@@ -1,6 +1,6 @@
 {
     "mongoConfig": {
-      "serverUrl": "mongodb://127.0.0.1:27017/",
-      "database": "Agile_Team21_CS555"
+      "serverUrl": "mongodb+srv://solar-project:aa22b66c@cluster0.mbtydyj.mongodb.net/?retryWrites=true&w=majority",
+      "database": "solar"
     }
   }

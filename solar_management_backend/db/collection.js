@@ -5,7 +5,8 @@ const getCollectionFn = (collection) => {
 
   return async () => {
     if (!_col) {
-      const db = await dbConnection.dbConnection();
+      const client = await dbConnection.connectToDatabase();
+      const db = client.db('solar');
       _col = await db.collection(collection);
     }
 
@@ -17,4 +18,5 @@ module.exports = {
   user: getCollectionFn("user"),
   customer: getCollectionFn("customer"),
   project: getCollectionFn("project"),
+  material: getCollectionFn("material")
 };
