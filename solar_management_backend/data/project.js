@@ -1,4 +1,4 @@
-// Add code for create project POST
+// Add code for create project POST -- Done
 // Add code for fetch top 5 projects GET
 // Add code to fetch all projects ( and covert in to 2 arrays) GET
 // Add code to fetch single selected project GET -- Done
@@ -12,9 +12,98 @@
 
 const mongoCollections = require("../db/collection");
 const project = mongoCollections.project;
+const customer = mongoCollections.customer;
 const { ObjectId } = require("mongodb");
 const validator = require("../validator");
-const createProject = async () => {};
+
+// Create a new project and customer
+const createProject = async (data) => {
+    let projectId = data.projectId;
+    let customerName = data.customerName;
+    let customerAddress = data.customerAddress;
+    let customerNumber = data.customerNumber;
+    let projectAddress = data.projectAddress;
+    let siteInspector = undefined;
+    let startDate = undefined;
+    let endDate = undefined;
+    let areaInfo = [];
+    let images =[];
+    let equipment = [];
+    let totalCost = undefined;
+    let projectStatus= "Pending";
+    let projectInfo = {
+        projectId : projectId,
+        projectAddress : projectAddress
+    };
+    let customerInfo = {
+        customerName : customerName,
+        customerAddress : customerAddress,
+        customerNumber : customerNumber,
+        projectInfo : projectInfo
+    };
+    let project = {
+        projectId : projectId,
+        projectAddress : projectAddress,
+        projectStatus: projectStatus,
+        siteInspector: siteInspector,
+        startDate: startDate,
+        endDate: endDate,
+        areaInfo: areaInfo,
+        images: images,
+        equipment: equipment,
+        totalCost: totalCost,
+    };
+    const projectCollection = await project();
+    const customerCollection = await customer();
+    const newInfo = await projectCollection.insertOne({ project });
+    const newCustInfo = await customerCollection.insertOne({customerInfo});
+
+    if (newInfo.insertedCount == 0 || newCustInfo.insertedCount ==0) {
+        throw "Error In Creating Project";
+    } 
+    else {
+        return "Created Project";
+    }
+
+};
+ 
+// To get allprojects
+const getAllProjects = async () => {
+    const projectCollection = await project();
+    let allProjects = await projectCollection;
+    inProgressProjects = await allProjects.find({projectStatus:'In-Progress', projectStatus:'Pending'})
+    finishedProjects = await allProjects.find({projectStatus:'Finished', projectStatus:'Cancelled'})
+
+    if(allProjects.length == 0){
+        throw `No Projects found`;
+    }
+    return allProjects;
+}
+
+// To get in-progress five projects
+const getInProgressFiveProjects = async () => {
+    const projectCollection = await project();
+    let inProgressProjects = await projectCollection
+    .find({projectStatus:'In-Progress'}) .limit(5);
+    
+    if(inProgressProjects.length == 0){
+        throw `No Projects found`;
+    }
+    return inProgressProjects;
+}
+
+// To get finished five projects
+const getFinishedFiveProjects = async () => {
+    const projectCollection = await project();
+    let finishedProjects = await projectCollection
+    .find({projectStatus:'Finished'}) .limit(5);
+    
+    if(finshedProjects.length == 0){
+        throw `No Projects found`;
+    }
+    return finishedProjects;
+}
+
 
 const getProjectByid = async (id) => {
     validator.validateId(id);
@@ -144,4 +233,7 @@ module.exports = {
     siteInspectorUpdate,
     addSiteInspector,
     addEquipment,
+    getAllProjects,
+    getInProgressFiveProjects,
+    getFinishedFiveProjects
 };

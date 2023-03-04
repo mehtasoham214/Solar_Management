@@ -39,12 +39,19 @@ recordRoutes.route("/record/:id").get(function (req, res) {
 // This section will help you create a new record.
 recordRoutes.route("/record/add").post(function (req, response) {
  let db_connect = dbo.getDb();
- let myobj = {
-   name: req.body.name,
-   position: req.body.position,
-   level: req.body.level,
+ let project = {
+  projectId: req.body.projectId,
+  siteInspector: req.body.siteInspector, 
+  startDate: req.body.startDate,
+  projectParameters: {
+  companyUserId:req.body.companyUserId,
+  roofInfo: req.body.roofInfo,
+  backyard: req.body.backyard,
+  grid: req.body.grid,
+  meterCompatibility:req.body.meterCompatibility,
+  coordinates: req.body.coordinates}
  };
- db_connect.collection("records").insertOne(myobj, function (err, res) {
+ db_connect.collection("records").insertOne(project, function (err, res) {
    if (err) throw err;
    response.json(res);
  });
