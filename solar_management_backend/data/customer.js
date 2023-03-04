@@ -1,1 +1,0 @@
-const projectdata = require ('./project')
