@@ -67,7 +67,7 @@ const createProject = async (data) => {
     const newCustInfo = await customerCollection.insertOne({ customerInfo });
 
     if (newInfo.insertedCount == 0 || newCustInfo.insertedCount == 0) {
-        throw "Error In Creating Project";
+        throw `Error In Creating Project`;
     } else {
         return "Created Project";
     }
