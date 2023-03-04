@@ -40,20 +40,60 @@ function validatePassword(password) {
     }
 }
 
+function validateCustomerandProject(
+    projectId,
+    customerName,
+    customerAddress,
+    customerNumber,
+    projectAddress
+) {
+    if (
+        typeof projectId !== "string" ||
+        projectId.length() < 0 ||
+        isNaN(projectId)
+    ) {
+        throw `Project Id is incorrect`;
+    }
+    if (
+        typeof customerName !== "string" ||
+        customerName.length() < 0 ||
+        isNaN(customerName)
+    ) {
+        throw `Customer Name is incorrect`;
+    }
+    if (
+        typeof customerAddress !== "string" ||
+        customerAddress.length() < 0 ||
+        isNaN(customerAddress)
+    ) {
+        throw `Customer Address is incorrect`;
+    }
+    if (customerNumber.length() < 0 || isNaN(customerNumber)) {
+        throw `Customer Number is incorrect`;
+    }
+    if (
+        typeof projectAddress !== "string" ||
+        projectAddress.length() < 0 ||
+        isNaN(projectAddress)
+    ) {
+        throw `Project Address is incorrect`;
+    }
+}
+
 function validateId(id) {
     // Validating id
     if (!id) {
-        throw "You must provide an id to search for";
+        throw `You must provide an id to search for`;
     }
     if (typeof id !== "string") {
-        throw "Id must be a string";
+        throw `Id must be a string`;
     }
     if (id.trim().length === 0) {
-        throw "Id cannot be an empty string or just spaces";
+        throw `Id cannot be an empty string or just spaces`;
     }
     id = id.trim();
     if (!ObjectId.isValid(id)) {
-        throw "Invalid object ID";
+        throw `Invalid object ID`;
     }
 }
 
@@ -63,10 +103,10 @@ function validateAreaParameter(roofInfo, backyard, grid, meterCompatible) {
     validateLength(backyard);
 
     if (grid !== "ON" || grid !== "OFF" || grid !== "Hybrid") {
-        throw "Grid must be either ON, OFF or Hybrid";
+        throw `Grid must be either ON, OFF or Hybrid`;
     }
     if (meterCompatible !== "Yes" || meterCompatible !== "No") {
-        throw "Meter compatible must be either Yes or No";
+        throw `Meter compatible must be either Yes or No`;
     }
 }
 
@@ -75,18 +115,18 @@ function validateLength(infoStr) {
 
     // Check if there are exactly two parts
     if (parts.length !== 2) {
-        throw "You must provide Length and Width";
+        throw `You must provide Length and Width`;
     }
 
     // Check if both parts are numeric
     var length = parseFloat(parts[0]);
     var width = parseFloat(parts[1]);
     if (isNaN(length) || isNaN(width)) {
-        throw "You must provide Length of Roof";
+        throw `You must provide Length of Roof`;
     }
 
     // Check if the values are within a reasonable range
     if (length <= 0 || width <= 0) {
-        throw "Length should be a greater than 0";
+        throw `Length should be a greater than 0`;
     }
 }
