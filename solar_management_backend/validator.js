@@ -58,6 +58,7 @@ function validateId(id) {
 }
 
 function validateAreaParameter(roofInfo, backyard, grid, meterCompatible) {
+    //Assuming that parameter are stored in format "5x10"
     validateLength(roofInfo);
     validateLength(backyard);
 

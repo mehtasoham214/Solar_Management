@@ -29,12 +29,19 @@ const getProjectByid = async (id) => {
     return project;
 };
 
+const getProject = async (projectId) => {
+    const projectCollection = await project();
+    const project = await projectCollection.findOne({ projectId: projectId });
+
+    if (!project) {
+        throw "Project Not Found";
+    }
+    return project;
+};
+
 const buttonClick = async (id, type) => {
     const projectCollection = await project();
     const projectStatus = await getProjectByid(id);
-    if (type == "start") {
-        projectStatus.status = "In-Progress";
-    }
     if (type == "end") {
         projectStatus.status = "Finished";
     }
@@ -52,6 +59,7 @@ const buttonClick = async (id, type) => {
     }
 };
 
+//For site Inspector
 const siteInspectorUpdate = async (
     id,
     roofInfo,
@@ -81,12 +89,13 @@ const siteInspectorUpdate = async (
     }
 };
 
+//For Operations Engineer
 const addSiteInspector = async (id, siteInspector) => {
     const projectCollection = await project();
     const project = await projectCollection.findOne({ _id: id });
-    await project().updateOne(
+    await project().update(
         { _id: id },
-        { $set: { siteInspector: siteInspector } }
+        { $set: { siteInspector: siteInspector, status: "In-Progress" } }
     );
     if (updatedInfo.modifiedCount == 0) {
         throw `Couldn't add Site Inspector`;
@@ -95,6 +104,7 @@ const addSiteInspector = async (id, siteInspector) => {
     }
 };
 
+//For operations Engineer
 const addEquipment = async (
     id,
     solarType,
@@ -129,6 +139,7 @@ module.exports = {
     fetchAllProject,
     fetchFiveProject,
     getProjectByid,
+    getProject,
     buttonClick,
     siteInspectorUpdate,
     addSiteInspector,
