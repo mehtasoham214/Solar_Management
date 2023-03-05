@@ -18,7 +18,6 @@ const validator = require("../validator");
 
 // Create a new project and customer
 const createProject = async (data) => {
-    let projectId = data.projectId.trim();
     let customerName = data.customerName.trim();
     let customerAddress = data.customerAddress.trim();
     let customerNumber = data.customerNumber.trim();
@@ -32,25 +31,25 @@ const createProject = async (data) => {
     let totalCost = undefined;
     let projectStatus = "Pending";
     validateCustomerandProject(
-        projectId,
         customerName,
         customerAddress,
         customerNumber,
         projectAddress
     );
     customerNumber = parseInt(customerNumber);
-    let projectInfo = {
-        projectId: projectId,
-        projectAddress: projectAddress,
-    };
+
     let customerInfo = {
         customerName: customerName,
         customerAddress: customerAddress,
         customerNumber: customerNumber,
-        projectInfo: projectInfo,
     };
+    const customerCollection = await customer();
+    const newCustInfo = await customerCollection.insertOne({ customerInfo });
+    const newID = newCustInfo.insertedId();
+
     let project = {
         projectId: projectId,
+        customerId: newID,
         projectAddress: projectAddress,
         projectStatus: projectStatus,
         siteInspector: siteInspector,
@@ -62,9 +61,8 @@ const createProject = async (data) => {
         totalCost: totalCost,
     };
     const projectCollection = await project();
-    const customerCollection = await customer();
+
     const newInfo = await projectCollection.insertOne({ project });
-    const newCustInfo = await customerCollection.insertOne({ customerInfo });
 
     if (newInfo.insertedCount == 0 || newCustInfo.insertedCount == 0) {
         throw `Error In Creating Project`;

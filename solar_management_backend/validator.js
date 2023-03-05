@@ -41,19 +41,11 @@ function validatePassword(password) {
 }
 
 function validateCustomerandProject(
-    projectId,
     customerName,
     customerAddress,
     customerNumber,
     projectAddress
 ) {
-    if (
-        typeof projectId !== "string" ||
-        projectId.length() < 0 ||
-        isNaN(projectId)
-    ) {
-        throw `Project Id is incorrect`;
-    }
     if (
         typeof customerName !== "string" ||
         customerName.length() < 0 ||

@@ -20,7 +20,7 @@ async function connectToDatabase() {
             console.log("Connected to MongoDB API");
         }
         if (!serverUrl || !dbName) {
-            throw new Error("MongoDB configuration not found");
+            throw `MongoDB configuration not found `;
         }
     } catch (err) {
         console.error(err);
