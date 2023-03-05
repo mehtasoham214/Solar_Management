@@ -48,7 +48,6 @@ const createProject = async (data) => {
     const newID = newCustInfo.insertedId();
 
     let project = {
-        projectId: projectId,
         customerId: newID,
         projectAddress: projectAddress,
         projectStatus: projectStatus,
