@@ -1,22 +1,21 @@
-const dbConnection = require("./conn.js");
+const dbConnection = require("./conn");
 
 const getCollectionFn = (collection) => {
-  let _col = undefined;
+    let _col = undefined;
 
-  return async () => {
-    if (!_col) {
-      const client = await dbConnection.connectToDatabase();
-      const db = client.db('solar');
-      _col = await db.collection(collection);
-    }
+    return async () => {
+        if (!_col) {
+            const db = await dbConnection.dbConnection();
+            _col = await db.collection(collection);
+        }
 
-    return _col;
-  };
+        return _col;
+    };
 };
 
 module.exports = {
-  user: getCollectionFn("user"),
-  customer: getCollectionFn("customer"),
-  project: getCollectionFn("project"),
-  material: getCollectionFn("material")
+    user: getCollectionFn("user"),
+    customer: getCollectionFn("customer"),
+    project: getCollectionFn("project"),
+    material: getCollectionFn("material"),
 };

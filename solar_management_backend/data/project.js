@@ -30,7 +30,7 @@ const createProject = async (data) => {
     let equipment = [];
     let totalCost = undefined;
     let projectStatus = "Pending";
-    validateCustomerandProject(
+    validator.validateCustomerandProject(
         customerName,
         customerAddress,
         customerNumber,
@@ -45,9 +45,9 @@ const createProject = async (data) => {
     };
     const customerCollection = await customer();
     const newCustInfo = await customerCollection.insertOne({ customerInfo });
-    const newID = newCustInfo.insertedId();
+    let newID = newCustInfo.insertedId;
 
-    let project = {
+    let projectdata = {
         customerId: newID,
         projectAddress: projectAddress,
         projectStatus: projectStatus,
@@ -61,7 +61,7 @@ const createProject = async (data) => {
     };
     const projectCollection = await project();
 
-    const newInfo = await projectCollection.insertOne({ project });
+    let newInfo = await projectCollection.insertOne(projectdata);
 
     if (newInfo.insertedCount == 0 || newCustInfo.insertedCount == 0) {
         throw `Error In Creating Project`;
@@ -117,15 +117,15 @@ const getFinishedFiveProjects = async () => {
 
 const getProjectByid = async (id) => {
     validator.validateId(id);
-    const projectCollection = await project();
     if (typeof id == "string") {
         id = new ObjectId(id);
     }
-    const project = await projectCollection.findOne({ _id: id });
-    if (!project) {
+    const projectCollection = await project();
+    const projectinfo = await projectCollection.findOne({ _id: id });
+    if (!projectinfo) {
         throw `No Project Found`;
     }
-    return project;
+    return projectinfo;
 };
 
 const getProject = async (projectId) => {
@@ -244,7 +244,4 @@ module.exports = {
     siteInspectorUpdate,
     addSiteInspector,
     addEquipment,
-    getAllProjects,
-    getInProgressFiveProjects,
-    getFinishedFiveProjects,
 };

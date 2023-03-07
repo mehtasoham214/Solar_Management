@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 function validateUser(username) {
     // Validating user name
     if (username == null) {
@@ -46,28 +47,16 @@ function validateCustomerandProject(
     customerNumber,
     projectAddress
 ) {
-    if (
-        typeof customerName !== "string" ||
-        customerName.length() < 0 ||
-        isNaN(customerName)
-    ) {
+    if (typeof customerName !== "string" || customerName.length < 0) {
         throw `Customer Name is incorrect`;
     }
-    if (
-        typeof customerAddress !== "string" ||
-        customerAddress.length() < 0 ||
-        isNaN(customerAddress)
-    ) {
+    if (typeof customerAddress !== "string" || customerAddress.length < 0) {
         throw `Customer Address is incorrect`;
     }
-    if (customerNumber.length() < 0 || isNaN(customerNumber)) {
+    if (customerNumber.length < 0) {
         throw `Customer Number is incorrect`;
     }
-    if (
-        typeof projectAddress !== "string" ||
-        projectAddress.length() < 0 ||
-        isNaN(projectAddress)
-    ) {
+    if (typeof projectAddress !== "string" || projectAddress.length < 0) {
         throw `Project Address is incorrect`;
     }
 }
@@ -85,7 +74,7 @@ function validateId(id) {
     }
     id = id.trim();
     if (!ObjectId.isValid(id)) {
-        throw `Invalid object ID`;
+        throw "Invalid object ID";
     }
 }
 
@@ -113,7 +102,7 @@ function validateLength(infoStr) {
     // Check if both parts are numeric
     var length = parseFloat(parts[0]);
     var width = parseFloat(parts[1]);
-    if (isNaN(length) || isNaN(width)) {
+    if (length == null || width == null) {
         throw `You must provide Length of Roof`;
     }
 
@@ -122,3 +111,11 @@ function validateLength(infoStr) {
         throw `Length should be a greater than 0`;
     }
 }
+module.exports = {
+    validateLength,
+    validateAreaParameter,
+    validateId,
+    validateCustomerandProject,
+    validateUser,
+    validatePassword,
+};
