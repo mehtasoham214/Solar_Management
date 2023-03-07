@@ -1,9 +1,14 @@
 import * as React from "react";
 import { useState } from "react";
 
+//Theme Imports
+import theme from "../theme";
+import { ThemeProvider } from "@mui/material/styles";
+
 //Project Imports
 import Counter from "./counter";
-import Orders from "./project";
+import OngoingProject from "./onGoingProject";
+import PastProject from "./pastProjects";
 import { mainListItems, secondaryListItems } from "./menuItems";
 
 //Material UI Imports
@@ -18,11 +23,10 @@ import {
     TextField,
     Typography,
 } from "@mui/material";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
-import Divider from "@mui/material/Divider";
+//import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import Paper from "@mui/material/Paper";
@@ -37,51 +41,6 @@ import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PhoneIcon from "@mui/icons-material/Phone";
 import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
-
-const theme = createTheme({
-    palette: {
-        primary: {
-            main: "#1a237e",
-        },
-        secondary: {
-            main: "#880e4f",
-        },
-    },
-    typography: {
-        fontFamily: "Poppins, sans-serif",
-        fontSize: 16,
-    },
-    components: {
-        MuiButton: {
-            styleOverrides: {
-                root: {
-                    borderRadius: 10,
-                },
-                outlinedPrimary: {
-                    color: "#AAA",
-                    backgroundColor: "#transparent",
-                    borderWidth: "3px",
-                    borderColor: "#AAAAAA",
-                    "&:hover": {
-                        backgroundColor: "#cdcdcd",
-                        borderColor: "#fff",
-                        color: "#fff",
-                    },
-                },
-                outlinedSecondary: {
-                    color: "#fff",
-                    backgroundColor: "#880e4f",
-                    borderColor: "#880e4f",
-                    "&:hover": {
-                        backgroundColor: "#4a148c",
-                        borderColor: "#4a148c",
-                        color: "#fff",
-                    },
-                },
-            },
-        },
-    },
-});
 
 function SalesDashboardContent() {
     const [openDialog, setOpenDialog] = useState(false);
@@ -125,21 +84,17 @@ function SalesDashboardContent() {
                     </Typography>
                     <List sx={{ mt: 8 }} component="nav">
                         {mainListItems}
-                        {/* <Divider sx={{ my: 1 }} /> */}
                         {secondaryListItems}
                     </List>
                 </Drawer>
-                <List component="nav">
-                    {mainListItems}
-                    <Divider sx={{ my: 1 }} />
-                    {secondaryListItems}
-                </List>
+
                 <Box
                     component="main"
                     sx={{
                         flexGrow: 1,
                         height: "100vh",
                         overflow: "auto",
+                        ml:28,
                     }}
                 >
                     <Toolbar />
@@ -295,18 +250,16 @@ function SalesDashboardContent() {
                                     </DialogContent>
                                     <DialogActions>
                                         <Button
-                                            variant="contained"
+                                            variant="outlined"
                                             onClick={handleCloseDialog}
                                             color="primary"
                                         >
                                             Cancel
                                         </Button>
                                         <Button
-                                            variant="contained"
+                                            variant="outlined"
                                             onClick={handleSubmit}
-                                            style={{
-                                                backgroundColor: "#42A5F5",
-                                            }}
+                                            color="secondary"
                                         >
                                             Submit
                                         </Button>
@@ -314,7 +267,7 @@ function SalesDashboardContent() {
                                 </Dialog>
                             </Grid>
 
-                            {/* Recent Orders */}
+                            {/* On going projects */}
                             <Grid item xs={12}>
                                 <Paper
                                     sx={{
@@ -323,7 +276,19 @@ function SalesDashboardContent() {
                                         flexDirection: "column",
                                     }}
                                 >
-                                    <Orders />
+                                    <OngoingProject />
+                                </Paper>
+                            </Grid>
+                            {/* Past projects */}
+                            <Grid item xs={12}>
+                                <Paper
+                                    sx={{
+                                        p: 2,
+                                        display: "flex",
+                                        flexDirection: "column",
+                                    }}
+                                >
+                                    <PastProject />
                                 </Paper>
                             </Grid>
                         </Grid>
