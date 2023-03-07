@@ -12,7 +12,7 @@ import Deposits from "./counter";
 import Orders from "./project";
 import Button from "@mui/material/Button";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
-import { Typography } from "@mui/material";
+import { Avatar, Drawer, Typography } from "@mui/material";
 
 const theme = createTheme({
   palette: {
@@ -62,15 +62,27 @@ const theme = createTheme({
 function SalesDashboardContent() {
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ display: "flex", mt: 2 }}>
-        <List component="nav">
+      <Box sx={{ display: "flex", mt: 2}}>
+        <Drawer variant="permanent">
+           <Avatar
+              sx={{ width: 80, height: 80,mx: 'auto',mt: 4}}>
+           </Avatar>
+           <Typography sx={{mx: 'auto'}} variant="subtitle1">
+            Alex
+           </Typography>
+           <Typography sx={{mx: 'auto'}} variant="subtitle2">
+            SalePerson
+           </Typography>
+         <List sx={{mt: 8}} component="nav">
           {mainListItems}
           <Divider sx={{ my: 1 }} />
           {secondaryListItems}
-        </List>
+         </List>
+        </Drawer>
         <Box
           component="main"
           sx={{
+            ml: 28,
             flexGrow: 1,
             height: "100vh",
             overflow: "auto",
