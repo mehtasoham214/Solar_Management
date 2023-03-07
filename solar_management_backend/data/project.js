@@ -1,5 +1,5 @@
 // Add code for create project POST -- Done
-// Add code for fetch top 5 projects GET
+// Add code for fetch top 5 projects GET -- Done
 // Add code to fetch all projects ( and covert in to 2 arrays) GET --Done
 // Add code to fetch single selected project GET -- Done
 // Add code to update project information PATCH -- Done
@@ -38,17 +38,20 @@ const createProject = async (data) => {
     );
     customerNumber = parseInt(customerNumber);
 
-    let customerInfo = {
+    // Insert customer information into the customers collection
+    const customerCollection = await customer();
+    const customerInfo = {
         customerName: customerName,
         customerAddress: customerAddress,
         customerNumber: customerNumber,
     };
-    const customerCollection = await customer();
-    const newCustInfo = await customerCollection.insertOne({ customerInfo });
-    let newID = newCustInfo.insertedId;
+    const newCustInfo = await customerCollection.insertOne(customerInfo);
+    const customerId = newCustInfo.insertedId;
 
+    // Insert project information into the projects collection
+    const projectCollection = await project();
     let projectdata = {
-        customerId: newID,
+        customerId: customerId,
         projectAddress: projectAddress,
         projectStatus: projectStatus,
         siteInspector: siteInspector,
@@ -59,9 +62,7 @@ const createProject = async (data) => {
         equipment: equipment,
         totalCost: totalCost,
     };
-    const projectCollection = await project();
-
-    let newInfo = await projectCollection.insertOne(projectdata);
+    const newInfo = await projectCollection.insertOne(projectdata);
 
     if (newInfo.insertedCount == 0 || newCustInfo.insertedCount == 0) {
         throw `Error In Creating Project`;
@@ -73,12 +74,13 @@ const createProject = async (data) => {
 // To get allprojects
 const getAllProjects = async () => {
     const projectCollection = await project();
-    let allProjects = await projectCollection;
-    inProgressProjects = await allProjects.find({
+    let allProjects = await projectCollection.find({}).toArray();
+
+    inProgressProjects = await projectCollection.find({
         projectStatus: "In-Progress",
         projectStatus: "Pending",
     });
-    finishedProjects = await allProjects.find({
+    finishedProjects = await projectCollection.find({
         projectStatus: "Finished",
         projectStatus: "Cancelled",
     });
@@ -94,7 +96,8 @@ const getInProgressFiveProjects = async () => {
     const projectCollection = await project();
     let inProgressProjects = await projectCollection
         .find({ projectStatus: "In-Progress" })
-        .limit(5);
+        .limit(5)
+        .toArray();
 
     if (inProgressProjects.length == 0) {
         throw `No Projects Found`;
@@ -107,9 +110,10 @@ const getFinishedFiveProjects = async () => {
     const projectCollection = await project();
     let finishedProjects = await projectCollection
         .find({ projectStatus: "Finished" })
-        .limit(5);
+        .limit(5)
+        .toArray();
 
-    if (finshedProjects.length == 0) {
+    if (finishedProjects.length == 0) {
         throw `No Projects Found`;
     }
     return finishedProjects;

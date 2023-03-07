@@ -111,6 +111,22 @@ function validateLength(infoStr) {
         throw `Length should be a greater than 0`;
     }
 }
+
+function validateCustomer(
+    customerName,
+    customerAddress,
+    customerNumber
+) {
+    if (typeof customerName !== "string" || customerName.length < 0) {
+        throw `Customer Name is incorrect`;
+    }
+    if (typeof customerAddress !== "string" || customerAddress.length < 0) {
+        throw `Customer Address is incorrect`;
+    }
+    if (customerNumber.length < 0) {
+        throw `Customer Number is incorrect`;
+    }
+}
 module.exports = {
     validateLength,
     validateAreaParameter,
@@ -118,4 +134,5 @@ module.exports = {
     validateCustomerandProject,
     validateUser,
     validatePassword,
+    validateCustomer
 };

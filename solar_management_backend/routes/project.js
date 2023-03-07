@@ -1,5 +1,6 @@
 const data = require("../data");
 const projectData = data.project;
+const customerData = data.customer;
 const userData = data.user;
 
 const express = require("express");
@@ -126,7 +127,6 @@ router.patch("/projects/equipment/:id", async (req, res) => {
     }
 });
 
-// changeroute
 router.patch("/projects/siteinspector/:id", async (req, res) => {
     try {
         const projectId = req.params.id;
@@ -145,5 +145,71 @@ router.patch("/projects/siteinspector/:id", async (req, res) => {
         res.status(500).json({ error: e });
     }
 });
+
+router.get("/inprogress", async (req, res) => {
+    try {
+        const inprogressProjects = await projectData.getInProgressFiveProjects();
+        res.json(inprogressProjects);
+    } catch (e) {
+        res.status(404).json({ error: `Failed to get projects: ${e}` });
+    }
+});
+
+router.get("/finished", async (req, res) => {
+    try {
+        const finishedProjects = await projectData.getFinishedFiveProjects();
+        res.json(finishedProjects);
+    } catch (e) {
+        res.status(404).json({ error: `Failed to get projects: ${e}` });
+    }
+});
+
+// get customer
+router.get("/customer/:id", async (req, res) => {
+    const customerId = req.params.id;
+
+    try {
+        const customer = await customerData.getCustomerByid(customerId);
+        res.json(customer);
+    } catch (e) {
+        res.status(404).json({
+            error: `Failed to get customer with id ${customerId}: ${e}`,
+        });
+    }
+});
+
+// patch customer
+router.patch('/customer_patch', async(req, res) => {
+    
+    let customerId = req.body.customerId;
+    let customerName = req.body.customerName;
+    let customerAddress = req.body.customerAddress;
+    let customerNumber = req.body.customerNumber;
+
+    try{
+        validator.validateId(customerId);
+        validator.validateCustomer(customerName,customerAddress,customerNumber);
+    }
+    catch(e){
+        res.status(400).json({error : e});
+        return;
+    }
+    
+    try{
+        const updateCustomer = await customerData.patchCustomer(
+            customerId,
+            customerName,
+            customerAddress,
+            customerNumber
+        );
+        res.status(200).json(updateCustomer);
+    }
+    catch(e){
+        res.status(400).json({error : e});
+    }
+});
+
+
+
 
 module.exports = router;

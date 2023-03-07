@@ -8,6 +8,8 @@ import { mainListItems, secondaryListItems } from "./menuItems";
 
 //Material UI Imports
 import {
+    Avatar,
+    Drawer,
     Dialog,
     DialogActions,
     DialogContent,
@@ -111,6 +113,22 @@ function SalesDashboardContent() {
     return (
         <ThemeProvider theme={theme}>
             <Box sx={{ display: "flex", mt: 2 }}>
+                <Drawer variant="permanent">
+                    <Avatar
+                        sx={{ width: 80, height: 80, mx: "auto", mt: 4 }}
+                    ></Avatar>
+                    <Typography sx={{ mx: "auto" }} variant="subtitle1">
+                        Alex
+                    </Typography>
+                    <Typography sx={{ mx: "auto" }} variant="subtitle2">
+                        SalePerson
+                    </Typography>
+                    <List sx={{ mt: 8 }} component="nav">
+                        {mainListItems}
+                        {/* <Divider sx={{ my: 1 }} /> */}
+                        {secondaryListItems}
+                    </List>
+                </Drawer>
                 <List component="nav">
                     {mainListItems}
                     <Divider sx={{ my: 1 }} />
