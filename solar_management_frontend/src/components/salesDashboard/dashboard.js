@@ -75,7 +75,7 @@ function SalesDashboardContent() {
            </Typography>
          <List sx={{mt: 8}} component="nav">
           {mainListItems}
-          <Divider sx={{ my: 1 }} />
+          {/* <Divider sx={{ my: 1 }} /> */}
           {secondaryListItems}
          </List>
         </Drawer>

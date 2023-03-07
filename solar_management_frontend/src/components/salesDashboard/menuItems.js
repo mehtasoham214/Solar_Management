@@ -39,7 +39,7 @@ export const mainListItems = (
 
 export const secondaryListItems = (
   <React.Fragment>
-    <ListItemButton sx={{mb: 4,mt:30}}>
+    <ListItemButton sx={{mt:30}}>
       <ListItemIcon>
         <LogoutIcon />
       </ListItemIcon>
