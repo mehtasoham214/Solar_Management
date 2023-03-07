@@ -1,26 +1,21 @@
 //import counter
-import * as React from 'react';
-import Link from '@mui/material/Link';
-import Typography from '@mui/material/Typography';
+import * as React from "react";
+import Typography from "@mui/material/Typography";
+import Icon from "@mui/material/Icon";
+import { Box } from "@mui/system";
 
-function preventDefault(event) {
-  event.preventDefault();
-}
-
-export default function Deposits() {
+export default function Counter({ title, icon, count }) {
   return (
     <React.Fragment>
-      <Typography component="p" variant="h4">
-        $3,024.00
+      <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
+        <Icon>{icon}</Icon>
+        <Typography variant="h5" sx={{ ml: 2 }}>
+          {title}
+        </Typography>
+      </Box>
+      <Typography variant="h4" sx={{ mt: 3 }}>
+        {count}
       </Typography>
-      <Typography color="text.secondary" sx={{ flex: 1 }}>
-        on 15 March, 2019
-      </Typography>
-      <div>
-        <Link color="primary" href="#" onClick={preventDefault}>
-          View balance
-        </Link>
-      </div>
     </React.Fragment>
   );
 }
