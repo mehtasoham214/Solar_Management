@@ -11,18 +11,20 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import LayersIcon from '@mui/icons-material/Layers';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import LogoutIcon from '@mui/icons-material/Logout';
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import FactCheckIcon from "@mui/icons-material/FactCheck";
 
 export const mainListItems = (
   <React.Fragment>
     <ListItemButton>
       <ListItemIcon>
-        <DashboardIcon />
+        <InsertDriveFileIcon />
       </ListItemIcon>
       <ListItemText primary="On-going Projects" />
     </ListItemButton>
     <ListItemButton>
       <ListItemIcon>
-        <ShoppingCartIcon />
+        <FactCheckIcon />
       </ListItemIcon>
       <ListItemText primary="Past Projects" />
     </ListItemButton>
