@@ -41,6 +41,7 @@ import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PhoneIcon from "@mui/icons-material/Phone";
 import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
+import PermanentDrawerLeft from "./navBar";
 
 function SalesDashboardContent() {
     const [openDialog, setOpenDialog] = useState(false);
@@ -72,21 +73,8 @@ function SalesDashboardContent() {
     return (
         <ThemeProvider theme={theme}>
             <Box sx={{ display: "flex", mt: 2 }}>
-                <Drawer variant="permanent">
-                    <Avatar
-                        sx={{ width: 80, height: 80, mx: "auto", mt: 4 }}
-                    ></Avatar>
-                    <Typography sx={{ mx: "auto" }} variant="subtitle1">
-                        Alex
-                    </Typography>
-                    <Typography sx={{ mx: "auto" }} variant="subtitle2">
-                        SalePerson
-                    </Typography>
-                    <List sx={{ mt: 8 }} component="nav">
-                        {mainListItems}
-                        {secondaryListItems}
-                    </List>
-                </Drawer>
+                
+                <PermanentDrawerLeft />
 
                 <Box
                     component="main"
