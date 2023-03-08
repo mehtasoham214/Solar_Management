@@ -8,6 +8,7 @@ import TableRow from "@mui/material/TableRow";
 import Title from "./Title";
 import theme from "../theme";
 import { ThemeProvider } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
 //import { Button } from "@mui/material";
 
 // Generate Order Data
@@ -81,11 +82,18 @@ const rows = [
     ),
 ];
 
-function preventDefault(event) {
-    event.preventDefault();
-}
+// function preventDefault(event) {
+//     event.preventDefault();
+// }
 
-export default function PastProject() {
+export default function PastProject({ showMoreLink = true }) {
+    const navigate = useNavigate();
+
+    const handleSeeMoreClick = (event) => {
+        event.preventDefault();
+        navigate("/pastprojects"); // replace with the desired path
+    };
+
     return (
         <ThemeProvider theme={theme}>
             <React.Fragment>
@@ -127,14 +135,16 @@ export default function PastProject() {
                         ))}
                     </TableBody>
                 </Table>
-                <Link
-                    color="primary"
-                    href="#"
-                    onClick={preventDefault}
-                    sx={{ mt: 3 }}
-                >
-                    See more orders
-                </Link>
+                {showMoreLink && (
+                    <Link
+                        color="primary"
+                        href="#"
+                        onClick={handleSeeMoreClick}
+                        sx={{ mt: 3 }}
+                    >
+                        See more projects
+                    </Link>
+                )}
             </React.Fragment>
         </ThemeProvider>
     );

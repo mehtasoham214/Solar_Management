@@ -23,7 +23,7 @@ const createProject = async (data) => {
     let customerNumber = data.customerNumber.trim();
     let projectAddress = data.projectAddress.trim();
     let siteInspector = undefined;
-    let startDate = undefined;
+    let startDate = new Date().toLocaleDateString();
     let endDate = undefined;
     let areaInfo = [];
     let images = [];

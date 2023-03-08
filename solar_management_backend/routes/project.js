@@ -148,7 +148,8 @@ router.patch("/projects/siteinspector/:id", async (req, res) => {
 
 router.get("/inprogress", async (req, res) => {
     try {
-        const inprogressProjects = await projectData.getInProgressFiveProjects();
+        const inprogressProjects =
+            await projectData.getInProgressFiveProjects();
         res.json(inprogressProjects);
     } catch (e) {
         res.status(404).json({ error: `Failed to get projects: ${e}` });
@@ -179,23 +180,25 @@ router.get("/customer/:id", async (req, res) => {
 });
 
 // patch customer
-router.patch('/customer_patch', async(req, res) => {
-    
+router.patch("/customer_patch", async (req, res) => {
     let customerId = req.body.customerId;
     let customerName = req.body.customerName;
     let customerAddress = req.body.customerAddress;
     let customerNumber = req.body.customerNumber;
 
-    try{
+    try {
         validator.validateId(customerId);
-        validator.validateCustomer(customerName,customerAddress,customerNumber);
-    }
-    catch(e){
-        res.status(400).json({error : e});
+        validator.validateCustomer(
+            customerName,
+            customerAddress,
+            customerNumber
+        );
+    } catch (e) {
+        res.status(400).json({ error: e });
         return;
     }
-    
-    try{
+
+    try {
         const updateCustomer = await customerData.patchCustomer(
             customerId,
             customerName,
@@ -203,13 +206,8 @@ router.patch('/customer_patch', async(req, res) => {
             customerNumber
         );
         res.status(200).json(updateCustomer);
-    }
-    catch(e){
-        res.status(400).json({error : e});
+    } catch (e) {
+        res.status(400).json({ error: e });
     }
 });
-
-
-
-
 module.exports = router;

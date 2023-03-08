@@ -9,12 +9,10 @@ import { ThemeProvider } from "@mui/material/styles";
 import Counter from "./counter";
 import OngoingProject from "./onGoingProject";
 import PastProject from "./pastProjects";
-import { mainListItems, secondaryListItems } from "./menuItems";
+import PermanentDrawerLeft from "./navBar";
 
 //Material UI Imports
 import {
-    Avatar,
-    Drawer,
     Dialog,
     DialogActions,
     DialogContent,
@@ -28,7 +26,6 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 //import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
-import List from "@mui/material/List";
 import Paper from "@mui/material/Paper";
 import Toolbar from "@mui/material/Toolbar";
 
@@ -41,7 +38,6 @@ import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PhoneIcon from "@mui/icons-material/Phone";
 import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
-import PermanentDrawerLeft from "./navBar";
 
 function SalesDashboardContent() {
     const [openDialog, setOpenDialog] = useState(false);
@@ -73,7 +69,6 @@ function SalesDashboardContent() {
     return (
         <ThemeProvider theme={theme}>
             <Box sx={{ display: "flex", mt: 2 }}>
-                
                 <PermanentDrawerLeft />
 
                 <Box
@@ -82,7 +77,7 @@ function SalesDashboardContent() {
                         flexGrow: 1,
                         height: "100vh",
                         overflow: "auto",
-                        ml:28,
+                        ml: 28,
                     }}
                 >
                     <Toolbar />
