@@ -5,6 +5,7 @@ import Dashboard from "./components/salesDashboard/dashboard";
 import ALLOngoingProjects from "./components/onGoingProjects";
 import ALLPastProjects from "./components/pastProjects";
 
+
 function App() {
     return (
         <Router>

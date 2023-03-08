@@ -52,6 +52,7 @@ const createProject = async (data) => {
     const projectCollection = await project();
     let projectdata = {
         customerId: customerId,
+        customerName: customerName,
         projectAddress: projectAddress,
         projectStatus: projectStatus,
         siteInspector: siteInspector,
@@ -95,7 +96,8 @@ const getAllProjects = async () => {
 const getInProgressFiveProjects = async () => {
     const projectCollection = await project();
     let inProgressProjects = await projectCollection
-        .find({ projectStatus: "In-Progress" })
+        .find({ projectStatus: "In-Progress",
+        projectStatus:"Pending" })
         .limit(5)
         .toArray();
 
@@ -109,7 +111,8 @@ const getInProgressFiveProjects = async () => {
 const getFinishedFiveProjects = async () => {
     const projectCollection = await project();
     let finishedProjects = await projectCollection
-        .find({ projectStatus: "Finished" })
+        .find({ projectStatus: "Finished",
+        projectStatus: "Cancelled", })
         .limit(5)
         .toArray();
 
