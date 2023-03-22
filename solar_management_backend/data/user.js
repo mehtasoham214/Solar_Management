@@ -45,7 +45,20 @@ const getUser = async (username, password) => {
     }
 };
 
+const getAllSiteInspector = async () => {
+    const siteInspector = await user();
+    const siteInsperctorList = await siteInspector.find({
+        position: "Site Inspector",
+    });
+    if (siteInsperctorList) {
+        return siteInspector;
+    } else {
+        throw `No SiteInspector`;
+    }
+};
+
 module.exports = {
     createUser,
     getUser,
+    getAllSiteInspector,
 };

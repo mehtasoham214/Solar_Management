@@ -1,4 +1,5 @@
 import * as React from "react";
+import {useState,  useEffect} from "react";
 import Link from "@mui/material/Link";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -12,6 +13,16 @@ import { useNavigate } from "react-router-dom";
 //import { Button } from "@mui/material";
 
 // Generate Order Data
+
+
+
+export default function OngoingProject({ showMoreLink = true }) {
+    const navigate = useNavigate();
+
+    const handleSeeMoreClick = (event) => {
+        event.preventDefault();
+        navigate("/ongoingprojects"); // replace with the desired path
+     };
 
 function ButtonArray() {
     const buttonArray = ["Edit", "Done", "Delete"];
@@ -31,69 +42,28 @@ function ButtonArray() {
     );
 }
 
-function createData(id, date, ProductName, CustomerName, Status, cost, Action) {
-    return { id, date, ProductName, CustomerName, Status, cost, Action };
-}
+const [projectlist, setemployees] = useState(null)
+    useEffect(() => {
+        getemployees()
+    }, [])
+    const getemployees = () => {
+        fetch("http://localhost:3000/inprogress")
+            .then(res => res.json())
+            .then(
+                (result) => {                    
+                    setemployees(result)
+                },
+                (error) => {
+                    setemployees(null);
+                }
+            )
+    }
 
-const rows = [
-    createData(
-        0,
-        "16 Mar, 2019",
-        "Solar Plant 1",
-        "Tupelo, MS",
-        "Pending",
-        312.44,
-        ButtonArray()
-    ),
-    createData(
-        1,
-        "16 Mar, 2019",
-        "Solar Plant 2",
-        "London, UK",
-        "In-Progress",
-        866.99,
-        ButtonArray()
-    ),
-    createData(
-        2,
-        "16 Mar, 2019",
-        "Solar Plant 3",
-        "Boston, MA",
-        "Pending",
-        100.81,
-        ButtonArray()
-    ),
-    createData(
-        3,
-        "16 Mar, 2019",
-        "Solar Plant 4",
-        "Gary, IN",
-        "Pending",
-        654.39,
-        ButtonArray()
-    ),
-    createData(
-        4,
-        "15 Mar, 2019",
-        "Solar Plant 5",
-        "Long Branch, NJ",
-        "In-Progress",
-        212.79,
-        ButtonArray()
-    ),
-];
+    if (!projectlist) return (<div>No Record Found</div>)
 
-// function preventDefault(event) {
-//     event.preventDefault();
-// }
 
-export default function OngoingProject({ showMoreLink = true }) {
-    const navigate = useNavigate();
 
-    const handleSeeMoreClick = (event) => {
-        event.preventDefault();
-        navigate("/ongoingprojects"); // replace with the desired path
-    };
+const rows = ButtonArray();
 
     const handleProjectClick = (event) => {
         event.preventDefault();
@@ -108,17 +78,16 @@ export default function OngoingProject({ showMoreLink = true }) {
                 <Table size="small">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Product Name</TableCell>
+                            <TableCell>Product Id</TableCell>
                             <TableCell>Customer Name</TableCell>
                             <TableCell>Date</TableCell>
                             <TableCell>Cost</TableCell>
-
                             <TableCell>Status</TableCell>
                             <TableCell>Action</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row) => (
+                        {projectlist.map((row) => (
                             <TableRow key={row.id}>
                                 <TableCell onClick={handleProjectClick}>{row.ProductName}</TableCell>
                                 <TableCell>{row.CustomerName}</TableCell>
@@ -128,16 +97,16 @@ export default function OngoingProject({ showMoreLink = true }) {
                                 <TableCell
                                     style={{
                                         color:
-                                            row.Status === "Pending"
+                                            row.projectStatus === "Pending"
                                                 ? theme.palette.error.main
-                                                : row.Status === "In-Progress"
+                                                : row.projectStatus === "In-Progress"
                                                 ? theme.palette.warning.main
                                                 : "",
                                     }}
                                 >
-                                    {row.Status}
+                                    {row.projectStatus}
                                 </TableCell>
-                                <TableCell>{row.Action}</TableCell>
+                                <TableCell>{rows}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

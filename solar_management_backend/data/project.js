@@ -52,6 +52,7 @@ const createProject = async (data) => {
     const projectCollection = await project();
     let projectdata = {
         customerId: customerId,
+        customerName: customerName,
         projectAddress: projectAddress,
         projectStatus: projectStatus,
         siteInspector: siteInspector,
@@ -95,7 +96,7 @@ const getAllProjects = async () => {
 const getInProgressFiveProjects = async () => {
     const projectCollection = await project();
     let inProgressProjects = await projectCollection
-        .find({ projectStatus: "In-Progress" })
+        .find({ projectStatus: "In-Progress", projectStatus: "Pending" })
         .limit(5)
         .toArray();
 
@@ -109,7 +110,7 @@ const getInProgressFiveProjects = async () => {
 const getFinishedFiveProjects = async () => {
     const projectCollection = await project();
     let finishedProjects = await projectCollection
-        .find({ projectStatus: "Finished" })
+        .find({ projectStatus: "Finished", projectStatus: "Cancelled" })
         .limit(5)
         .toArray();
 
@@ -145,10 +146,10 @@ const getProject = async (projectId) => {
 const buttonClick = async (id, type) => {
     const projectCollection = await project();
     const projectStatus = await getProjectByid(id);
-    if (type == "end") {
+    if (type == "finished") {
         projectStatus.status = "Finished";
     }
-    if (type == "cancel") {
+    if (type == "cancelled") {
         projectStatus.status = "Cancelled";
     }
     await projectCollection().updateOne(
