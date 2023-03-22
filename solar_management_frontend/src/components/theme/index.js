@@ -50,6 +50,28 @@ const theme = createTheme({
                         color: "#fff",
                     },
                 },
+                outlinedError: {
+                    color: "#f44336",
+                    backgroundColor: "transparent",
+                    borderWidth: "3px",
+                    borderColor: "#f44336",
+                    "&:hover": {
+                        backgroundColor: "#f44336",
+                        borderColor: "#fff",
+                        color: "#fff",
+                    },
+                },
+                outlinedSuccess: {
+                    color: "#4caf50",
+                    backgroundColor: "transparent",
+                    borderWidth: "3px",
+                    borderColor: "#4caf50",
+                    "&:hover": {
+                        backgroundColor: "#4caf50",
+                        borderColor: "#fff",
+                        color: "#fff",
+                    },
+                },
             },
         },
     },

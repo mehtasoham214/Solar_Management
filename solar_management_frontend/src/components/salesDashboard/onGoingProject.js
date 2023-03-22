@@ -95,6 +95,11 @@ export default function OngoingProject({ showMoreLink = true }) {
         navigate("/ongoingprojects"); // replace with the desired path
     };
 
+    const handleProjectClick = (event) => {
+        event.preventDefault();
+        navigate("/projectdetails"); // replace with the desired path
+    };
+
     
     return (
         <ThemeProvider theme={theme}>
@@ -115,7 +120,7 @@ export default function OngoingProject({ showMoreLink = true }) {
                     <TableBody>
                         {rows.map((row) => (
                             <TableRow key={row.id}>
-                                <TableCell>{row.ProductName}</TableCell>
+                                <TableCell onClick={handleProjectClick}>{row.ProductName}</TableCell>
                                 <TableCell>{row.CustomerName}</TableCell>
                                 <TableCell>{row.date}</TableCell>
                                 <TableCell>{`$${row.cost}`}</TableCell>

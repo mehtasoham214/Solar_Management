@@ -7,6 +7,7 @@ import PeopleIcon from "@mui/icons-material/People";
 import LogoutIcon from "@mui/icons-material/Logout";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import FactCheckIcon from "@mui/icons-material/FactCheck";
+import HomeIcon from '@mui/icons-material/Home';
 import theme from "../theme";
 import { ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
@@ -14,6 +15,14 @@ import { Link } from "react-router-dom";
 export const mainListItems = (
     <ThemeProvider theme={theme}>
         <React.Fragment>
+            <Link to="/" href="#" sx={{ mt: 3}}>
+                <ListItemButton sx={{ color: "primary.main" }}>
+                    <ListItemIcon>
+                        <HomeIcon sx={{ color: "primary.main" }} />
+                    </ListItemIcon>
+                    <ListItemText primary="Dashboard" />
+                </ListItemButton>
+            </Link>
             <Link to="/ongoingprojects" href="#" sx={{ mt: 3}}>
                 <ListItemButton sx={{ color: "primary.main" }}>
                     <ListItemIcon>

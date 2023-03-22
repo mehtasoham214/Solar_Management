@@ -11,6 +11,12 @@ import OngoingProject from "./onGoingProject";
 import PastProject from "./pastProjects";
 import PermanentDrawerLeft from "./navBar";
 
+//Date Picker Imports
+// import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 //Material UI Imports
 import {
     Dialog,
@@ -38,6 +44,7 @@ import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PhoneIcon from "@mui/icons-material/Phone";
 import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 function SalesDashboardContent() {
     const [openDialog, setOpenDialog] = useState(false);
@@ -229,6 +236,29 @@ function SalesDashboardContent() {
                                                     ),
                                                 }}
                                             />
+                                            <TextField
+                                                id="appointment-date"
+                                                label="Appointment Date"
+                                                variant="outlined"
+                                                type="datetime-local"
+                                                InputProps={{
+                                                    startAdornment: (
+                                                        <InputAdornment position="start">
+                                                            <CalendarMonthIcon
+                                                                sx={{
+                                                                    color: "action.active",
+                                                                    m: 0.5,
+                                                                }}
+                                                            />
+                                                        </InputAdornment>
+                                                    ),
+                                                }}
+                                            />
+                                            {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                <DemoContainer components={['DatePicker']}>
+                                                <DatePicker label="Basic date picker" />
+                                                </DemoContainer>
+                                            </LocalizationProvider> */}
                                         </Box>
                                     </DialogContent>
                                     <DialogActions>
