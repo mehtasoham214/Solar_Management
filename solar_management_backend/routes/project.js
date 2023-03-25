@@ -156,9 +156,27 @@ router.get("/inprogress", async (req, res) => {
     }
 });
 
+router.get("/allinprogress", async (req, res) => {
+    try {
+        const finishedProjects = await projectData.getOngoingProjects();
+        res.json(finishedProjects);
+    } catch (e) {
+        res.status(404).json({ error: `Failed to get projects: ${e}` });
+    }
+});
+
 router.get("/finished", async (req, res) => {
     try {
         const finishedProjects = await projectData.getFinishedFiveProjects();
+        res.json(finishedProjects);
+    } catch (e) {
+        res.status(404).json({ error: `Failed to get projects: ${e}` });
+    }
+});
+
+router.get("/allfinished", async (req, res) => {
+    try {
+        const finishedProjects = await projectData.getFinishedProjects();
         res.json(finishedProjects);
     } catch (e) {
         res.status(404).json({ error: `Failed to get projects: ${e}` });
