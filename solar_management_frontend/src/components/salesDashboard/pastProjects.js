@@ -47,7 +47,7 @@ const [projectlist, setemployees] = useState(null)
         getemployees()
     }, [])
     const getemployees = () => {
-        fetch("http://localhost:3000/finished")
+        fetch("http://localhost:4000/finished")
             .then(res => res.json())
             .then(
                 (result) => {                    
@@ -92,7 +92,7 @@ const rows = ButtonArray();
                                 <TableCell onClick={handleProjectClick}>{row._id}</TableCell>
                                 <TableCell>{row.customerName}</TableCell>
                                 <TableCell>{row.startDate}</TableCell>
-                                <TableCell>{`$${row.cost}`}</TableCell>
+                                <TableCell>{`$${row.totalCost}`}</TableCell>
 
                                 <TableCell
                                     style={{
@@ -100,7 +100,7 @@ const rows = ButtonArray();
                                             row.projectStatus === "Cancelled"
                                                 ? theme.palette.error.main
                                                 : row.projectStatus === "Finished"
-                                                ? theme.palette.warning.main
+                                                ? theme.palette.success.light
                                                 : "",
                                     }}
                                 >

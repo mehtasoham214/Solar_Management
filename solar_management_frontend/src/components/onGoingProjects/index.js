@@ -38,7 +38,7 @@ const [projectlist, setemployees] = useState(null)
         getemployees()
     }, [])
     const getemployees = () => {
-        fetch("http://localhost:3000/projects")
+        fetch("http://localhost:4000/allinprogress")
             .then(res => res.json())
             .then(
                 (result) => {                    

@@ -96,7 +96,7 @@ const getAllProjects = async () => {
 const getInProgressFiveProjects = async () => {
     const projectCollection = await project();
     let inProgressProjects = await projectCollection
-        .find({ projectStatus: "In-Progress", projectStatus: "Pending" })
+        .find({ projectStatus: { $in: ["In-Progress", "Pending"] } })
         .limit(5)
         .toArray();
 
@@ -106,11 +106,23 @@ const getInProgressFiveProjects = async () => {
     return inProgressProjects;
 };
 
+// To get all ongoing projects
+const getOngoingProjects = async () => {
+    const projectCollection = await project();
+    let finishedProjects = await projectCollection
+    .find({projectStatus: { $in: ["In-Progress", "Pending"] } })
+    .toArray();
+    if (finishedProjects.length == 0) {
+        throw `No Projects Found`;
+    }
+    return finishedProjects;
+}
+
 // To get finished five projects
 const getFinishedFiveProjects = async () => {
     const projectCollection = await project();
     let finishedProjects = await projectCollection
-        .find({ projectStatus: "Finished", projectStatus: "Cancelled" })
+        .find( { projectStatus: { $in: ["Cancelled", "Finished"] } } )
         .limit(5)
         .toArray();
 
@@ -119,6 +131,18 @@ const getFinishedFiveProjects = async () => {
     }
     return finishedProjects;
 };
+
+// To get all finished projects
+const getFinishedProjects = async () => {
+    const projectCollection = await project();
+    let finishedProjects = await projectCollection
+    .find({projectStatus: { $in: ["Cancelled", "Finished"] } })
+    .toArray();
+    if (finishedProjects.length == 0) {
+        throw `No Projects Found`;
+    }
+    return finishedProjects;
+}
 
 const getProjectByid = async (id) => {
     validator.validateId(id);
@@ -249,4 +273,6 @@ module.exports = {
     siteInspectorUpdate,
     addSiteInspector,
     addEquipment,
+    getFinishedProjects,
+    getOngoingProjects
 };
