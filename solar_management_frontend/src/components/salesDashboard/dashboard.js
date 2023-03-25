@@ -44,7 +44,7 @@ import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PhoneIcon from "@mui/icons-material/Phone";
 import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 function SalesDashboardContent() {
     const [openDialog, setOpenDialog] = useState(false);
@@ -69,13 +69,13 @@ function SalesDashboardContent() {
 
         // submit the form data to the server or do any other processing here
         console.log(formData);
-        fetch('http://localhost:3000/projects/add', {
-            method: 'POST',
+        fetch(process.env.REACT_APP_API_URL, {
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify(formData)
-          });
+            body: JSON.stringify(formData),
+        });
 
         // close the dialog box
         handleCloseDialog();
