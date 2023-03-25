@@ -1,4 +1,5 @@
 import * as React from "react";
+import {useState,  useEffect} from "react";
 import Link from "@mui/material/Link";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -12,6 +13,17 @@ import { useNavigate } from "react-router-dom";
 //import { Button } from "@mui/material";
 
 // Generate Order Data
+
+
+
+export default function PastProject({ showMoreLink = true }) {
+    const navigate = useNavigate();
+
+    const handleSeeMoreClick = (event) => {
+        event.preventDefault();
+        navigate("/ongoingprojects"); // replace with the desired path
+     };
+
 function ButtonArray() {
     const buttonArray = ["PDF"];
 
@@ -30,70 +42,35 @@ function ButtonArray() {
     );
 }
 
-function createData(id, date, ProductName, CustomerName, Status, cost, Action) {
-    return { id, date, ProductName, CustomerName, Status, cost, Action };
-}
+const [projectlist, setemployees] = useState(null)
+    useEffect(() => {
+        getemployees()
+    }, [])
+    const getemployees = () => {
+        fetch("http://localhost:3000/finished")
+            .then(res => res.json())
+            .then(
+                (result) => {                    
+                    setemployees(result)
+                },
+                (error) => {
+                    setemployees(null);
+                }
+            )
+    }
 
-const rows = [
-    createData(
-        0,
-        "16 Mar, 2019",
-        "Solar Plant 1",
-        "Tupelo, MS",
-        "Completed",
-        312.44,
-        ButtonArray()
-    ),
-    createData(
-        1,
-        "16 Mar, 2019",
-        "Solar Plant 2",
-        "London, UK",
-        "Cancelled",
-        866.99,
-        ButtonArray()
-    ),
-    createData(
-        2,
-        "16 Mar, 2019",
-        "Solar Plant 3",
-        "Boston, MA",
-        "Cancelled",
-        100.81,
-        ButtonArray()
-    ),
-    createData(
-        3,
-        "16 Mar, 2019",
-        "Solar Plant 4",
-        "Gary, IN",
-        "Completed",
-        654.39,
-        ButtonArray()
-    ),
-    createData(
-        4,
-        "15 Mar, 2019",
-        "Solar Plant 5",
-        "Long Branch, NJ",
-        "Completed",
-        212.79,
-        ButtonArray()
-    ),
-];
+    if (!projectlist) return (<div>No Record Found</div>)
 
-// function preventDefault(event) {
-//     event.preventDefault();
-// }
 
-export default function PastProject({ showMoreLink = true }) {
-    const navigate = useNavigate();
 
-    const handleSeeMoreClick = (event) => {
+const rows = ButtonArray();
+
+    const handleProjectClick = (event) => {
         event.preventDefault();
-        navigate("/pastprojects"); // replace with the desired path
+        navigate("/projectdetails"); // replace with the desired path
     };
 
+    
     return (
         <ThemeProvider theme={theme}>
             <React.Fragment>
@@ -101,50 +78,48 @@ export default function PastProject({ showMoreLink = true }) {
                 <Table size="small">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Product Name</TableCell>
+                            <TableCell>Product Id</TableCell>
                             <TableCell>Customer Name</TableCell>
                             <TableCell>Date</TableCell>
                             <TableCell>Cost</TableCell>
-
                             <TableCell>Status</TableCell>
                             <TableCell>Action</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row) => (
+                        {projectlist.map((row) => (
                             <TableRow key={row.id}>
-                                <TableCell>{row.ProductName}</TableCell>
-                                <TableCell>{row.CustomerName}</TableCell>
-                                <TableCell>{row.date}</TableCell>
+                                <TableCell onClick={handleProjectClick}>{row._id}</TableCell>
+                                <TableCell>{row.customerName}</TableCell>
+                                <TableCell>{row.startDate}</TableCell>
                                 <TableCell>{`$${row.cost}`}</TableCell>
 
                                 <TableCell
                                     style={{
                                         color:
-                                            row.Status === "Cancelled"
+                                            row.projectStatus === "Cancelled"
                                                 ? theme.palette.error.main
-                                                : row.Status === "Completed"
-                                                ? theme.palette.success.main
+                                                : row.projectStatus === "Finished"
+                                                ? theme.palette.warning.main
                                                 : "",
                                     }}
                                 >
-                                    {row.Status}
+                                    {row.projectStatus}
                                 </TableCell>
-                                <TableCell>{row.Action}</TableCell>
+                                <TableCell>{rows}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
                 {showMoreLink && (
-                    <Link
-                        color="primary"
-                        href="#"
-                        onClick={handleSeeMoreClick}
-                        sx={{ mt: 3 }}
-                    >
-                        See more projects
-                    </Link>
-                )}
+                <Link
+                    color="primary"
+                    href="#"
+                    onClick={handleSeeMoreClick}
+                    sx={{ mt: 3 }}
+                >
+                    See more Projects
+                </Link>)}
             </React.Fragment>
         </ThemeProvider>
     );
