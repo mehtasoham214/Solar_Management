@@ -264,8 +264,12 @@ const siteInspectorUpdate = async (
     roofInfo,
     backyard,
     grid,
+    irradiance,
     meterCompatible,
-    coordinates
+    coordinates,
+    photos,
+    notes,
+    feasible
 ) => {
     validator.validateId(id);
     validator.validateAreaParameter(roofInfo, backyard, grid, meterCompatible);
@@ -274,12 +278,21 @@ const siteInspectorUpdate = async (
         roofInfo: roofInfo,
         backyard: backyard,
         grid: grid,
+        irradiance: irradiance,
         meterCompatible: meterCompatible,
         coordinates: coordinates,
+        notes:notes,
+        feasible:feasible
     };
+    let  progressStatus= "At Operations Engineer";
+    const photos = {
+        photos: photos
+    }
     await project().updateOne(
         { _id: id },
-        { $set: { areaInfo: siteInspector } }
+        { $set: { areaInfo: siteInspector,
+        images: photos,
+        progress: progressStatus } }
     );
     if (updatedInfo.modifiedCount == 0) {
         throw `Couldn't update Site Inspector Information`;
@@ -289,12 +302,16 @@ const siteInspectorUpdate = async (
 };
 
 //For Operations Engineer
-const addSiteInspector = async (id, siteInspector) => {
+const addStaff = async (id, siteInspector, operationsEngineer,teamLead) => {
     const projectCollection = await project();
     const project = await projectCollection.findOne({ _id: id });
+    let progressStatus = "With Site Inspector"
     await project().update(
         { _id: id },
-        { $set: { siteInspector: siteInspector, status: "In-Progress" } }
+        { $set: { siteInspector: siteInspector,
+        operationsEngineer: operationsEngineer,
+    teamLead:teamLead,
+progress: progressStatus} }
     );
     if (updatedInfo.modifiedCount == 0) {
         throw `Couldn't add Site Inspector`;
@@ -342,7 +359,7 @@ module.exports = {
     getProject,
     buttonClick,
     siteInspectorUpdate,
-    addSiteInspector,
+    addStaff,
     addEquipment,
     getFinishedProjects,
     getOngoingProjects,
