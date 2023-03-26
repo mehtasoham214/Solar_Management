@@ -179,6 +179,7 @@ const getFinishedProjects = async () => {
     return finishedProjects;
 };
 
+// To get project by id
 const getProjectByid = async (id) => {
     validator.validateId(id);
     if (typeof id == "string") {
@@ -192,16 +193,7 @@ const getProjectByid = async (id) => {
     return projectinfo;
 };
 
-const getProject = async (projectId) => {
-    const projectCollection = await project();
-    const project = await projectCollection.findOne({ projectId: projectId });
-
-    if (!project) {
-        throw `Project Not Found`;
-    }
-    return project;
-};
-
+//Update project stats by button click
 const buttonClick = async (id, type) => {
     const projectCollection = await project();
     const projectStatus = await getProjectByid(id);
@@ -281,18 +273,22 @@ const siteInspectorUpdate = async (
         irradiance: irradiance,
         meterCompatible: meterCompatible,
         coordinates: coordinates,
-        notes:notes,
-        feasible:feasible
+        notes: notes,
+        feasible: feasible,
     };
-    let  progressStatus= "At Operations Engineer";
+    let progressStatus = "At Operations Engineer";
     const photos = {
-        photos: photos
-    }
+        photos: photos,
+    };
     await project().updateOne(
         { _id: id },
-        { $set: { areaInfo: siteInspector,
-        images: photos,
-        progress: progressStatus } }
+        {
+            $set: {
+                areaInfo: siteInspector,
+                images: photos,
+                progress: progressStatus,
+            },
+        }
     );
     if (updatedInfo.modifiedCount == 0) {
         throw `Couldn't update Site Inspector Information`;
@@ -300,18 +296,21 @@ const siteInspectorUpdate = async (
         return "Site Inspector information updated";
     }
 };
-
 //For Operations Engineer
-const addStaff = async (id, siteInspector, operationsEngineer,teamLead) => {
+const addStaff = async (id, siteInspector, operationsEngineer, teamLead) => {
     const projectCollection = await project();
     const project = await projectCollection.findOne({ _id: id });
-    let progressStatus = "With Site Inspector"
+    let progressStatus = "With Site Inspector";
     await project().update(
         { _id: id },
-        { $set: { siteInspector: siteInspector,
-        operationsEngineer: operationsEngineer,
-    teamLead:teamLead,
-progress: progressStatus} }
+        {
+            $set: {
+                siteInspector: siteInspector,
+                operationsEngineer: operationsEngineer,
+                teamLead: teamLead,
+                progress: progressStatus,
+            },
+        }
     );
     if (updatedInfo.modifiedCount == 0) {
         throw `Couldn't add Site Inspector`;
@@ -329,7 +328,9 @@ const addEquipment = async (
     wireCount,
     batteryCount,
     batteryCapacity,
-    railsCount
+    railsCount,
+    chargeControllertype,
+    chargeControllerCount
 ) => {
     const projectCollection = await project();
     const project = await projectCollection.findOne({ _id: id });
@@ -341,6 +342,8 @@ const addEquipment = async (
         batteryCount: batteryCount,
         batteryCapacity: batteryCapacity,
         railsCount: railsCount,
+        chargeControllertype: chargeControllertype,
+        chargeControllerCount: chargeControllerCount,
     };
     await project().updateOne({ _id: id }, { $set: { equipment: equipment } });
     if (updatedInfo.modifiedCount == 0) {
@@ -356,7 +359,6 @@ module.exports = {
     getInProgressFiveProjects,
     getFinishedFiveProjects,
     getProjectByid,
-    getProject,
     buttonClick,
     siteInspectorUpdate,
     addStaff,
