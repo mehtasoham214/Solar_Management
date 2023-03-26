@@ -1,5 +1,6 @@
 const mongoCollections = require("../db/collection");
 const customer = mongoCollections.customer;
+const leads = mongoCollections.leads;
 const { ObjectId } = require("mongodb");
 const validator = require("../validator");
 
@@ -63,7 +64,17 @@ const getCustomerByid = async (id) => {
     return customerinfo;
 };
 
+const getLeads = async () => {
+    const leadsCollection = await leads();
+    const leadsList = await leadsCollection.find({}).toArray();
+    if (!leadsList) {
+        throw `No Leads Found`;
+    }
+    return leadsList;
+};
+
 module.exports = {
     getCustomerByid,
     patchCustomer,
+    getLeads,
 };

@@ -7,6 +7,7 @@ const express = require("express");
 const router = express.Router();
 const validator = require("../validator");
 
+//Getting all projects
 router.get("/projects", async (req, res) => {
     try {
         const projects = await projectData.getAllProjects();
@@ -16,6 +17,7 @@ router.get("/projects", async (req, res) => {
     }
 });
 
+//Creating Project
 router.post("/projects/add", async (req, res) => {
     let customerName = req.body.customerName;
     let customerAddress = req.body.customerAddress;
@@ -52,6 +54,7 @@ router.post("/projects/add", async (req, res) => {
     }
 });
 
+//Getting project by id
 router.get("/projects/:id", async (req, res) => {
     const projectId = req.params.id;
 
@@ -65,13 +68,15 @@ router.get("/projects/:id", async (req, res) => {
     }
 });
 
+//Adding Site Inspector information
 router.patch("/projects/:id", async (req, res) => {
     let id = req.params.id;
     let roofInfo = req.body.roofInfo;
     let backyard = req.body.backyard;
     let grid = req.body.grid;
     let meterCompatible = req.body.meterCompatible;
-    let coordinates = req.body.coordinates;
+    let irradiance = req.body.irradiance;
+    let feasible = req.body.feasible;
 
     try {
         validator.validateId(id);
@@ -92,8 +97,12 @@ router.patch("/projects/:id", async (req, res) => {
             roofInfo,
             backyard,
             grid,
+            irradiance,
             meterCompatible,
-            coordinates
+            coordinates,
+            photos,
+            notes,
+            feasible
         );
         res.status(200).json(updateProject);
     } catch (e) {
@@ -101,6 +110,7 @@ router.patch("/projects/:id", async (req, res) => {
     }
 });
 
+//Adding Operation Engineer information
 router.patch("/projects/equipment/:id", async (req, res) => {
     let id = req.params.id;
     let solarType = req.body.solarType;
@@ -110,6 +120,9 @@ router.patch("/projects/equipment/:id", async (req, res) => {
     let batteryCount = req.body.batteryCount;
     let batteryCapacity = req.body.batteryCapacity;
     let railsCount = req.body.railsCount;
+    let chargeControllertype = req.body.chargeControllertype;
+    let chargeControllerCount = req.body.chargeControllerCount;
+
     try {
         const addEquipment = await projectData.addEquipment(
             id,
@@ -119,7 +132,9 @@ router.patch("/projects/equipment/:id", async (req, res) => {
             wireCount,
             batteryCount,
             batteryCapacity,
-            railsCount
+            railsCount,
+            chargeControllertype,
+            chargeControllerCount
         );
         res.status(200).json(addEquipment);
     } catch (e) {
@@ -127,10 +142,13 @@ router.patch("/projects/equipment/:id", async (req, res) => {
     }
 });
 
-router.patch("/projects/siteinspector/:id", async (req, res) => {
+//Adding Staff information to project
+router.patch("/projects/addStaff/:id", async (req, res) => {
     try {
         const projectId = req.params.id;
         const siteInspector = req.body.siteInspector;
+        const operationEngineer = req.body.operationEngineer;
+        const teamLead = req.body.teamLead;
 
         if (!siteInspector) {
             throw new Error("siteInspector data is missing");
@@ -138,7 +156,9 @@ router.patch("/projects/siteinspector/:id", async (req, res) => {
 
         const updatedProject = await projectData.updateSiteInspector(
             projectId,
-            siteInspector
+            siteInspector,
+            operationEngineer,
+            teamLead
         );
         res.json(updatedProject);
     } catch (e) {
@@ -146,6 +166,7 @@ router.patch("/projects/siteinspector/:id", async (req, res) => {
     }
 });
 
+//Getting 5 inprogress projects
 router.get("/inprogress", async (req, res) => {
     try {
         const inprogressProjects =
@@ -156,6 +177,7 @@ router.get("/inprogress", async (req, res) => {
     }
 });
 
+//Getting all inprogress projects
 router.get("/allinprogress", async (req, res) => {
     try {
         const finishedProjects = await projectData.getOngoingProjects();
@@ -165,6 +187,7 @@ router.get("/allinprogress", async (req, res) => {
     }
 });
 
+//Getting 5 finished projects
 router.get("/finished", async (req, res) => {
     try {
         const finishedProjects = await projectData.getFinishedFiveProjects();
@@ -174,6 +197,7 @@ router.get("/finished", async (req, res) => {
     }
 });
 
+//Getting all finished projects
 router.get("/allfinished", async (req, res) => {
     try {
         const finishedProjects = await projectData.getFinishedProjects();
@@ -183,7 +207,7 @@ router.get("/allfinished", async (req, res) => {
     }
 });
 
-// get customer
+// get customer by id
 router.get("/customer/:id", async (req, res) => {
     const customerId = req.params.id;
 
@@ -228,4 +252,15 @@ router.patch("/customer_patch", async (req, res) => {
         res.status(400).json({ error: e });
     }
 });
+
+//Getting all leads
+router.get("/leads", async (req, res) => {
+    try {
+        const leads = await customerData.getLeads();
+        res.json(leads);
+    } catch (e) {
+        res.status(404).json({ error: `Failed to get leads: ${e}` });
+    }
+});
+
 module.exports = router;
