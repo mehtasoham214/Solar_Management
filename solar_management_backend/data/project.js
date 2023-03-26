@@ -34,6 +34,9 @@ const createProject = async (data) => {
     let equipment = [];
     let totalCost = undefined;
     let projectStatus = "Pending";
+    let addedNotes = undefined;
+    let whoAdded = undefined;
+    let addedDate = undefined;
     validator.validateCustomerandProject(
         customerName,
         customerAddress,
@@ -82,8 +85,21 @@ const createProject = async (data) => {
             totalCost: totalCost,
         };
         const newInfo = await projectCollection.insertOne(projectdata);
+        const projectId = newInfo.insertedId;
+        let notesData = {
+            projectId: projectId,
+            notes: addedNotes,
+            whoAdded: whoAdded,
+            addedDate: addedDate,
+        };
+        const notesCollection = await notes();
+        const newNotesInfo = await notesCollection.insertOne(notesData);
 
-        if (newInfo.insertedCount == 0 || newCustInfo.insertedCount == 0) {
+        if (
+            newInfo.insertedCount == 0 ||
+            newCustInfo.insertedCount == 0 ||
+            newNotesInfo.insertedCount == 0
+        ) {
             throw `Error In Creating Project`;
         } else {
             return "Created Project";
@@ -189,16 +205,31 @@ const getProject = async (projectId) => {
 const buttonClick = async (id, type) => {
     const projectCollection = await project();
     const projectStatus = await getProjectByid(id);
+
+    if (type == "start") {
+        projectStatus.status = "In-Progress";
+        let startDate = new Date().toLocaleDateString();
+        await projectCollection().updateOne(
+            { _id: id },
+            { $set: { status: projectStatus.status, startDate: startDate } }
+        );
+    }
     if (type == "finished") {
         projectStatus.status = "Finished";
+        let endDate = new Date().toLocaleDateString();
+        await projectCollection().updateOne(
+            { _id: id },
+            { $set: { status: projectStatus.status, endDate: endDate } }
+        );
     }
     if (type == "cancelled") {
         projectStatus.status = "Cancelled";
+        let endDate = new Date().toLocaleDateString();
+        await projectCollection().updateOne(
+            { _id: id },
+            { $set: { status: projectStatus.status, endDate: endDate } }
+        );
     }
-    await projectCollection().updateOne(
-        { _id: id },
-        { $set: { status: projectStatus.status } }
-    );
     if (updatedInfo.modifiedCount == 0) {
         throw `Couldn't update Status of Project`;
     } else {
