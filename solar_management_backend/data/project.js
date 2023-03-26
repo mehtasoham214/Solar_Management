@@ -18,6 +18,7 @@ const notes = mongoCollections.notes;
 const material = mongoCollections.material;
 const { ObjectId } = require("mongodb");
 const validator = require("../validator");
+const user = require("./user");
 
 // Create a new project and customer
 const createProject = async (data) => {
@@ -25,6 +26,7 @@ const createProject = async (data) => {
     let customerAddress = data.customerAddress.trim();
     let customerNumber = data.customerNumber.trim();
     let projectAddress = data.projectAddress.trim();
+    let sales = data.username;
     let siteInspector = undefined;
     let startDate = new Date().toLocaleDateString();
     let appointmentDate = data.appointmentDate;
@@ -36,6 +38,7 @@ const createProject = async (data) => {
     let projectStatus = "Pending";
     let addedNotes = undefined;
     let whoAdded = undefined;
+
     let addedDate = undefined;
     validator.validateCustomerandProject(
         customerName,
@@ -51,6 +54,7 @@ const createProject = async (data) => {
         const leadsInfo = {
             customerName: customerName,
             customerNumber: customerNumber,
+            salesIncharge: sales,
             Date: new Date().toLocaleDateString(),
         };
         const newLeadsInfo = await leadsCollection.insertOne(leadsInfo);
@@ -65,6 +69,7 @@ const createProject = async (data) => {
             customerName: customerName,
             customerAddress: customerAddress,
             customerNumber: customerNumber,
+            salesIncharge: sales,
         };
         const newCustInfo = await customerCollection.insertOne(customerInfo);
         const customerId = newCustInfo.insertedId;
@@ -76,6 +81,7 @@ const createProject = async (data) => {
             customerName: customerName,
             projectAddress: projectAddress,
             projectStatus: projectStatus,
+            salesIncharge: sales,
             siteInspector: siteInspector,
             startDate: startDate,
             endDate: endDate,
@@ -108,19 +114,36 @@ const createProject = async (data) => {
 };
 
 // To get allprojects
-const getAllProjects = async () => {
-    const projectCollection = await project();
-    let allProjects = await projectCollection.find({}).toArray();
+const getAllProjects = async (username) => {
+    let staffUser = user.getUser(username);
+    if (staffUser.role == "Sales") {
+        const projectCollection = await project();
+        let allProjects = await projectCollection.find({}).toArray();
 
-    inProgressProjects = await projectCollection.find({
-        projectStatus: "In-Progress",
-        projectStatus: "Pending",
-    });
-    finishedProjects = await projectCollection.find({
-        projectStatus: "Finished",
-        projectStatus: "Cancelled",
-    });
+        inProgressProjects = await projectCollection.find({
+            projectStatus: "In-Progress",
+            projectStatus: "Pending",
+            salesIncharge: username,
+        });
+        finishedProjects = await projectCollection.find({
+            projectStatus: "Finished",
+            projectStatus: "Cancelled",
+            salesIncharge: username,
+        });
+    }
+    if (staffUser.role == "Operations Manager") {
+        const projectCollection = await project();
+        let allProjects = await projectCollection.find({}).toArray();
 
+        inProgressProjects = await projectCollection.find({
+            projectStatus: "In-Progress",
+            projectStatus: "Pending",
+        });
+        finishedProjects = await projectCollection.find({
+            projectStatus: "Finished",
+            projectStatus: "Cancelled",
+        });
+    }
     if (allProjects.length == 0) {
         throw `No Projects Found`;
     }
@@ -128,10 +151,13 @@ const getAllProjects = async () => {
 };
 
 // To get in-progress five projects
-const getInProgressFiveProjects = async () => {
+const getInProgressFiveProjects = async (username) => {
     const projectCollection = await project();
     let inProgressProjects = await projectCollection
-        .find({ projectStatus: { $in: ["In-Progress", "Pending"] } })
+        .find({
+            projectStatus: { $in: ["In-Progress", "Pending"] },
+            salesIncharge: username,
+        })
         .limit(5)
         .toArray();
 
@@ -277,7 +303,7 @@ const siteInspectorUpdate = async (
         feasible: feasible,
     };
     let progressStatus = "At Operations Engineer";
-    const photos = {
+    const pictures = {
         photos: photos,
     };
     await project().updateOne(
@@ -285,7 +311,7 @@ const siteInspectorUpdate = async (
         {
             $set: {
                 areaInfo: siteInspector,
-                images: photos,
+                images: pictures,
                 progress: progressStatus,
             },
         }
