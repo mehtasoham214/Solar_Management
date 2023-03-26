@@ -228,4 +228,42 @@ router.patch("/customer_patch", async (req, res) => {
         res.status(400).json({ error: e });
     }
 });
+
+// get all sales team
+router.get("/sales", async (req, res) => {
+    try {
+        const salesTeam = await userData.getAllSalesTeam();
+        res.json(salesTeam);
+    } catch (e) {
+        res.status(404).json({ error: `Failed to get users: ${e}` });
+    }
+});
+
+
+router.get("/siteinspectors", async (req, res) => {
+    try {
+        const siteInspectors= await userData.getAllSiteInspector();
+        res.json(siteInspectors);
+    } catch (e) {
+        res.status(404).json({ error: `Failed to get users: ${e}` });
+    }
+});
+
+router.get("/operationsengineer", async (req, res) => {
+    try {
+        const operationsEgineers= await userData.getAllOperationsEngineer();
+        res.json(operationsEgineers);
+    } catch (e) {
+        res.status(404).json({ error: `Failed to get users: ${e}` });
+    }
+});
+
+router.get("/teamlead", async (req, res) => {
+    try {
+        const teamLeads= await userData.getAllTeamLeads();
+        res.json(teamLeads);
+    } catch (e) {
+        res.status(404).json({ error: `Failed to get users: ${e}` });
+    }
+});
 module.exports = router;

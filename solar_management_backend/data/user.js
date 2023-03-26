@@ -50,15 +50,56 @@ const getAllSiteInspector = async () => {
     const siteInsperctorList = await siteInspector.find({
         position: "Site Inspector",
     });
-    if (siteInsperctorList) {
-        return siteInspector;
-    } else {
-        throw `No SiteInspector`;
+    if (siteInsperctorList.length == 0) {
+        throw `No Site Inspectors Found`;
     }
+    return siteInsperctorList;
+};
+
+const getAllTeamLeads = async() => {
+    const teamLeadCollection = await user();
+    let teamLeadsList = await teamLeadCollection
+    .find({
+        position: "Team Lead",
+    })
+    .toArray();
+    if (teamLeadsList.length == 0) {
+        throw `No Team Leads Found`;
+    }
+    return teamLeadsList;
+};
+
+const getAllOperationsEngineer = async() => {
+    const operationsEngineerCollection = await user();
+    let operationsEngineerList = await operationsEngineerCollection
+    .find({
+        position: "Operations Engineer"
+    })
+    .toArray();
+    if (operationsEngineerList.length == 0) {
+        throw `No Operations Engineers Found`;
+    }
+    return operationsEngineerList;
+};
+
+const getAllSalesTeam = async() => {
+    const salesTeamCollection = await user();
+    let salesTeamList = await salesTeamCollection
+    .find({
+        position: "Sales"
+    })
+    .toArray();
+    if (salesTeamList.length == 0) {
+        throw `No Operations Engineers Found`;
+    }
+    return salesTeamList;
 };
 
 module.exports = {
     createUser,
     getUser,
     getAllSiteInspector,
+    getAllTeamLeads,
+    getAllOperationsEngineer,
+    getAllSalesTeam
 };

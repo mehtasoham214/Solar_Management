@@ -277,7 +277,7 @@ const siteInspectorUpdate = async (
         feasible: feasible,
     };
     let progressStatus = "At Operations Engineer";
-    const photos = {
+    const pictures = {
         photos: photos,
     };
     await project().updateOne(
@@ -285,7 +285,7 @@ const siteInspectorUpdate = async (
         {
             $set: {
                 areaInfo: siteInspector,
-                images: photos,
+                images: pictures,
                 progress: progressStatus,
             },
         }
