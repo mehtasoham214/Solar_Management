@@ -208,26 +208,47 @@ const buttonClick = async (id, type) => {
 
     if (type == "start") {
         projectStatus.status = "In-Progress";
+        progress = "With Boots on Ground";
         let startDate = new Date().toLocaleDateString();
         await projectCollection().updateOne(
             { _id: id },
-            { $set: { status: projectStatus.status, startDate: startDate } }
+            {
+                $set: {
+                    status: projectStatus.status,
+                    startDate: startDate,
+                    progress: progress,
+                },
+            }
         );
     }
     if (type == "finished") {
         projectStatus.status = "Finished";
         let endDate = new Date().toLocaleDateString();
+        let progress = "Completed";
         await projectCollection().updateOne(
             { _id: id },
-            { $set: { status: projectStatus.status, endDate: endDate } }
+            {
+                $set: {
+                    status: projectStatus.status,
+                    endDate: endDate,
+                    progress: progress,
+                },
+            }
         );
     }
     if (type == "cancelled") {
         projectStatus.status = "Cancelled";
         let endDate = new Date().toLocaleDateString();
+        let progress = "Cancelled";
         await projectCollection().updateOne(
             { _id: id },
-            { $set: { status: projectStatus.status, endDate: endDate } }
+            {
+                $set: {
+                    status: projectStatus.status,
+                    endDate: endDate,
+                    progress: progress,
+                },
+            }
         );
     }
     if (updatedInfo.modifiedCount == 0) {
