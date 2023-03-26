@@ -13,6 +13,9 @@
 const mongoCollections = require("../db/collection");
 const project = mongoCollections.project;
 const customer = mongoCollections.customer;
+const leads = mongoCollections.leads;
+const notes = mongoCollections.notes;
+const material = mongoCollections.material;
 const { ObjectId } = require("mongodb");
 const validator = require("../validator");
 
@@ -24,6 +27,7 @@ const createProject = async (data) => {
     let projectAddress = data.projectAddress.trim();
     let siteInspector = undefined;
     let startDate = new Date().toLocaleDateString();
+    let appointmentDate = data.appointmentDate;
     let endDate = undefined;
     let areaInfo = [];
     let images = [];
@@ -39,36 +43,51 @@ const createProject = async (data) => {
     customerNumber = parseInt(customerNumber);
 
     // Insert customer information into the customers collection
-    const customerCollection = await customer();
-    const customerInfo = {
-        customerName: customerName,
-        customerAddress: customerAddress,
-        customerNumber: customerNumber,
-    };
-    const newCustInfo = await customerCollection.insertOne(customerInfo);
-    const customerId = newCustInfo.insertedId;
-
-    // Insert project information into the projects collection
-    const projectCollection = await project();
-    let projectdata = {
-        customerId: customerId,
-        customerName: customerName,
-        projectAddress: projectAddress,
-        projectStatus: projectStatus,
-        siteInspector: siteInspector,
-        startDate: startDate,
-        endDate: endDate,
-        areaInfo: areaInfo,
-        images: images,
-        equipment: equipment,
-        totalCost: totalCost,
-    };
-    const newInfo = await projectCollection.insertOne(projectdata);
-
-    if (newInfo.insertedCount == 0 || newCustInfo.insertedCount == 0) {
-        throw `Error In Creating Project`;
+    if (!appointmentDate) {
+        const leadsCollection = await leads();
+        const leadsInfo = {
+            customerName: customerName,
+            customerNumber: customerNumber,
+            Date: new Date().toLocaleDateString(),
+        };
+        const newLeadsInfo = await leadsCollection.insertOne(leadsInfo);
+        if (newLeadsInfo.insertedCount == 0) {
+            throw `Error In Creating Lead`;
+        } else {
+            return "Created Lead";
+        }
     } else {
-        return "Created Project";
+        const customerCollection = await customer();
+        const customerInfo = {
+            customerName: customerName,
+            customerAddress: customerAddress,
+            customerNumber: customerNumber,
+        };
+        const newCustInfo = await customerCollection.insertOne(customerInfo);
+        const customerId = newCustInfo.insertedId;
+
+        // Insert project information into the projects collection
+        const projectCollection = await project();
+        let projectdata = {
+            customerId: customerId,
+            customerName: customerName,
+            projectAddress: projectAddress,
+            projectStatus: projectStatus,
+            siteInspector: siteInspector,
+            startDate: startDate,
+            endDate: endDate,
+            areaInfo: areaInfo,
+            images: images,
+            equipment: equipment,
+            totalCost: totalCost,
+        };
+        const newInfo = await projectCollection.insertOne(projectdata);
+
+        if (newInfo.insertedCount == 0 || newCustInfo.insertedCount == 0) {
+            throw `Error In Creating Project`;
+        } else {
+            return "Created Project";
+        }
     }
 };
 
@@ -110,19 +129,19 @@ const getInProgressFiveProjects = async () => {
 const getOngoingProjects = async () => {
     const projectCollection = await project();
     let finishedProjects = await projectCollection
-    .find({projectStatus: { $in: ["In-Progress", "Pending"] } })
-    .toArray();
+        .find({ projectStatus: { $in: ["In-Progress", "Pending"] } })
+        .toArray();
     if (finishedProjects.length == 0) {
         throw `No Projects Found`;
     }
     return finishedProjects;
-}
+};
 
 // To get finished five projects
 const getFinishedFiveProjects = async () => {
     const projectCollection = await project();
     let finishedProjects = await projectCollection
-        .find( { projectStatus: { $in: ["Cancelled", "Finished"] } } )
+        .find({ projectStatus: { $in: ["Cancelled", "Finished"] } })
         .limit(5)
         .toArray();
 
@@ -136,13 +155,13 @@ const getFinishedFiveProjects = async () => {
 const getFinishedProjects = async () => {
     const projectCollection = await project();
     let finishedProjects = await projectCollection
-    .find({projectStatus: { $in: ["Cancelled", "Finished"] } })
-    .toArray();
+        .find({ projectStatus: { $in: ["Cancelled", "Finished"] } })
+        .toArray();
     if (finishedProjects.length == 0) {
         throw `No Projects Found`;
     }
     return finishedProjects;
-}
+};
 
 const getProjectByid = async (id) => {
     validator.validateId(id);
@@ -274,5 +293,5 @@ module.exports = {
     addSiteInspector,
     addEquipment,
     getFinishedProjects,
-    getOngoingProjects
+    getOngoingProjects,
 };
