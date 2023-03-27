@@ -317,7 +317,9 @@ router.get(
         try {
             const { username } = req.user;
             const token = req.headers.authorization.split(" ")[1];
-            const finishedProjects = await projectData.getOngoingProjects(username);
+            const finishedProjects = await projectData.getOngoingProjects(
+                username
+            );
             res.json(finishedProjects);
         } catch (e) {
             res.status(404).json({ error: `Failed to get projects: ${e}` });
@@ -333,8 +335,9 @@ router.get(
         try {
             const { username } = req.user;
             const token = req.headers.authorization.split(" ")[1];
-            const finishedProjects =
-                await projectData.getFinishedFiveProjects(username);
+            const finishedProjects = await projectData.getFinishedFiveProjects(
+                username
+            );
             res.json(finishedProjects);
         } catch (e) {
             res.status(404).json({ error: `Failed to get projects: ${e}` });
@@ -350,7 +353,9 @@ router.get(
         try {
             const { username } = req.user;
             const token = req.headers.authorization.split(" ")[1];
-            const finishedProjects = await projectData.getFinishedProjects(username);
+            const finishedProjects = await projectData.getFinishedProjects(
+                username
+            );
             res.json(finishedProjects);
         } catch (e) {
             res.status(404).json({ error: `Failed to get projects: ${e}` });
@@ -466,8 +471,9 @@ router.get(
         try {
             const { username } = req.user;
             const token = req.headers.authorization.split(" ")[1];
-            const operationsEgineers =
-                await userData.getAllOperationsEngineer(username);
+            const operationsEgineers = await userData.getAllOperationsEngineer(
+                username
+            );
             res.json(operationsEgineers);
         } catch (e) {
             res.status(404).json({ error: `Failed to get users: ${e}` });
@@ -541,7 +547,7 @@ router.get(
             const token = req.headers.authorization.split(" ")[1];
             console.log(token);
             const ongoingCounts = await projectData.getOngoingCount(username);
-            res.json({counts:ongoingCounts });
+            res.json({ counts: ongoingCounts });
         } catch (e) {
             res.status(404).json({ error: `Failed to get users: ${e}` });
         }
@@ -556,13 +562,13 @@ router.get(
         try {
             const { username } = req.user;
             const token = req.headers.authorization.split(" ")[1];
+            console.log(token);
             const finishedCount = await projectData.getFinishedCount(username);
-            res.json({counts:finishedCount});
+            res.json({ counts: finishedCount });
         } catch (e) {
             res.status(404).json({ error: `Failed to get users: ${e}` });
         }
     }
 );
-
 
 module.exports = router;

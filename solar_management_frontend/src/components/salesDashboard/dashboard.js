@@ -1,8 +1,8 @@
 import * as React from "react";
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 
 // import axios
-import axios  from 'axios'
+import axios from "axios";
 //Theme Imports
 import theme from "../theme";
 import { ThemeProvider } from "@mui/material/styles";
@@ -56,64 +56,44 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 // import AllLeads from "../leads";
 // import AllCustomer from "../customers";
 
-
 function SalesDashboardContent() {
-
-// Setting Ongoing Project Count
-const [ongoing, setOngoing] = useState();
-async function fetchData() {
-    const cookieString = document.cookie;
-    const tokenCookie = cookieString.split('; ').find(row => row.startsWith('token='));
-    if (!tokenCookie) {
-      // handle the case where the token cookie is not found
-      console.error('Token cookie not found');
-      return;
+    // Setting Ongoing Project Count
+    const [ongoing, setOngoing] = useState();
+    async function fetchData() {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+            `${process.env.REACT_APP_API_URL}ongoingcount`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        const data = await response.data.counts;
+        setOngoing(data);
     }
-    const token = localStorage.getItem('token');
-    console.log(token);
-
-    const response = await axios.get(`${process.env.REACT_APP_API_URL}ongoingcount`, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      }
-    });
-    console.log({response});
-    const data = await response.data.counts;
-    console.log(data);
-    setOngoing(data);
-}    
-useEffect(() => {
-
+    useEffect(() => {
         fetchData();
-  }, []);
+    }, []);
 
-
-//  Setting Past Project Count
-      const [past, setPast] = useState();
-  async function getPastCount() {
-    const cookieString = document.cookie;
-    const tokenCookie = cookieString.split('; ').find(row => row.startsWith('token='));
-    if (!tokenCookie) {
-      // handle the case where the token cookie is not found
-      console.error('Token cookie not found');
-      return;
+    //  Setting Past Project Count
+    const [past, setPast] = useState();
+    async function getPastCount() {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+            `${process.env.REACT_APP_API_URL}pastcount`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        const data = await response.data.counts;
+        setPast(data);
     }
-    const token = localStorage.getItem('token');
-    console.log(token);
-    debugger;
-    const response = await axios.get(`${process.env.REACT_APP_API_URL}pastcount`, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      }
-    });
-    console.log({response});
-    const data = await response.data.counts;
-    console.log(data);
-    setPast(data);
-}    
-  useEffect(() => {
-    getPastCount();
-  }, []);
+    useEffect(() => {
+        getPastCount();
+    }, []);
 
     const [openDialog, setOpenDialog] = useState(false);
 
@@ -145,12 +125,10 @@ useEffect(() => {
             body: JSON.stringify(formData),
         });
 
-        
         // close the dialog box
         handleCloseDialog();
-        
     }
-    
+
     return (
         <ThemeProvider theme={theme}>
             <Box sx={{ display: "flex", mt: 2 }}>
@@ -180,7 +158,7 @@ useEffect(() => {
                                     <Counter
                                         title="On-going Projects"
                                         icon={<InsertDriveFileIcon />}
-                                        count = {JSON.stringify(ongoing,0)}
+                                        count={JSON.stringify(ongoing, 0)}
                                     />
                                 </Paper>
                             </Grid>
@@ -197,7 +175,7 @@ useEffect(() => {
                                     <Counter
                                         title="Past Projects"
                                         icon={<FactCheckIcon />}
-                                        count={JSON.stringify(past,0)}
+                                        count={JSON.stringify(past, 0)}
                                     />
                                 </Paper>
                             </Grid>

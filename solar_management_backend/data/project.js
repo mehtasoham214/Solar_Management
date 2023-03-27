@@ -520,7 +520,7 @@ const getOngoingCount = async (username) => {
     }
 };
 
-const getFinishedCount = async () => {
+const getFinishedCount = async (username) => {
     const projectCollection = await project();
     let staffUser = await user.getUser(username);
     let finishedProjects = undefined;
@@ -528,7 +528,7 @@ const getFinishedCount = async () => {
         finishedProjects = await projectCollection
             .find({
                 projectStatus: { $in: ["Cancelled", "Finished"] },
-                salesIncharge: username
+                salesIncharge: username,
             })
             .toArray();
     } else {
