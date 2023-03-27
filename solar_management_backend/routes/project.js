@@ -235,6 +235,9 @@ router.patch(
         let railsCount = req.body.railsCount;
         let chargeControllertype = req.body.chargeControllertype;
         let chargeControllerCount = req.body.chargeControllerCount;
+        let inverterType = req.body.inverterType;
+        let inverterCount = req.body.inverterCount;
+        let crewCount = req.body.crewCount;
 
         try {
             const addEquipment = await projectData.addEquipment(
@@ -247,7 +250,10 @@ router.patch(
                 batteryCapacity,
                 railsCount,
                 chargeControllertype,
-                chargeControllerCount
+                chargeControllerCount,
+                inverterType,
+                inverterCount,
+                crewCount
             );
             res.status(200).json(addEquipment);
         } catch (e) {
@@ -306,7 +312,7 @@ router.get(
     passport.authenticate("jwt", { session: false }),
     async (req, res, next) => {
         try {
-            const finishedProjects = await projectData.getOngoingProjects();
+            const finishedProjects = await projectData.getOngoingProjects(username);
             res.json(finishedProjects);
         } catch (e) {
             res.status(404).json({ error: `Failed to get projects: ${e}` });
@@ -321,7 +327,7 @@ router.get(
     async (req, res, next) => {
         try {
             const finishedProjects =
-                await projectData.getFinishedFiveProjects();
+                await projectData.getFinishedFiveProjects(username);
             res.json(finishedProjects);
         } catch (e) {
             res.status(404).json({ error: `Failed to get projects: ${e}` });
@@ -335,7 +341,7 @@ router.get(
     passport.authenticate("jwt", { session: false }),
     async (req, res, next) => {
         try {
-            const finishedProjects = await projectData.getFinishedProjects();
+            const finishedProjects = await projectData.getFinishedProjects(username);
             res.json(finishedProjects);
         } catch (e) {
             res.status(404).json({ error: `Failed to get projects: ${e}` });
@@ -403,7 +409,7 @@ router.get(
     passport.authenticate("jwt", { session: false }),
     async (req, res, next) => {
         try {
-            const leads = await customerData.getLeads();
+            const leads = await customerData.getLeads(username);
             res.json(leads);
         } catch (e) {
             res.status(404).json({ error: `Failed to get leads: ${e}` });
@@ -417,7 +423,7 @@ router.get(
     passport.authenticate("jwt", { session: false }),
     async (req, res, next) => {
         try {
-            const salesTeam = await userData.getAllSalesTeam();
+            const salesTeam = await userData.getAllSalesTeam(username);
             res.json(salesTeam);
         } catch (e) {
             res.status(404).json({ error: `Failed to get users: ${e}` });
@@ -430,7 +436,7 @@ router.get(
     passport.authenticate("jwt", { session: false }),
     async (req, res, next) => {
         try {
-            const siteInspectors = await userData.getAllSiteInspector();
+            const siteInspectors = await userData.getAllSiteInspector(username);
             res.json(siteInspectors);
         } catch (e) {
             res.status(404).json({ error: `Failed to get users: ${e}` });
@@ -444,7 +450,7 @@ router.get(
     async (req, res, next) => {
         try {
             const operationsEgineers =
-                await userData.getAllOperationsEngineer();
+                await userData.getAllOperationsEngineer(username);
             res.json(operationsEgineers);
         } catch (e) {
             res.status(404).json({ error: `Failed to get users: ${e}` });
@@ -457,12 +463,54 @@ router.get(
     passport.authenticate("jwt", { session: false }),
     async (req, res, next) => {
         try {
-            const teamLeads = await userData.getAllTeamLeads();
+            const teamLeads = await userData.getAllTeamLeads(username);
             res.json(teamLeads);
         } catch (e) {
             res.status(404).json({ error: `Failed to get users: ${e}` });
         }
     }
 );
+
+router.patch(
+    "/projects/equipment/update",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res, next) => {
+        let id = req.params.id;
+        let solarType = req.body.solarType;
+        let solarCount = req.body.solarCount;
+        let wireType = req.body.wireType;
+        let wireCount = req.body.wireCount;
+        let batteryCount = req.body.batteryCount;
+        let batteryCapacity = req.body.batteryCapacity;
+        let railsCount = req.body.railsCount;
+        let chargeControllertype = req.body.chargeControllertype;
+        let chargeControllerCount = req.body.chargeControllerCount;
+        let inverterType = req.body.inverterType;
+        let inverterCount = req.body.inverterCount;
+        let crewCount = req.body.crewCount;
+
+        try {
+            const addEquipment = await projectData.addEquipment(
+                id,
+                solarType,
+                solarCount,
+                wireType,
+                wireCount,
+                batteryCount,
+                batteryCapacity,
+                railsCount,
+                chargeControllertype,
+                chargeControllerCount,
+                inverterType,
+                inverterCount,
+                crewCount
+            );
+            res.status(200).json(addEquipment);
+        } catch (e) {
+            res.status(404).json({ error: e });
+        }
+    }
+);
+
 
 module.exports = router;
