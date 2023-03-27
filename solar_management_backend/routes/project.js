@@ -8,18 +8,22 @@ const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
 const validator = require("../validator");
+const user = require("../data/user");
 
 router.post("/login", async (req, res, next) => {
     const { username, password } = req.body;
     try {
         // Get user from database
-        const user = await getUser(username);
+        const userinfo = await user.getUser(username);
         // If user doesn't exist, return error response
-        if (!user) {
+        if (!userinfo) {
             return res.status(401).json({ message: "Invalid credentials" });
         }
         // Compare provided password with hashed password from database
-        const passwordMatches = await bcrypt.compare(password, user.password);
+        const passwordMatches = await bcrypt.compare(
+            password,
+            userinfo.password
+        );
         // If passwords don't match, return error response
         if (!passwordMatches) {
             return res.status(401).json({ message: "Invalid credentials" });
@@ -27,9 +31,46 @@ router.post("/login", async (req, res, next) => {
         // Generate and sign JWT token
         const token = jwt.sign({ username }, process.env.JWT_SECRET);
         // Return success response with JWT token
-        res.json({ token });
-    } catch (error) {
-        next(error);
+        res.status(200).json(token);
+    } catch (e) {
+        res.status(404).json({ error: `Failed to : ${e}` });
+    }
+});
+
+//Register USer
+router.post("/register", async (req, res, next) => {
+    const username = req.body.username;
+    const password = req.body.password;
+    const position = req.body.position;
+    const contact = req.body.contact;
+
+    try {
+        // Check if username already exists in database
+        const existingUser = await getUser(username);
+
+        // If username already exists, return error response
+        if (existingUser) {
+            return res.status(409).json({ message: "Username already exists" });
+        }
+
+        // Hash password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create user in database
+        const userData = await user.createUser(
+            username,
+            hashedPassword,
+            position,
+            contact
+        );
+
+        // Generate and sign JWT token
+        const token = jwt.sign({ username }, process.env.JWT_SECRET);
+
+        // Return success response with JWT token
+        res.status(200).json(userData, token);
+    } catch (e) {
+        res.status(404).json({ error: `Failed to Register: ${e}` });
     }
 });
 

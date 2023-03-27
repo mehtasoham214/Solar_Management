@@ -4,23 +4,16 @@ const customer = mongoCollections.customer;
 const { ObjectId } = require("mongodb");
 const validator = require("../validator");
 
-const createUser = async (username, password, type) => {
+const createUser = async (username, password, position, contact) => {
     const usercollection = await user();
     validateUser(username.trim());
-    validatePassword(password.trim());
-    const user = await usercollection.findOne({
-        username: username,
-        password: password,
-    });
-    if (user) {
-        throw `User Already Exists`;
-    }
     const userInfo = {
         username,
         password,
-        type,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        position,
+        contact,
+        createdAt: new Date().toLocaleDateString(),
+        updatedAt: new Date().toLocaleDateString(),
     };
     const userInserted = await usercollection.insertOne(userInfo);
     if (userInserted.insertedCount == 0) {
