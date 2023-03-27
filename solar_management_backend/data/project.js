@@ -379,6 +379,22 @@ const addEquipment = async (
     }
 };
 
+const getOngoingCount = async () => {
+    const projectCollection = await project();
+    let ongoingProjects = await projectCollection
+        .find({ projectStatus: { $in: ["In-Progress", "Pending"] } })
+        .toArray();
+    return ongoingProjects.length;
+};
+
+const getFinishedCount = async () => {
+    const projectCollection = await project();
+    let finishedProjects = await projectCollection
+        .find({ projectStatus: { $in: ["Cancelled", "Finished"] } })
+        .toArray();
+    return finishedProjects.length;
+};
+
 module.exports = {
     createProject,
     getAllProjects,
@@ -391,4 +407,6 @@ module.exports = {
     addEquipment,
     getFinishedProjects,
     getOngoingProjects,
+    getOngoingCount,
+    getFinishedCount
 };

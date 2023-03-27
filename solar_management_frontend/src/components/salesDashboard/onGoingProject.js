@@ -73,7 +73,7 @@ export default function OngoingProject({ showMoreLink = true }) {
                 <Table size="small">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Product Id</TableCell>
+                            <TableCell>Product Address</TableCell>
                             <TableCell>Customer Name</TableCell>
                             <TableCell>Date</TableCell>
                             <TableCell>Cost</TableCell>
@@ -85,7 +85,7 @@ export default function OngoingProject({ showMoreLink = true }) {
                         {projectlist.map((row) => (
                             <TableRow key={row.id}>
                                 <TableCell onClick={handleProjectClick}>
-                                    {row._id}
+                                    {row.projectAddress}
                                 </TableCell>
                                 <TableCell>{row.customerName}</TableCell>
                                 <TableCell>{row.startDate}</TableCell>

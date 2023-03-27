@@ -1,6 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
-
+import { useState, useEffect} from "react";
 //Theme Imports
 import theme from "../theme";
 import { ThemeProvider } from "@mui/material/styles";
@@ -56,6 +55,32 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 
 function SalesDashboardContent() {
+
+// Setting Ongoing Project Count
+const [ongoing, setOngoing] = useState();
+const getOngoingCount = async () => {
+    const response = await fetch(
+      "http://localhost:4000/ongoingcount"
+    ).then((response) => response.json());
+  
+    // update the state
+    setOngoing(response.count);
+  };
+  useEffect(() => {
+    getOngoingCount();
+  }, []);
+// Setting Past Project Count
+  const [past, setPast] = useState();
+  const getPastCount = async () => {
+    const response = await fetch(
+      "http://localhost:4000/pastcount"
+    ).then((response) => response.json());
+    setPast(response.count);
+  };
+  useEffect(() => {
+    getPastCount();
+  }, []);
+
     const [openDialog, setOpenDialog] = useState(false);
 
     const handleOpenDialog = () => {
@@ -86,9 +111,12 @@ function SalesDashboardContent() {
             body: JSON.stringify(formData),
         });
 
+        
         // close the dialog box
         handleCloseDialog();
+        
     }
+    
     return (
         <ThemeProvider theme={theme}>
             <Box sx={{ display: "flex", mt: 2 }}>
@@ -118,7 +146,7 @@ function SalesDashboardContent() {
                                     <Counter
                                         title="On-going Projects"
                                         icon={<InsertDriveFileIcon />}
-                                        count={3}
+                                        count = {JSON.stringify(ongoing,null)}
                                     />
                                 </Paper>
                             </Grid>
@@ -135,7 +163,7 @@ function SalesDashboardContent() {
                                     <Counter
                                         title="Past Projects"
                                         icon={<FactCheckIcon />}
-                                        count={23}
+                                        count={JSON.stringify(past,null)}
                                     />
                                 </Paper>
                             </Grid>

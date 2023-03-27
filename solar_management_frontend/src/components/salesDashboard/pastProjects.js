@@ -78,7 +78,7 @@ const rows = ButtonArray();
                 <Table size="small">
                     <TableHead>
                         <TableRow>
-                            <TableCell >Product Name</TableCell>
+                            <TableCell>Project Address</TableCell>
                             <TableCell>Customer Name</TableCell>
                             <TableCell>Date</TableCell>
                             <TableCell>Cost</TableCell>
