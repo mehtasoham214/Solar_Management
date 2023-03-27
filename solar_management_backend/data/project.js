@@ -29,7 +29,7 @@ const createProject = async (data) => {
     let sales = data.username;
     let siteInspector = undefined;
     let startDate = new Date().toLocaleDateString();
-    let appointmentDate = data.appointmentDate;
+    let appointmentDate = data.date;
     let endDate = undefined;
     let areaInfo = [];
     let images = [];
@@ -115,31 +115,34 @@ const createProject = async (data) => {
 
 // To get allprojects
 const getAllProjects = async (username) => {
-    let staffUser = user.getUser(username);
-    if (staffUser.role == "Sales") {
+    let staffUser = await user.getUser(username);
+    let allProjects = undefined;
+    if (staffUser.position == "Sales Team") {
         const projectCollection = await project();
-        let allProjects = await projectCollection.find({}).toArray();
+        allProjects = await projectCollection
+            .find({ salesIncharge: username })
+            .toArray();
 
-        inProgressProjects = await projectCollection.find({
+        let inProgressProjects = await projectCollection.find({
             projectStatus: "In-Progress",
             projectStatus: "Pending",
             salesIncharge: username,
         });
-        finishedProjects = await projectCollection.find({
+        let finishedProjects = await projectCollection.find({
             projectStatus: "Finished",
             projectStatus: "Cancelled",
             salesIncharge: username,
         });
     }
-    if (staffUser.role == "Operations Manager") {
+    if (staffUser.position == "Operations Manager") {
         const projectCollection = await project();
-        let allProjects = await projectCollection.find({}).toArray();
+        allProjects = await projectCollection.find({}).toArray();
 
-        inProgressProjects = await projectCollection.find({
+        let inProgressProjects = await projectCollection.find({
             projectStatus: "In-Progress",
             projectStatus: "Pending",
         });
-        finishedProjects = await projectCollection.find({
+        let finishedProjects = await projectCollection.find({
             projectStatus: "Finished",
             projectStatus: "Cancelled",
         });
@@ -408,5 +411,5 @@ module.exports = {
     getFinishedProjects,
     getOngoingProjects,
     getOngoingCount,
-    getFinishedCount
+    getFinishedCount,
 };
