@@ -1,5 +1,8 @@
 import * as React from "react";
 import { useState, useEffect} from "react";
+
+// import axios
+import axios  from 'axios'
 //Theme Imports
 import theme from "../theme";
 import { ThemeProvider } from "@mui/material/styles";
@@ -66,31 +69,48 @@ async function fetchData() {
       console.error('Token cookie not found');
       return;
     }
-    const token = tokenCookie.split('=')[1];
+    const token = localStorage.getItem('token');
     console.log(token);
-    const response = await fetch(`${process.env.REACT_APP_API_URL}ongoingcount`, {
+
+    const response = await axios.get(`${process.env.REACT_APP_API_URL}ongoingcount`, {
       headers: {
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${token}`,
       }
     });
-    const data = await response.json();
-    setOngoing(data.count);
+    console.log({response});
+    const data = await response.data.counts;
+    console.log(data);
+    setOngoing(data);
 }    
 useEffect(() => {
-    setTimeout(() => {
+
         fetchData();
-      }, 3000)
   }, []);
 
 
-// Setting Past Project Count
-  const [past, setPast] = useState();
-  const getPastCount = async () => {
-    const response = await fetch(
-        `${process.env.REACT_APP_API_URL}pastcount`
-    ).then((response) => response.json());
-    setPast(response.count);
-  };
+//  Setting Past Project Count
+      const [past, setPast] = useState();
+  async function getPastCount() {
+    const cookieString = document.cookie;
+    const tokenCookie = cookieString.split('; ').find(row => row.startsWith('token='));
+    if (!tokenCookie) {
+      // handle the case where the token cookie is not found
+      console.error('Token cookie not found');
+      return;
+    }
+    const token = localStorage.getItem('token');
+    console.log(token);
+    debugger;
+    const response = await axios.get(`${process.env.REACT_APP_API_URL}pastcount`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
+    });
+    console.log({response});
+    const data = await response.data.counts;
+    console.log(data);
+    setPast(data);
+}    
   useEffect(() => {
     getPastCount();
   }, []);
@@ -160,7 +180,7 @@ useEffect(() => {
                                     <Counter
                                         title="On-going Projects"
                                         icon={<InsertDriveFileIcon />}
-                                        count = {JSON.stringify(ongoing,null)}
+                                        count = {JSON.stringify(ongoing,0)}
                                     />
                                 </Paper>
                             </Grid>
@@ -177,7 +197,7 @@ useEffect(() => {
                                     <Counter
                                         title="Past Projects"
                                         icon={<FactCheckIcon />}
-                                        count={JSON.stringify(past,null)}
+                                        count={JSON.stringify(past,0)}
                                     />
                                 </Paper>
                             </Grid>

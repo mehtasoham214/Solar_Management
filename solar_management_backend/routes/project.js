@@ -541,7 +541,7 @@ router.get(
             const token = req.headers.authorization.split(" ")[1];
             console.log(token);
             const ongoingCounts = await projectData.getOngoingCount(username);
-            res.json({counts:ongoingCounts});
+            res.json({counts:ongoingCounts });
         } catch (e) {
             res.status(404).json({ error: `Failed to get users: ${e}` });
         }

@@ -1,5 +1,8 @@
 import * as React from 'react';
 import {useState} from 'react';
+
+//IMPORTING AXIOS
+import axios from  'axios';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -14,24 +17,15 @@ import theme from '../theme';
 export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        credentials : 'same-origin',
-        body: JSON.stringify({ 
-          username,
-          password,
-        })
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}login`, {
+        username: username,
+        password: password
       });
-      const data = await response.json();
-      const token = data;
-  document.cookie = `token=${token};path=/sales`;
-      console.log(document.cookie);
-      console.log(token);
+      console.log(response.data);// You can use this data to store the token in local storage or cookies
+      let token = response.data;
+
+      localStorage.setItem('token',token)
     } catch (error) {
       console.error(error);
     }
