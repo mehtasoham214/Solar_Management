@@ -20,4 +20,5 @@ module.exports = {
     material: getCollectionFn("material"),
     notes: getCollectionFn("notes"),
     leads: getCollectionFn("leads"),
+    requests: getCollectionFn("requests"),
 };

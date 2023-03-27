@@ -16,6 +16,7 @@ const customer = mongoCollections.customer;
 const leads = mongoCollections.leads;
 const notes = mongoCollections.notes;
 const material = mongoCollections.material;
+const requests = mongoCollections.requests;
 const { ObjectId } = require("mongodb");
 const validator = require("../validator");
 const user = require("./user");
@@ -638,6 +639,91 @@ const updateEquipment = async (
     }
 };
 
+const addRequest = async (id, projectRequest, postedby) => {
+    const projectDetails = getProjectByid(id);
+    const requestCollection = await requests();
+    const newRequest = {
+        projectRequest: projectRequest,
+        postedby: postedby,
+        project: projectDetails.projectAddress,
+        date: new Date().toLocaleDateString(),
+    };
+    const newInsertInformation = await requestCollection.insertOne(newRequest);
+    if (newInsertInformation.insertedCount == 0) {
+        throw `Could not add request`;
+    } else {
+        return "Request added";
+    }
+};
+
+const updateRequest = async (id, status) => {
+    const requestCollection = await requests();
+    const notesCollection = await notes();
+    const projectCollection = await project();
+    const requestDetails = await requestCollection.findOne({ _id: id });
+    const projectDetails = await projectCollection.findOne({
+        projectAddress: requestDetails.projectAddress,
+    });
+    if ((status = "Approved")) {
+        let newnote = requestDetails.projectRequest + " -" + status;
+        const newNoteDetails = {
+            projectid: projectDetails._id,
+            note: newnote,
+            postedby: requestDetails.postedby,
+            date: new Date().toLocaleDateString(),
+        };
+        const newInsertNote = await notesCollection.insertOne(newNoteDetails);
+        const deletedInfo = await requestCollection.deleteOne({ _id: id });
+        if (deletedInfo.deletedCount == 0 || newInsertNote.insertedCount == 0) {
+            throw `Could not delete request`;
+        } else {
+            return `Request ${status}`;
+        }
+    }
+    if ((status = "Denied")) {
+        let newnote = requestDetails.projectRequest + " -" + status;
+        const newNoteDetails = {
+            projectid: projectDetails._id,
+            note: newnote,
+            postedby: requestDetails.postedby,
+            date: new Date().toLocaleDateString(),
+        };
+        const newInsertNote = await notesCollection.insertOne(newNoteDetails);
+        const deletedInfo = await requestCollection.deleteOne({ _id: id });
+        if (deletedInfo.deletedCount == 0 || newInsertNote.insertedCount == 0) {
+            throw `Could not delete request`;
+        } else {
+            return `Request ${status}`;
+        }
+    }
+};
+
+const addNote = async (id, note, postedby) => {
+    const notesCollection = await notes();
+    let newNote = {
+        projectid: id,
+        note: note,
+        postedby: postedby,
+        date: new Date().toLocaleDateString(),
+    };
+    const newInsertInformation = await notesCollection.insertOne(newNote);
+    if (newInsertInformation.insertedCount == 0) {
+        throw `Could not add note`;
+    } else {
+        return "Note added";
+    }
+};
+
+const getNotes = async (id) => {
+    const notesCollection = await notes();
+    const notes = await notesCollection.find({ projectid: id }).toArray();
+    if (!notes) {
+        throw `No Notes found`;
+    } else {
+        return notes;
+    }
+};
+
 module.exports = {
     createProject,
     getAllProjects,
@@ -654,4 +740,8 @@ module.exports = {
     getFinishedCount,
     getCost,
     updateEquipment,
+    addRequest,
+    updateRequest,
+    addNote,
+    getNotes,
 };
