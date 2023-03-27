@@ -10,11 +10,15 @@ import OMDashboard from "./components/operationManagerDashboard";
 import OEDashboard from "./components/operationEngineerDashboard";
 import SIDashboard from "./components/siteInspectorDashboard";
 import TLDashboard from "./components/teamLeadDashboard";
+import Login from "./components/login";
+import Register from "./components/register";
 
 
 function Router(){
     return (
             <Routes>
+                <Route exact path="/" element={<Login />} />
+                <Route path="/register" element={<Register />} />
                 <Route exact path="/sales" element={<Dashboard />} />
                 <Route path="/sales/ongoingprojects" element={<ALLOngoingProjects />} />
                 <Route path="/sales/pastprojects" element={<ALLPastProjects />} />
