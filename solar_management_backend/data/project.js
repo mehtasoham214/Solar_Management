@@ -13,8 +13,12 @@
 const mongoCollections = require("../db/collection");
 const project = mongoCollections.project;
 const customer = mongoCollections.customer;
+const leads = mongoCollections.leads;
+const notes = mongoCollections.notes;
+const material = mongoCollections.material;
 const { ObjectId } = require("mongodb");
 const validator = require("../validator");
+const user = require("./user");
 
 // Create a new project and customer
 const createProject = async (data) => {
@@ -22,14 +26,20 @@ const createProject = async (data) => {
     let customerAddress = data.customerAddress.trim();
     let customerNumber = data.customerNumber.trim();
     let projectAddress = data.projectAddress.trim();
+    let sales = data.username;
     let siteInspector = undefined;
     let startDate = new Date().toLocaleDateString();
+    let appointmentDate = data.date;
     let endDate = undefined;
     let areaInfo = [];
     let images = [];
     let equipment = [];
     let totalCost = undefined;
     let projectStatus = "Pending";
+    let addedNotes = undefined;
+    let whoAdded = undefined;
+
+    let addedDate = undefined;
     validator.validateCustomerandProject(
         customerName,
         customerAddress,
@@ -39,53 +49,104 @@ const createProject = async (data) => {
     customerNumber = parseInt(customerNumber);
 
     // Insert customer information into the customers collection
-    const customerCollection = await customer();
-    const customerInfo = {
-        customerName: customerName,
-        customerAddress: customerAddress,
-        customerNumber: customerNumber,
-    };
-    const newCustInfo = await customerCollection.insertOne(customerInfo);
-    const customerId = newCustInfo.insertedId;
-
-    // Insert project information into the projects collection
-    const projectCollection = await project();
-    let projectdata = {
-        customerId: customerId,
-        customerName: customerName,
-        projectAddress: projectAddress,
-        projectStatus: projectStatus,
-        siteInspector: siteInspector,
-        startDate: startDate,
-        endDate: endDate,
-        areaInfo: areaInfo,
-        images: images,
-        equipment: equipment,
-        totalCost: totalCost,
-    };
-    const newInfo = await projectCollection.insertOne(projectdata);
-
-    if (newInfo.insertedCount == 0 || newCustInfo.insertedCount == 0) {
-        throw `Error In Creating Project`;
+    if (!appointmentDate) {
+        const leadsCollection = await leads();
+        const leadsInfo = {
+            customerName: customerName,
+            customerNumber: customerNumber,
+            salesIncharge: sales,
+            Date: new Date().toLocaleDateString(),
+        };
+        const newLeadsInfo = await leadsCollection.insertOne(leadsInfo);
+        if (newLeadsInfo.insertedCount == 0) {
+            throw `Error In Creating Lead`;
+        } else {
+            return "Created Lead";
+        }
     } else {
-        return "Created Project";
+        const customerCollection = await customer();
+        const customerInfo = {
+            customerName: customerName,
+            customerAddress: customerAddress,
+            customerNumber: customerNumber,
+            salesIncharge: sales,
+        };
+        const newCustInfo = await customerCollection.insertOne(customerInfo);
+        const customerId = newCustInfo.insertedId;
+
+        // Insert project information into the projects collection
+        const projectCollection = await project();
+        let projectdata = {
+            customerId: customerId,
+            customerName: customerName,
+            projectAddress: projectAddress,
+            projectStatus: projectStatus,
+            salesIncharge: sales,
+            siteInspector: siteInspector,
+            startDate: startDate,
+            endDate: endDate,
+            areaInfo: areaInfo,
+            images: images,
+            equipment: equipment,
+            totalCost: totalCost,
+        };
+        const newInfo = await projectCollection.insertOne(projectdata);
+        const projectId = newInfo.insertedId;
+        let notesData = {
+            projectId: projectId,
+            notes: addedNotes,
+            whoAdded: whoAdded,
+            addedDate: addedDate,
+        };
+        const notesCollection = await notes();
+        const newNotesInfo = await notesCollection.insertOne(notesData);
+
+        if (
+            newInfo.insertedCount == 0 ||
+            newCustInfo.insertedCount == 0 ||
+            newNotesInfo.insertedCount == 0
+        ) {
+            throw `Error In Creating Project`;
+        } else {
+            return "Created Project";
+        }
     }
 };
 
 // To get allprojects
-const getAllProjects = async () => {
-    const projectCollection = await project();
-    let allProjects = await projectCollection.find({}).toArray();
+const getAllProjects = async (username) => {
+    let staffUser = await user.getUser(username);
+    let allProjects = undefined;
+    if (staffUser.position == "Sales Team") {
+        const projectCollection = await project();
+        allProjects = await projectCollection
+            .find({ salesIncharge: username })
+            .toArray();
 
-    inProgressProjects = await projectCollection.find({
-        projectStatus: "In-Progress",
-        projectStatus: "Pending",
-    });
-    finishedProjects = await projectCollection.find({
-        projectStatus: "Finished",
-        projectStatus: "Cancelled",
-    });
+        let inProgressProjects = await projectCollection.find({
+            projectStatus: "In-Progress",
+            projectStatus: "Pending",
+            salesIncharge: username,
+        });
+        let finishedProjects = await projectCollection.find({
+            projectStatus: "Finished",
+            projectStatus: "Cancelled",
+            salesIncharge: username,
+        });
+    }
+    if (staffUser.position == "Operations Manager") {
+        const projectCollection = await project();
+        allProjects = await projectCollection.find({}).toArray();
 
+        let inProgressProjects = await projectCollection.find({
+            projectStatus: "In-Progress",
+            projectStatus: "Pending",
+        });
+        let finishedProjects = await projectCollection.find({
+            projectStatus: "Finished",
+            projectStatus: "Cancelled",
+        });
+    }
     if (allProjects.length == 0) {
         throw `No Projects Found`;
     }
@@ -93,26 +154,79 @@ const getAllProjects = async () => {
 };
 
 // To get in-progress five projects
-const getInProgressFiveProjects = async () => {
+const getInProgressFiveProjects = async (username) => {
     const projectCollection = await project();
-    let inProgressProjects = await projectCollection
-        .find({ projectStatus: "In-Progress", projectStatus: "Pending" })
-        .limit(5)
-        .toArray();
-
+    let staffUser = await user.getUser(username);
+    let inProgressProjects = undefined;
+    if (staffUser.position == "Sales Team") {
+        inProgressProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["In-Progress", "Pending"] },
+                salesIncharge: username,
+            })
+            .limit(5)
+            .toArray();
+    } else {
+        inProgressProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["In-Progress", "Pending"] },
+            })
+            .limit(5)
+            .toArray();
+    }
     if (inProgressProjects.length == 0) {
         throw `No Projects Found`;
     }
     return inProgressProjects;
 };
 
-// To get finished five projects
-const getFinishedFiveProjects = async () => {
+// To get all ongoing projects
+const getOngoingProjects = async (username) => {
     const projectCollection = await project();
-    let finishedProjects = await projectCollection
-        .find({ projectStatus: "Finished", projectStatus: "Cancelled" })
-        .limit(5)
-        .toArray();
+
+    let staffUser = await user.getUser(username);
+    let inProgressProjects = undefined;
+    if (staffUser.position == "Sales Team") {
+        inProgressProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["In-Progress", "Pending"] },
+                salesIncharge: username,
+            })
+            .toArray();
+    } else {
+        inProgressProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["In-Progress", "Pending"] },
+            })
+            .toArray();
+    }
+    if (finishedProjects.length == 0) {
+        throw `No Projects Found`;
+    }
+    return finishedProjects;
+};
+
+// To get finished five projects
+const getFinishedFiveProjects = async (username) => {
+    const projectCollection = await project();
+    let staffUser = await user.getUser(username);
+    let finishedProjects = undefined;
+    if (staffUser.position == "Sales Team") {
+        finishedProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["Cancelled", "Finished"] },
+                salesIncharge: username,
+            })
+            .limit(5)
+            .toArray();
+    } else {
+        finishedProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["Cancelled", "Finished"] },
+            })
+            .limit(5)
+            .toArray();
+    }
 
     if (finishedProjects.length == 0) {
         throw `No Projects Found`;
@@ -120,6 +234,32 @@ const getFinishedFiveProjects = async () => {
     return finishedProjects;
 };
 
+// To get all finished projects
+const getFinishedProjects = async () => {
+    const projectCollection = await project();
+    let staffUser = await user.getUser(username);
+    let finishedProjects = undefined;
+    if (staffUser.position == "Sales Team") {
+        finishedProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["Cancelled", "Finished"] },
+                salesIncharge: username,
+            })
+            .toArray();
+    } else {
+        finishedProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["Cancelled", "Finished"] },
+            })
+            .toArray();
+    }
+    if (finishedProjects.length == 0) {
+        throw `No Projects Found`;
+    }
+    return finishedProjects;
+};
+
+// To get project by id
 const getProjectByid = async (id) => {
     validator.validateId(id);
     if (typeof id == "string") {
@@ -133,29 +273,56 @@ const getProjectByid = async (id) => {
     return projectinfo;
 };
 
-const getProject = async (projectId) => {
-    const projectCollection = await project();
-    const project = await projectCollection.findOne({ projectId: projectId });
-
-    if (!project) {
-        throw `Project Not Found`;
-    }
-    return project;
-};
-
+//Update project stats by button click
 const buttonClick = async (id, type) => {
     const projectCollection = await project();
     const projectStatus = await getProjectByid(id);
+
+    if (type == "start") {
+        projectStatus.status = "In-Progress";
+        progress = "With Boots on Ground";
+        let startDate = new Date().toLocaleDateString();
+        await projectCollection().updateOne(
+            { _id: id },
+            {
+                $set: {
+                    status: projectStatus.status,
+                    startDate: startDate,
+                    progress: progress,
+                },
+            }
+        );
+    }
     if (type == "finished") {
         projectStatus.status = "Finished";
+        let endDate = new Date().toLocaleDateString();
+        let progress = "Completed";
+        await projectCollection().updateOne(
+            { _id: id },
+            {
+                $set: {
+                    status: projectStatus.status,
+                    endDate: endDate,
+                    progress: progress,
+                },
+            }
+        );
     }
     if (type == "cancelled") {
         projectStatus.status = "Cancelled";
+        let endDate = new Date().toLocaleDateString();
+        let progress = "Cancelled";
+        await projectCollection().updateOne(
+            { _id: id },
+            {
+                $set: {
+                    status: projectStatus.status,
+                    endDate: endDate,
+                    progress: progress,
+                },
+            }
+        );
     }
-    await projectCollection().updateOne(
-        { _id: id },
-        { $set: { status: projectStatus.status } }
-    );
     if (updatedInfo.modifiedCount == 0) {
         throw `Couldn't update Status of Project`;
     } else {
@@ -169,8 +336,12 @@ const siteInspectorUpdate = async (
     roofInfo,
     backyard,
     grid,
+    irradiance,
     meterCompatible,
-    coordinates
+    coordinates,
+    photos,
+    notes,
+    feasible
 ) => {
     validator.validateId(id);
     validator.validateAreaParameter(roofInfo, backyard, grid, meterCompatible);
@@ -179,12 +350,25 @@ const siteInspectorUpdate = async (
         roofInfo: roofInfo,
         backyard: backyard,
         grid: grid,
+        irradiance: irradiance,
         meterCompatible: meterCompatible,
         coordinates: coordinates,
+        notes: notes,
+        feasible: feasible,
+    };
+    let progressStatus = "At Operations Engineer";
+    const pictures = {
+        photos: photos,
     };
     await project().updateOne(
         { _id: id },
-        { $set: { areaInfo: siteInspector } }
+        {
+            $set: {
+                areaInfo: siteInspector,
+                images: pictures,
+                progress: progressStatus,
+            },
+        }
     );
     if (updatedInfo.modifiedCount == 0) {
         throw `Couldn't update Site Inspector Information`;
@@ -192,14 +376,21 @@ const siteInspectorUpdate = async (
         return "Site Inspector information updated";
     }
 };
-
 //For Operations Engineer
-const addSiteInspector = async (id, siteInspector) => {
+const addStaff = async (id, siteInspector, operationsEngineer, teamLead) => {
     const projectCollection = await project();
     const project = await projectCollection.findOne({ _id: id });
+    let progressStatus = "With Site Inspector";
     await project().update(
         { _id: id },
-        { $set: { siteInspector: siteInspector, status: "In-Progress" } }
+        {
+            $set: {
+                siteInspector: siteInspector,
+                operationsEngineer: operationsEngineer,
+                teamLead: teamLead,
+                progress: progressStatus,
+            },
+        }
     );
     if (updatedInfo.modifiedCount == 0) {
         throw `Couldn't add Site Inspector`;
@@ -217,10 +408,19 @@ const addEquipment = async (
     wireCount,
     batteryCount,
     batteryCapacity,
-    railsCount
+    railsCount,
+    chargeControllertype,
+    chargeControllerCount,
+    inverterType,
+    inverterCount,
+    crewCount
 ) => {
+    const materialCollection = await material();
     const projectCollection = await project();
-    const project = await projectCollection.findOne({ _id: id });
+    const projects = await projectCollection.findOne({ _id: id });
+    if (!projects) {
+        throw `No Project Found`;
+    }
     const equipment = {
         solarType: solarType,
         solarCount: solarCount,
@@ -229,8 +429,208 @@ const addEquipment = async (
         batteryCount: batteryCount,
         batteryCapacity: batteryCapacity,
         railsCount: railsCount,
+        chargeControllertype: chargeControllertype,
+        chargeControllerCount: chargeControllerCount,
+        inverterType: inverterType,
+        inverterCount: inverterCount,
+        crewCount: crewCount,
     };
-    await project().updateOne({ _id: id }, { $set: { equipment: equipment } });
+    let progressStatus = "At Sales Team";
+    let crewType = "Crew";
+    const solarCost = await materialCollection.findOne({ type: solarType });
+    const wireCost = await materialCollection.findOne({ type: wireType });
+    const batteryCost = await materialCollection.findOne({ type: batteryType });
+    const railsCost = await materialCollection.findOne({ type: railsType });
+    const chargeControllerCost = await materialCollection.findOne({
+        type: chargeControllertype,
+    });
+    const inverterCost = await materialCollection.findOne({
+        type: inverterType,
+    });
+    const crewCost = await materialCollection.findone({ type: crewType });
+    let totalCost =
+        solarCost.cost * solarCount +
+        wireCost.cost * wireCount +
+        batteryCost.cost * batteryCount +
+        railsCost.cost * railsCount +
+        chargeControllerCost.cost * chargeControllerCount +
+        inverterCost.cost * inverterCount +
+        crewCost.cost * crewCount;
+    await project().update(
+        { _id: id },
+        {
+            $set: {
+                equipment: equipment,
+                progress: progressStatus,
+                totalCost: totalCost,
+            },
+        }
+    );
+
+    if (updatedInfo.modifiedCount == 0) {
+        throw `Couldn't add Equipment`;
+    } else {
+        return "Equipment added to Project";
+    }
+};
+
+const getOngoingCount = async (username) => {
+    const projectCollection = await project();
+    let staffUser = await user.getUser(username);
+    let ongoingProjects = undefined;
+    if (staffUser.position == "Sales Team") {
+        ongoingProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["In-Progress", "Pending"] },
+                salesIncharge: username,
+            })
+            .toArray();
+    }
+    return ongoingProjects.length;
+};
+
+const getFinishedCount = async () => {
+    const projectCollection = await project();
+    let staffUser = await user.getUser(username);
+    let finishedProjects = undefined;
+    if (staffUser.position == "Sales Team") {
+        finishedProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["Cancelled", "Finished"] },
+            })
+            .toArray();
+    } else {
+        finishedProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["Cancelled", "Finished"] },
+            })
+            .toArray();
+    }
+    return finishedProjects.length;
+};
+
+const getCost = async (username) => {
+    const projectCollection = await project();
+    let staffUser = await user.getUser(username);
+    let cost = undefined;
+    if (staffUser.position == "Sales Team") {
+        cost = await projectCollection
+            .find({
+                projectStatus: { $in: ["Finished"] },
+                salesIncharge: username,
+            })
+            .toArray();
+    } else {
+        cost = await projectCollection
+            .find({
+                projectStatus: { $in: ["Finished"] },
+            })
+            .toArray();
+    }
+    let totalSales = 0;
+    for (let i = 0; i < cost.length; i++) {
+        totalSales += cost[i].totalCost;
+    }
+    return Sales;
+};
+
+//Update Equipment
+const updateEquipment = async (
+    id,
+    solarType,
+    solarCount,
+    wireType,
+    wireCount,
+    batteryCount,
+    batteryCapacity,
+    railsCount,
+    chargeControllertype,
+    chargeControllerCount,
+    inverterType,
+    inverterCount,
+    crewCount
+) => {
+    const projectCollection = await project();
+    const project = await projectCollection.findOne({ _id: id });
+    if (!solarType) {
+        solarType = project.equipment.solarType;
+    }
+    if (!solarCount) {
+        solarCount = project.equipment.solarCount;
+    }
+    if (!wireType) {
+        wireType = project.equipment.wireType;
+    }
+    if (!wireCount) {
+        wireCount = project.equipment.wireCount;
+    }
+    if (!batteryCount) {
+        batteryCount = project.equipment.batteryCount;
+    }
+    if (!batteryCapacity) {
+        batteryCapacity = project.equipment.batteryCapacity;
+    }
+    if (!railsCount) {
+        railsCount = project.equipment.railsCount;
+    }
+    if (!chargeControllertype) {
+        chargeControllertype = project.equipment.chargeControllertype;
+    }
+    if (!chargeControllerCount) {
+        chargeControllerCount = project.equipment.chargeControllerCount;
+    }
+    if (!inverterType) {
+        inverterType = project.equipment.inverterType;
+    }
+    if (!inverterCount) {
+        inverterCount = project.equipment.inverterCount;
+    }
+    if (!crewCount) {
+        crewCount = project.equipment.crewCount;
+    }
+    const equipment = {
+        solarType: solarType,
+        solarCount: solarCount,
+        wireType: wireType,
+        wireCount: wireCount,
+        batteryCount: batteryCount,
+        batteryCapacity: batteryCapacity,
+        railsCount: railsCount,
+        chargeControllertype: chargeControllertype,
+        chargeControllerCount: chargeControllerCount,
+        inverterType: inverterType,
+        inverterCount: inverterCount,
+        crewCount: crewCount,
+    };
+    let crewType = "Crew";
+    const solarCost = await materialCollection.findOne({ type: solarType });
+    const wireCost = await materialCollection.findOne({ type: wireType });
+    const batteryCost = await materialCollection.findOne({ type: batteryType });
+    const railsCost = await materialCollection.findOne({ type: railsType });
+    const chargeControllerCost = await materialCollection.findOne({
+        type: chargeControllertype,
+    });
+    const inverterCost = await materialCollection.findOne({
+        type: inverterType,
+    });
+    const crewCost = await materialCollection.findone({ type: crewType });
+    let totalCost =
+        solarCost.cost * solarCount +
+        wireCost.cost * wireCount +
+        batteryCost.cost * batteryCount +
+        railsCost.cost * railsCount +
+        chargeControllerCost.cost * chargeControllerCount +
+        inverterCost.cost * inverterCount +
+        crewCost.cost * crewCount;
+    await project().update(
+        { _id: id },
+        {
+            $set: {
+                equipment: equipment,
+                totalCost: totalCost,
+            },
+        }
+    );
     if (updatedInfo.modifiedCount == 0) {
         throw `Couldn't add Equipment`;
     } else {
@@ -244,9 +644,14 @@ module.exports = {
     getInProgressFiveProjects,
     getFinishedFiveProjects,
     getProjectByid,
-    getProject,
     buttonClick,
     siteInspectorUpdate,
-    addSiteInspector,
+    addStaff,
     addEquipment,
+    getFinishedProjects,
+    getOngoingProjects,
+    getOngoingCount,
+    getFinishedCount,
+    getCost,
+    updateEquipment,
 };

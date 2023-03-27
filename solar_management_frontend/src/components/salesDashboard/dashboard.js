@@ -1,6 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
-
+import { useState, useEffect} from "react";
 //Theme Imports
 import theme from "../theme";
 import { ThemeProvider } from "@mui/material/styles";
@@ -44,9 +43,44 @@ import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PhoneIcon from "@mui/icons-material/Phone";
 import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+
+// Navigation Imports
+// import { Route, Routes } from "react-router-dom";
+// import ALLOngoingProjects from "../onGoingProjects"
+// import ALLPastProjects from "../pastProjects";
+// import ProjectDashboard from "../projectDetails/projectDashboard";
+// import AllLeads from "../leads";
+// import AllCustomer from "../customers";
+
 
 function SalesDashboardContent() {
+
+// Setting Ongoing Project Count
+const [ongoing, setOngoing] = useState();
+const getOngoingCount = async () => {
+    const response = await fetch(
+      "http://localhost:4000/ongoingcount"
+    ).then((response) => response.json());
+  
+    // update the state
+    setOngoing(response.count);
+  };
+  useEffect(() => {
+    getOngoingCount();
+  }, []);
+// Setting Past Project Count
+  const [past, setPast] = useState();
+  const getPastCount = async () => {
+    const response = await fetch(
+      "http://localhost:4000/pastcount"
+    ).then((response) => response.json());
+    setPast(response.count);
+  };
+  useEffect(() => {
+    getPastCount();
+  }, []);
+
     const [openDialog, setOpenDialog] = useState(false);
 
     const handleOpenDialog = () => {
@@ -69,22 +103,24 @@ function SalesDashboardContent() {
 
         // submit the form data to the server or do any other processing here
         console.log(formData);
-        fetch('http://localhost:3000/projects/add', {
-            method: 'POST',
+        fetch(process.env.REACT_APP_API_URL, {
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify(formData)
-          });
+            body: JSON.stringify(formData),
+        });
 
+        
         // close the dialog box
         handleCloseDialog();
+        
     }
+    
     return (
         <ThemeProvider theme={theme}>
             <Box sx={{ display: "flex", mt: 2 }}>
                 <PermanentDrawerLeft />
-
                 <Box
                     component="main"
                     sx={{
@@ -110,7 +146,7 @@ function SalesDashboardContent() {
                                     <Counter
                                         title="On-going Projects"
                                         icon={<InsertDriveFileIcon />}
-                                        count={3}
+                                        count = {JSON.stringify(ongoing,null)}
                                     />
                                 </Paper>
                             </Grid>
@@ -127,7 +163,7 @@ function SalesDashboardContent() {
                                     <Counter
                                         title="Past Projects"
                                         icon={<FactCheckIcon />}
-                                        count={23}
+                                        count={JSON.stringify(past,null)}
                                     />
                                 </Paper>
                             </Grid>

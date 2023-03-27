@@ -10,16 +10,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.header(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept"
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept"
     );
     next();
-  });
+});
 
 app.use(require("./routes/project"));
 configRoutes(app);
 
-app.listen(3000, () => {
+app.listen(4000, () => {
     console.log("We've now got a server!");
-    console.log("Your routes will be running on http://localhost:3000");
+    console.log("Your routes will be running on http://localhost:4000");
 });

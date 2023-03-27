@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useState,  useEffect} from "react";
+import { useState, useEffect } from "react";
 import Link from "@mui/material/Link";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -14,63 +14,58 @@ import { useNavigate } from "react-router-dom";
 
 // Generate Order Data
 
-
-
 export default function OngoingProject({ showMoreLink = true }) {
     const navigate = useNavigate();
 
     const handleSeeMoreClick = (event) => {
         event.preventDefault();
         navigate("/ongoingprojects"); // replace with the desired path
-     };
+    };
 
-function ButtonArray() {
-    const buttonArray = ["Edit", "Done", "Delete"];
+    function ButtonArray() {
+        const buttonArray = ["Edit", "Done", "Delete"];
 
-    return (
-        <div>
-            {/* <EditButton>buttonArray[0]</EditButton>
+        return (
+            <div>
+                {/* <EditButton>buttonArray[0]</EditButton>
               <button >buttonArray[0]</button>
               <button >buttonArray[0]</button> */}
 
-            {buttonArray.map((buttonText, index) => (
-                <button style={{ marginLeft: "10px" }} key={index}>
-                    {buttonText}
-                </button>
-            ))}
-        </div>
-    );
-}
+                {buttonArray.map((buttonText, index) => (
+                    <button style={{ marginLeft: "10px" }} key={index}>
+                        {buttonText}
+                    </button>
+                ))}
+            </div>
+        );
+    }
 
-const [projectlist, setemployees] = useState(null)
+    const [projectlist, setemployees] = useState(null);
     useEffect(() => {
-        getemployees()
-    }, [])
+        getemployees();
+    }, []);
     const getemployees = () => {
-        fetch("http://localhost:3000/inprogress")
-            .then(res => res.json())
+        fetch(`${process.env.REACT_APP_API_URL}inprogress`)
+            .then((res) => res.json())
             .then(
-                (result) => {                    
-                    setemployees(result)
+                (result) => {
+                    setemployees(result);
                 },
                 (error) => {
                     setemployees(null);
                 }
-            )
-    }
+            );
+    };
 
-    if (!projectlist) return (<div>No Record Found</div>)
+    if (!projectlist) return <div>No Record Found</div>;
 
-
-
-const rows = ButtonArray();
+    const rows = ButtonArray();
 
     const handleProjectClick = (event) => {
         event.preventDefault();
-        navigate("/projectdetails"); // replace with the desired path
+        navigate("/sales/projectdetails"); // replace with the desired path
     };
 
-    
     return (
         <ThemeProvider theme={theme}>
             <React.Fragment>
@@ -78,7 +73,7 @@ const rows = ButtonArray();
                 <Table size="small">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Product Id</TableCell>
+                            <TableCell>Product Address</TableCell>
                             <TableCell>Customer Name</TableCell>
                             <TableCell>Date</TableCell>
                             <TableCell>Cost</TableCell>
@@ -89,17 +84,20 @@ const rows = ButtonArray();
                     <TableBody>
                         {projectlist.map((row) => (
                             <TableRow key={row.id}>
-                                <TableCell onClick={handleProjectClick}>{row.ProductName}</TableCell>
-                                <TableCell>{row.CustomerName}</TableCell>
-                                <TableCell>{row.date}</TableCell>
-                                <TableCell>{`$${row.cost}`}</TableCell>
+                                <TableCell onClick={handleProjectClick}>
+                                    {row.projectAddress}
+                                </TableCell>
+                                <TableCell>{row.customerName}</TableCell>
+                                <TableCell>{row.startDate}</TableCell>
+                                <TableCell>{`$${row.totalCost}`}</TableCell>
 
                                 <TableCell
                                     style={{
                                         color:
                                             row.projectStatus === "Pending"
                                                 ? theme.palette.error.main
-                                                : row.projectStatus === "In-Progress"
+                                                : row.projectStatus ===
+                                                  "In-Progress"
                                                 ? theme.palette.warning.main
                                                 : "",
                                     }}
@@ -112,14 +110,15 @@ const rows = ButtonArray();
                     </TableBody>
                 </Table>
                 {showMoreLink && (
-                <Link
-                    color="primary"
-                    href="#"
-                    onClick={handleSeeMoreClick}
-                    sx={{ mt: 3 }}
-                >
-                    See more Projects
-                </Link>)}
+                    <Link
+                        color="primary"
+                        href="#"
+                        onClick={handleSeeMoreClick}
+                        sx={{ mt: 3 }}
+                    >
+                        See more Projects
+                    </Link>
+                )}
             </React.Fragment>
         </ThemeProvider>
     );
