@@ -377,6 +377,32 @@ const siteInspectorUpdate = async (
         return "Site Inspector information updated";
     }
 };
+
+const getSiteInspectorUpdate = async (id) => {
+    validator.validateId(id);
+    if (typeof id == "string") {
+        id = new ObjectId(id);
+    }
+    const projectCollection = await project();
+    const projectinfo = await projectCollection.findOne({ _id: id });
+    if (!projectinfo) {
+        throw `No Project Found`;
+    }
+    return projectinfo.areaInfo;
+};
+
+const getImages = async (id) => {
+    validator.validateId(id);
+    if (typeof id == "string") {
+        id = new ObjectId(id);
+    }
+    const projectCollection = await project();
+    const projectinfo = await projectCollection.findOne({ _id: id });
+    if (!projectinfo) {
+        throw `No Project Found`;
+    }
+    return projectinfo.images;
+};
 //For Operations Engineer
 const addStaff = async (id, siteInspector, operationsEngineer, teamLead) => {
     const projectCollection = await project();
@@ -732,6 +758,8 @@ module.exports = {
     getProjectByid,
     buttonClick,
     siteInspectorUpdate,
+    getSiteInspectorUpdate,
+    getImages,
     addStaff,
     addEquipment,
     getFinishedProjects,
