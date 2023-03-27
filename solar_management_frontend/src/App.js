@@ -5,6 +5,7 @@ import Dashboard from "./components/salesDashboard/dashboard";
 import ALLOngoingProjects from "./components/onGoingProjects";
 import ALLPastProjects from "./components/pastProjects";
 import ProjectDashboard from "./components/salesDashboard/projectDashboard";
+import SiteInspectorForm from "./components/SiteInspectorForm";
 
 
 function App() {
@@ -18,8 +19,10 @@ function App() {
                 />
                 <Route path="/pastprojects" element={<ALLPastProjects />} />
                 <Route path="/projectdetails" element={<ProjectDashboard />} />
+                <Route path="/SiteInspectorForm" element={<SiteInspectorForm />} />
             </Routes>
         </Router>
+       
     );
 }
 
