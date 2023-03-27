@@ -1,30 +1,15 @@
 import * as React from "react";
-import PastProject from "../salesDashboard/pastProjects";
-import PermanentDrawerLeft from "../salesDashboard/navBar";
-import theme from "../theme";
-import { ThemeProvider } from "@mui/material/styles";
-import { Box, Container } from "@mui/system";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import FormControl from '@mui/material/FormControl';
-import TextField from '@mui/material/TextField';
-import { Button } from "@mui/material";
-import Send from '@mui/icons-material/Send';
-import { useState } from "react"; 
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import RadioGroup from "@mui/material";
-import Radio from "@mui/material";
-import FormLabel from "@mui/material";
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControl from '@mui/material/FormControl';
-import Radio from '@mui/material/Radio';
-import Button from '@mui/material/Button'
+import { Box } from "@mui/system";
 
+import {
+    Button,
+    FormControl,
+    FormLabel,
+    FormControlLabel,
+    Radio,
+    RadioGroup,
+    TextField,
+} from "@mui/material";
 
 
 export default function SiteInspectorForm() {

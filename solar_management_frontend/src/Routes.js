@@ -14,7 +14,7 @@ import Login from "./components/login";
 import Register from "./components/register";
 
 
-function Router(){
+function ProjectRouter(){
     return (
             <Routes>
                 <Route exact path="/" element={<Login />} />
@@ -33,4 +33,4 @@ function Router(){
     );
 }
 
-export default Router;
+export default ProjectRouter;

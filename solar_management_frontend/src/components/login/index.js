@@ -21,13 +21,17 @@ export default function Login() {
         headers: {
           'Content-Type': 'application/json'
         },
+        credentials : 'same-origin',
         body: JSON.stringify({ 
           username,
           password,
         })
       });
       const data = await response.json();
-      console.log(data);
+      const token = data;
+  document.cookie = `token=${token};path=/sales`;
+      console.log(document.cookie);
+      console.log(token);
     } catch (error) {
       console.error(error);
     }

@@ -58,22 +58,36 @@ function SalesDashboardContent() {
 
 // Setting Ongoing Project Count
 const [ongoing, setOngoing] = useState();
-const getOngoingCount = async () => {
-    const response = await fetch(
-      "http://localhost:4000/ongoingcount"
-    ).then((response) => response.json());
-  
-    // update the state
-    setOngoing(response.count);
-  };
-  useEffect(() => {
-    getOngoingCount();
+async function fetchData() {
+    const cookieString = document.cookie;
+    const tokenCookie = cookieString.split('; ').find(row => row.startsWith('token='));
+    if (!tokenCookie) {
+      // handle the case where the token cookie is not found
+      console.error('Token cookie not found');
+      return;
+    }
+    const token = tokenCookie.split('=')[1];
+    console.log(token);
+    const response = await fetch(`${process.env.REACT_APP_API_URL}ongoingcount`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    const data = await response.json();
+    setOngoing(data.count);
+}    
+useEffect(() => {
+    setTimeout(() => {
+        fetchData();
+      }, 3000)
   }, []);
+
+
 // Setting Past Project Count
   const [past, setPast] = useState();
   const getPastCount = async () => {
     const response = await fetch(
-      "http://localhost:4000/pastcount"
+        `${process.env.REACT_APP_API_URL}pastcount`
     ).then((response) => response.json());
     setPast(response.count);
   };
