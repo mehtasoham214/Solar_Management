@@ -29,7 +29,7 @@ const createProject = async (data) => {
     let sales = data.username;
     let siteInspector = undefined;
     let startDate = new Date().toLocaleDateString();
-    let appointmentDate = data.appointmentDate;
+    let appointmentDate = data.date;
     let endDate = undefined;
     let areaInfo = [];
     let images = [];
@@ -115,31 +115,34 @@ const createProject = async (data) => {
 
 // To get allprojects
 const getAllProjects = async (username) => {
-    let staffUser = user.getUser(username);
-    if (staffUser.role == "Sales") {
+    let staffUser = await user.getUser(username);
+    let allProjects = undefined;
+    if (staffUser.position == "Sales Team") {
         const projectCollection = await project();
-        let allProjects = await projectCollection.find({}).toArray();
+        allProjects = await projectCollection
+            .find({ salesIncharge: username })
+            .toArray();
 
-        inProgressProjects = await projectCollection.find({
+        let inProgressProjects = await projectCollection.find({
             projectStatus: "In-Progress",
             projectStatus: "Pending",
             salesIncharge: username,
         });
-        finishedProjects = await projectCollection.find({
+        let finishedProjects = await projectCollection.find({
             projectStatus: "Finished",
             projectStatus: "Cancelled",
             salesIncharge: username,
         });
     }
-    if (staffUser.role == "Operations Manager") {
+    if (staffUser.position == "Operations Manager") {
         const projectCollection = await project();
-        let allProjects = await projectCollection.find({}).toArray();
+        allProjects = await projectCollection.find({}).toArray();
 
-        inProgressProjects = await projectCollection.find({
+        let inProgressProjects = await projectCollection.find({
             projectStatus: "In-Progress",
             projectStatus: "Pending",
         });
-        finishedProjects = await projectCollection.find({
+        let finishedProjects = await projectCollection.find({
             projectStatus: "Finished",
             projectStatus: "Cancelled",
         });
@@ -153,14 +156,24 @@ const getAllProjects = async (username) => {
 // To get in-progress five projects
 const getInProgressFiveProjects = async (username) => {
     const projectCollection = await project();
-    let inProgressProjects = await projectCollection
-        .find({
-            projectStatus: { $in: ["In-Progress", "Pending"] },
-            salesIncharge: username,
-        })
-        .limit(5)
-        .toArray();
-
+    let staffUser = await user.getUser(username);
+    let inProgressProjects = undefined;
+    if (staffUser.position == "Sales Team") {
+        inProgressProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["In-Progress", "Pending"] },
+                salesIncharge: username,
+            })
+            .limit(5)
+            .toArray();
+    } else {
+        inProgressProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["In-Progress", "Pending"] },
+            })
+            .limit(5)
+            .toArray();
+    }
     if (inProgressProjects.length == 0) {
         throw `No Projects Found`;
     }
@@ -168,11 +181,25 @@ const getInProgressFiveProjects = async (username) => {
 };
 
 // To get all ongoing projects
-const getOngoingProjects = async () => {
+const getOngoingProjects = async (username) => {
     const projectCollection = await project();
-    let finishedProjects = await projectCollection
-        .find({ projectStatus: { $in: ["In-Progress", "Pending"] } })
-        .toArray();
+
+    let staffUser = await user.getUser(username);
+    let inProgressProjects = undefined;
+    if (staffUser.position == "Sales Team") {
+        inProgressProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["In-Progress", "Pending"] },
+                salesIncharge: username,
+            })
+            .toArray();
+    } else {
+        inProgressProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["In-Progress", "Pending"] },
+            })
+            .toArray();
+    }
     if (finishedProjects.length == 0) {
         throw `No Projects Found`;
     }
@@ -180,12 +207,26 @@ const getOngoingProjects = async () => {
 };
 
 // To get finished five projects
-const getFinishedFiveProjects = async () => {
+const getFinishedFiveProjects = async (username) => {
     const projectCollection = await project();
-    let finishedProjects = await projectCollection
-        .find({ projectStatus: { $in: ["Cancelled", "Finished"] } })
-        .limit(5)
-        .toArray();
+    let staffUser = await user.getUser(username);
+    let finishedProjects = undefined;
+    if (staffUser.position == "Sales Team") {
+        finishedProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["Cancelled", "Finished"] },
+                salesIncharge: username,
+            })
+            .limit(5)
+            .toArray();
+    } else {
+        finishedProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["Cancelled", "Finished"] },
+            })
+            .limit(5)
+            .toArray();
+    }
 
     if (finishedProjects.length == 0) {
         throw `No Projects Found`;
@@ -196,9 +237,22 @@ const getFinishedFiveProjects = async () => {
 // To get all finished projects
 const getFinishedProjects = async () => {
     const projectCollection = await project();
-    let finishedProjects = await projectCollection
-        .find({ projectStatus: { $in: ["Cancelled", "Finished"] } })
-        .toArray();
+    let staffUser = await user.getUser(username);
+    let finishedProjects = undefined;
+    if (staffUser.position == "Sales Team") {
+        finishedProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["Cancelled", "Finished"] },
+                salesIncharge: username,
+            })
+            .toArray();
+    } else {
+        finishedProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["Cancelled", "Finished"] },
+            })
+            .toArray();
+    }
     if (finishedProjects.length == 0) {
         throw `No Projects Found`;
     }
@@ -356,10 +410,17 @@ const addEquipment = async (
     batteryCapacity,
     railsCount,
     chargeControllertype,
-    chargeControllerCount
+    chargeControllerCount,
+    inverterType,
+    inverterCount,
+    crewCount
 ) => {
+    const materialCollection = await material();
     const projectCollection = await project();
-    const project = await projectCollection.findOne({ _id: id });
+    const projects = await projectCollection.findOne({ _id: id });
+    if (!projects) {
+        throw `No Project Found`;
+    }
     const equipment = {
         solarType: solarType,
         solarCount: solarCount,
@@ -370,8 +431,42 @@ const addEquipment = async (
         railsCount: railsCount,
         chargeControllertype: chargeControllertype,
         chargeControllerCount: chargeControllerCount,
+        inverterType: inverterType,
+        inverterCount: inverterCount,
+        crewCount: crewCount,
     };
-    await project().updateOne({ _id: id }, { $set: { equipment: equipment } });
+    let progressStatus = "At Sales Team";
+    let crewType = "Crew";
+    const solarCost = await materialCollection.findOne({ type: solarType });
+    const wireCost = await materialCollection.findOne({ type: wireType });
+    const batteryCost = await materialCollection.findOne({ type: batteryType });
+    const railsCost = await materialCollection.findOne({ type: railsType });
+    const chargeControllerCost = await materialCollection.findOne({
+        type: chargeControllertype,
+    });
+    const inverterCost = await materialCollection.findOne({
+        type: inverterType,
+    });
+    const crewCost = await materialCollection.findone({ type: crewType });
+    let totalCost =
+        solarCost.cost * solarCount +
+        wireCost.cost * wireCount +
+        batteryCost.cost * batteryCount +
+        railsCost.cost * railsCount +
+        chargeControllerCost.cost * chargeControllerCount +
+        inverterCost.cost * inverterCount +
+        crewCost.cost * crewCount;
+    await project().update(
+        { _id: id },
+        {
+            $set: {
+                equipment: equipment,
+                progress: progressStatus,
+                totalCost: totalCost,
+            },
+        }
+    );
+
     if (updatedInfo.modifiedCount == 0) {
         throw `Couldn't add Equipment`;
     } else {
@@ -379,20 +474,168 @@ const addEquipment = async (
     }
 };
 
-const getOngoingCount = async () => {
+const getOngoingCount = async (username) => {
     const projectCollection = await project();
-    let ongoingProjects = await projectCollection
-        .find({ projectStatus: { $in: ["In-Progress", "Pending"] } })
-        .toArray();
+    let staffUser = await user.getUser(username);
+    let ongoingProjects = undefined;
+    if (staffUser.position == "Sales Team") {
+        ongoingProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["In-Progress", "Pending"] },
+                salesIncharge: username,
+            })
+            .toArray();
+    }
     return ongoingProjects.length;
 };
 
 const getFinishedCount = async () => {
     const projectCollection = await project();
-    let finishedProjects = await projectCollection
-        .find({ projectStatus: { $in: ["Cancelled", "Finished"] } })
-        .toArray();
+    let staffUser = await user.getUser(username);
+    let finishedProjects = undefined;
+    if (staffUser.position == "Sales Team") {
+        finishedProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["Cancelled", "Finished"] },
+            })
+            .toArray();
+    } else {
+        finishedProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["Cancelled", "Finished"] },
+            })
+            .toArray();
+    }
     return finishedProjects.length;
+};
+
+const getCost = async (username) => {
+    const projectCollection = await project();
+    let staffUser = await user.getUser(username);
+    let cost = undefined;
+    if (staffUser.position == "Sales Team") {
+        cost = await projectCollection
+            .find({
+                projectStatus: { $in: ["Finished"] },
+                salesIncharge: username,
+            })
+            .toArray();
+    } else {
+        cost = await projectCollection
+            .find({
+                projectStatus: { $in: ["Finished"] },
+            })
+            .toArray();
+    }
+    let totalSales = 0;
+    for (let i = 0; i < cost.length; i++) {
+        totalSales += cost[i].totalCost;
+    }
+    return Sales;
+};
+
+//Update Equipment
+const updateEquipment = async (
+    id,
+    solarType,
+    solarCount,
+    wireType,
+    wireCount,
+    batteryCount,
+    batteryCapacity,
+    railsCount,
+    chargeControllertype,
+    chargeControllerCount,
+    inverterType,
+    inverterCount,
+    crewCount
+) => {
+    const projectCollection = await project();
+    const project = await projectCollection.findOne({ _id: id });
+    if (!solarType) {
+        solarType = project.equipment.solarType;
+    }
+    if (!solarCount) {
+        solarCount = project.equipment.solarCount;
+    }
+    if (!wireType) {
+        wireType = project.equipment.wireType;
+    }
+    if (!wireCount) {
+        wireCount = project.equipment.wireCount;
+    }
+    if (!batteryCount) {
+        batteryCount = project.equipment.batteryCount;
+    }
+    if (!batteryCapacity) {
+        batteryCapacity = project.equipment.batteryCapacity;
+    }
+    if (!railsCount) {
+        railsCount = project.equipment.railsCount;
+    }
+    if (!chargeControllertype) {
+        chargeControllertype = project.equipment.chargeControllertype;
+    }
+    if (!chargeControllerCount) {
+        chargeControllerCount = project.equipment.chargeControllerCount;
+    }
+    if (!inverterType) {
+        inverterType = project.equipment.inverterType;
+    }
+    if (!inverterCount) {
+        inverterCount = project.equipment.inverterCount;
+    }
+    if (!crewCount) {
+        crewCount = project.equipment.crewCount;
+    }
+    const equipment = {
+        solarType: solarType,
+        solarCount: solarCount,
+        wireType: wireType,
+        wireCount: wireCount,
+        batteryCount: batteryCount,
+        batteryCapacity: batteryCapacity,
+        railsCount: railsCount,
+        chargeControllertype: chargeControllertype,
+        chargeControllerCount: chargeControllerCount,
+        inverterType: inverterType,
+        inverterCount: inverterCount,
+        crewCount: crewCount,
+    };
+    let crewType = "Crew";
+    const solarCost = await materialCollection.findOne({ type: solarType });
+    const wireCost = await materialCollection.findOne({ type: wireType });
+    const batteryCost = await materialCollection.findOne({ type: batteryType });
+    const railsCost = await materialCollection.findOne({ type: railsType });
+    const chargeControllerCost = await materialCollection.findOne({
+        type: chargeControllertype,
+    });
+    const inverterCost = await materialCollection.findOne({
+        type: inverterType,
+    });
+    const crewCost = await materialCollection.findone({ type: crewType });
+    let totalCost =
+        solarCost.cost * solarCount +
+        wireCost.cost * wireCount +
+        batteryCost.cost * batteryCount +
+        railsCost.cost * railsCount +
+        chargeControllerCost.cost * chargeControllerCount +
+        inverterCost.cost * inverterCount +
+        crewCost.cost * crewCount;
+    await project().update(
+        { _id: id },
+        {
+            $set: {
+                equipment: equipment,
+                totalCost: totalCost,
+            },
+        }
+    );
+    if (updatedInfo.modifiedCount == 0) {
+        throw `Couldn't add Equipment`;
+    } else {
+        return "Equipment added to Project";
+    }
 };
 
 module.exports = {
@@ -408,5 +651,7 @@ module.exports = {
     getFinishedProjects,
     getOngoingProjects,
     getOngoingCount,
-    getFinishedCount
+    getFinishedCount,
+    getCost,
+    updateEquipment,
 };

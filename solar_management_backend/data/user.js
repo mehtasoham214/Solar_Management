@@ -1,31 +1,32 @@
 const mongoCollections = require("../db/collection");
-const user = mongoCollections.user;
+const userCol = mongoCollections.users;
 const customer = mongoCollections.customer;
 const { ObjectId } = require("mongodb");
 const validator = require("../validator");
 
-const createUser = async (username, password, position, contact) => {
-    const usercollection = await user();
-    validateUser(username.trim());
+const createUser = async (name, username, password, position, contact) => {
+    const usercollection = await userCol();
+    validator.validateUser(username.trim());
     const userInfo = {
-        username,
-        password,
-        position,
-        contact,
+        name: name,
+        username: username,
+        password: password,
+        position: position,
+        contact: contact,
         createdAt: new Date().toLocaleDateString(),
         updatedAt: new Date().toLocaleDateString(),
     };
     const userInserted = await usercollection.insertOne(userInfo);
     if (userInserted.insertedCount == 0) {
-        throw `User was be created`;
+        throw `User was not created`;
     } else {
         return "User Created Successfully";
     }
 };
 
 const getUser = async (username) => {
-    const usercollection = await user();
-    validateUser(username.trim());
+    const usercollection = await userCol();
+    validator.validateUser(username.trim());
     const user = await usercollection.findOne({
         username: username,
     });
@@ -79,7 +80,7 @@ const getAllSalesTeam = async () => {
     const salesTeamCollection = await user();
     let salesTeamList = await salesTeamCollection
         .find({
-            position: "Sales",
+            position: "Sales Team",
         })
         .toArray();
     if (salesTeamList.length == 0) {

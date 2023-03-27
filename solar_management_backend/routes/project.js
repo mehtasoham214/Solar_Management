@@ -8,14 +8,39 @@ const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
+const passportJWT = require("passport-jwt");
+const JWTStrategy = passportJWT.Strategy;
+const ExtractJWT = passportJWT.ExtractJwt;
+
 const validator = require("../validator");
-const user = require("../data/user");
+
+console.log(process.env.JWT_SECRET);
+const options = {
+    jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+    secretOrKey: "solar_manager_team21",
+};
+
+passport.use(
+    new JWTStrategy(options, async (jwtPayload, done) => {
+        try {
+            const user = await userData.getUser(jwtPayload.username);
+            if (user) {
+                return done(null, user);
+            } else {
+                return done(null, false);
+            }
+        } catch (e) {
+            return done(e, false);
+        }
+    })
+);
 
 router.post("/login", async (req, res, next) => {
-    const { username, password } = req.body;
+    const username = req.body.username;
+    const password = req.body.password;
     try {
         // Get user from database
-        const userinfo = await user.getUser(username);
+        const userinfo = await userData.getUser(username);
         // If user doesn't exist, return error response
         if (!userinfo) {
             return res.status(401).json({ message: "Invalid credentials" });
@@ -38,27 +63,21 @@ router.post("/login", async (req, res, next) => {
     }
 });
 
-//Register USer
+//Register User
 router.post("/register", async (req, res, next) => {
     const username = req.body.username;
+    const name = req.body.name;
     const password = req.body.password;
     const position = req.body.position;
     const contact = req.body.contact;
 
     try {
-        // Check if username already exists in database
-        const existingUser = await getUser(username);
-
-        // If username already exists, return error response
-        if (existingUser) {
-            return res.status(409).json({ message: "Username already exists" });
-        }
-
         // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Create user in database
-        const userData = await user.createUser(
+        const createdUserData = await userData.createUser(
+            name,
             username,
             hashedPassword,
             position,
@@ -66,10 +85,11 @@ router.post("/register", async (req, res, next) => {
         );
 
         // Generate and sign JWT token
+        console.log(process.env.JWT_SECRET);
         const token = jwt.sign({ username }, process.env.JWT_SECRET);
 
         // Return success response with JWT token
-        res.status(200).json(userData, token);
+        res.status(200).json({ createdUserData, token });
     } catch (e) {
         res.status(404).json({ error: `Failed to Register: ${e}` });
     }
@@ -81,7 +101,9 @@ router.get(
     passport.authenticate("jwt", { session: false }),
     async (req, res, next) => {
         try {
-            const projects = await projectData.getAllProjects();
+            const { username } = req.user;
+            const token = req.headers.authorization.split(" ")[1]; // get JWT token from Authorization header
+            const projects = await projectData.getAllProjects(username);
             res.json(projects);
         } catch (e) {
             res.status(404).json({ error: `Failed to get projects: ${e}` });
@@ -99,6 +121,7 @@ router.post(
         let customerAddress = req.body.customerAddress;
         let customerNumber = req.body.customerNumber;
         let projectAddress = req.body.projectAddress;
+        let date = req.body.date;
 
         try {
             validator.validateCustomerandProject(
@@ -121,6 +144,7 @@ router.post(
                 customerNumber,
                 projectAddress,
                 username,
+                date,
             };
             const newProject = await projectData.createProject(data);
             res.status(200).json(newProject);
