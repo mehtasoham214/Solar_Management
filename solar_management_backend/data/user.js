@@ -30,13 +30,11 @@ const createUser = async (username, password, type) => {
     }
 };
 
-const getUser = async (username, password) => {
+const getUser = async (username) => {
     const usercollection = await user();
     validateUser(username.trim());
-    validatePassword(password.trim());
     const user = await usercollection.findOne({
         username: username,
-        password: password,
     });
     if (user) {
         return user;
@@ -47,18 +45,61 @@ const getUser = async (username, password) => {
 
 const getAllSiteInspector = async () => {
     const siteInspector = await user();
-    const siteInsperctorList = await siteInspector.find({
-        position: "Site Inspector",
-    });
-    if (siteInsperctorList) {
-        return siteInspector;
-    } else {
-        throw `No SiteInspector`;
+    const siteInsperctorList = await siteInspector
+        .find({
+            position: "Site Inspector",
+        })
+        .toArray();
+    if (siteInsperctorList.length == 0) {
+        throw `No Site Inspectors Found`;
     }
+    return siteInsperctorList;
+};
+
+const getAllTeamLeads = async () => {
+    const teamLeadCollection = await user();
+    let teamLeadsList = await teamLeadCollection
+        .find({
+            position: "Team Lead",
+        })
+        .toArray();
+    if (teamLeadsList.length == 0) {
+        throw `No Team Leads Found`;
+    }
+    return teamLeadsList;
+};
+
+const getAllOperationsEngineer = async () => {
+    const operationsEngineerCollection = await user();
+    let operationsEngineerList = await operationsEngineerCollection
+        .find({
+            position: "Operations Engineer",
+        })
+        .toArray();
+    if (operationsEngineerList.length == 0) {
+        throw `No Operations Engineers Found`;
+    }
+    return operationsEngineerList;
+};
+
+const getAllSalesTeam = async () => {
+    const salesTeamCollection = await user();
+    let salesTeamList = await salesTeamCollection
+        .find({
+            position: "Sales",
+        })
+        .toArray();
+    if (salesTeamList.length == 0) {
+        throw `No Operations Engineers Found`;
+    }
+    return salesTeamList;
 };
 
 module.exports = {
     createUser,
     getUser,
     getAllSiteInspector,
+    getAllTeamLeads,
+    getAllOperationsEngineer,
+    getAllSalesTeam,
 };
