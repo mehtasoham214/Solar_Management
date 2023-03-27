@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useState} from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -16,20 +17,36 @@ import FormControl from "@mui/material/FormControl";
 
 
 export default function Register() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      username: data.get('username'),
-      password: data.get('password'),
-    });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+          position,
+          username,
+          password,
+          staffname,
+          contact 
+        })
+      });
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const [position, setPosition] = React.useState('');
+  const [position, setPosition] = useState('');
+  const [username, setUserName] = useState('');
+  const [password, setPassword] = useState('');
+  const [staffname, setStaffName] = useState('');
+  const [contact, setContactNumber] = useState('');
 
-  const handleChange = (event) => {
-    setPosition(event.target.value);
-  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -54,10 +71,11 @@ export default function Register() {
                   name="name"
                   required
                   fullWidth
-                  id="name"
+                  id="staffname"
                   label="Full Name"
                   autoFocus
                   placeholder='e.g. John Doe'
+                  onChange={(e)=> setStaffName(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -69,6 +87,7 @@ export default function Register() {
                   name="username"
                   autoComplete="username"
                   placeholder='e.g. JohnDoe123'
+                  onChange={(e)=> setUserName(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -80,6 +99,7 @@ export default function Register() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  onChange={(e)=> setPassword(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -90,7 +110,7 @@ export default function Register() {
           id="position"
           value={position}
           label="Position *"
-          onChange={handleChange}
+          onChange={(e)=> setPosition(e.target.value)}
         >
           <MenuItem value="">
                     <em>None</em>
@@ -113,6 +133,7 @@ export default function Register() {
                   id="contactNumber"
                   autoComplete="contactNumber"
                   placeholder='e.g. +11234567890'
+                  onChange={(e)=> setContactNumber(e.target.value)}
                 />
               </Grid>
             </Grid>

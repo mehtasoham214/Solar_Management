@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useState} from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -11,15 +12,28 @@ import { ThemeProvider } from '@mui/material/styles';
 import theme from '../theme';
 
 export default function Login() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      username: data.get('username'),
-      password: data.get('password'),
-    });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+          username,
+          password,
+        })
+      });
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
-
+  const [username, setUserName] = useState('');
+  const [password, setPassword] = useState('');
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -45,6 +59,7 @@ export default function Login() {
               name="username"
               autoComplete="username"
               autoFocus
+              onChange={(e)=> setUserName(e.target.value)}
             />
             <TextField
               margin="normal"
@@ -55,6 +70,7 @@ export default function Login() {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={(e)=> setPassword(e.target.value)}
             />
             <Button
               type="submit"

@@ -14,7 +14,6 @@ const ExtractJWT = passportJWT.ExtractJwt;
 
 const validator = require("../validator");
 
-console.log(process.env.JWT_SECRET);
 const options = {
     jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
     secretOrKey: "solar_manager_team21",
@@ -66,7 +65,7 @@ router.post("/login", async (req, res, next) => {
 //Register User
 router.post("/register", async (req, res, next) => {
     const username = req.body.username;
-    const name = req.body.name;
+    const name = req.body.staffname;
     const password = req.body.password;
     const position = req.body.position;
     const contact = req.body.contact;
