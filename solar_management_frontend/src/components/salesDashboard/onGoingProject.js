@@ -67,7 +67,7 @@ const rows = ButtonArray();
 
     const handleProjectClick = (event) => {
         event.preventDefault();
-        navigate("/projectdetails"); // replace with the desired path
+        navigate("/sales/projectdetails"); // replace with the desired path
     };
 
     

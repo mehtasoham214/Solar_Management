@@ -94,6 +94,11 @@ export default function PastProject({ showMoreLink = true }) {
         navigate("/pastprojects"); // replace with the desired path
     };
 
+    const handleProjectClick = (event) => {
+        event.preventDefault();
+        navigate("/projectdetails"); // replace with the desired path
+    };
+
     return (
         <ThemeProvider theme={theme}>
             <React.Fragment>
@@ -101,7 +106,7 @@ export default function PastProject({ showMoreLink = true }) {
                 <Table size="small">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Product Name</TableCell>
+                            <TableCell >Product Name</TableCell>
                             <TableCell>Customer Name</TableCell>
                             <TableCell>Date</TableCell>
                             <TableCell>Cost</TableCell>
@@ -113,7 +118,7 @@ export default function PastProject({ showMoreLink = true }) {
                     <TableBody>
                         {rows.map((row) => (
                             <TableRow key={row.id}>
-                                <TableCell>{row.ProductName}</TableCell>
+                                <TableCell onClick={handleProjectClick}>{row.ProductName}</TableCell>
                                 <TableCell>{row.CustomerName}</TableCell>
                                 <TableCell>{row.date}</TableCell>
                                 <TableCell>{`$${row.cost}`}</TableCell>

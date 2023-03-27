@@ -28,7 +28,7 @@ function subtotal(items) {
 }
 
 const rows = [
-  createRow('Solar Panels', 111, 1.15),
+  createRow('Solar Panels', 125, 1.15),
   createRow('Batteries', 10, 45.99),
   createRow('Wiring', 2, 17.99),
 ];

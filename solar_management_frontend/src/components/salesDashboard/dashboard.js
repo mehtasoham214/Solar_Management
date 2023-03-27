@@ -46,6 +46,15 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
+// Navigation Imports
+// import { Route, Routes } from "react-router-dom";
+// import ALLOngoingProjects from "../onGoingProjects"
+// import ALLPastProjects from "../pastProjects";
+// import ProjectDashboard from "../projectDetails/projectDashboard";
+// import AllLeads from "../leads";
+// import AllCustomer from "../customers";
+
+
 function SalesDashboardContent() {
     const [openDialog, setOpenDialog] = useState(false);
 
@@ -84,7 +93,6 @@ function SalesDashboardContent() {
         <ThemeProvider theme={theme}>
             <Box sx={{ display: "flex", mt: 2 }}>
                 <PermanentDrawerLeft />
-
                 <Box
                     component="main"
                     sx={{

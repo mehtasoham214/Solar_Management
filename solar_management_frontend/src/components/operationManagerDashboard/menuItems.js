@@ -3,11 +3,10 @@ import * as React from "react";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import PeopleIcon from "@mui/icons-material/People";
 import LogoutIcon from "@mui/icons-material/Logout";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import FactCheckIcon from "@mui/icons-material/FactCheck";
-import LeaderboardIcon from '@mui/icons-material/Leaderboard';
+import PersonIcon from '@mui/icons-material/Person';
 import HomeIcon from '@mui/icons-material/Home';
 import theme from "../theme";
 import { ThemeProvider } from "@mui/material/styles";
@@ -16,7 +15,7 @@ import { Link } from "react-router-dom";
 export const mainListItems = (
     <ThemeProvider theme={theme}>
         <React.Fragment>
-            <Link to="/sales" href="#" sx={{ mt: 3}}>
+            <Link to="/" href="#" sx={{ mt: 3}}>
                 <ListItemButton sx={{ color: "primary.main" }}>
                     <ListItemIcon>
                         <HomeIcon sx={{ color: "primary.main" }} />
@@ -24,7 +23,7 @@ export const mainListItems = (
                     <ListItemText primary="Dashboard" />
                 </ListItemButton>
             </Link>
-            <Link to="/sales/ongoingprojects" href="#" sx={{ mt: 3}}>
+            <Link to="/ongoingprojects" href="#" sx={{ mt: 3}}>
                 <ListItemButton sx={{ color: "primary.main" }}>
                     <ListItemIcon>
                         <InsertDriveFileIcon sx={{ color: "primary.main" }} />
@@ -32,7 +31,7 @@ export const mainListItems = (
                     <ListItemText primary="On-going Projects" />
                 </ListItemButton>
             </Link>
-            <Link to="/sales/pastprojects" href="#" sx={{ mt: 3 }}>
+            <Link to="/pastprojects" href="#" sx={{ mt: 3 }}>
                 <ListItemButton sx={{ color: "primary.main" }}>
                     <ListItemIcon>
                         <FactCheckIcon sx={{ color: "primary.main" }} />
@@ -40,20 +39,36 @@ export const mainListItems = (
                     <ListItemText primary="Past Projects" />
                 </ListItemButton>
             </Link>
-            <Link to="/sales/customers" href="#" sx={{ mt: 3 }}>
+            <Link>
             <ListItemButton sx={{ color: "primary.main" }}>
                 <ListItemIcon>
-                    <PeopleIcon sx={{ color: "primary.main" }} />
+                    <PersonIcon sx={{ color: "primary.main" }} />
                 </ListItemIcon>
-                <ListItemText primary="Customers" />
+                <ListItemText primary="Operation Engineer" />
             </ListItemButton>
             </Link>
-            <Link to="/sales/leads" href="#" sx={{ mt: 3 }}>
+            <Link>
             <ListItemButton sx={{ color: "primary.main" }}>
                 <ListItemIcon>
-                    <LeaderboardIcon sx={{ color: "primary.main" }} />
+                    <PersonIcon sx={{ color: "primary.main" }} />
                 </ListItemIcon>
-                <ListItemText primary="Leads" />
+                <ListItemText primary="Site Inspector" />
+            </ListItemButton>
+            </Link>
+            <Link>
+            <ListItemButton sx={{ color: "primary.main" }}>
+                <ListItemIcon>
+                    <PersonIcon sx={{ color: "primary.main" }} />
+                </ListItemIcon>
+                <ListItemText primary="Sales" />
+            </ListItemButton>
+            </Link>
+            <Link>
+            <ListItemButton sx={{ color: "primary.main" }}>
+                <ListItemIcon>
+                    <PersonIcon sx={{ color: "primary.main" }} />
+                </ListItemIcon>
+                <ListItemText primary="Team Lead" />
             </ListItemButton>
             </Link>
         </React.Fragment>
