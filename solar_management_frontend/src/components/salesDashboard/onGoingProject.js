@@ -1,4 +1,5 @@
 import * as React from "react";
+import axios from "axios";
 import { useState, useEffect } from "react";
 import Link from "@mui/material/Link";
 import Table from "@mui/material/Table";
@@ -28,8 +29,8 @@ export default function OngoingProject({ showMoreLink = true }) {
         return (
             <div>
                 {/* <EditButton>buttonArray[0]</EditButton>
-              <button >buttonArray[0]</button>
-              <button >buttonArray[0]</button> */}
+                        <button >buttonArray[0]</button>
+                        <button >buttonArray[0]</button> */}
 
                 {buttonArray.map((buttonText, index) => (
                     <button style={{ marginLeft: "10px" }} key={index}>
@@ -40,30 +41,33 @@ export default function OngoingProject({ showMoreLink = true }) {
         );
     }
 
-    const [projectlist, setemployees] = useState(null);
-    useEffect(() => {
-        getemployees();
-    }, []);
-    const getemployees = () => {
-        fetch(`${process.env.REACT_APP_API_URL}inprogress`)
-            .then((res) => res.json())
-            .then(
-                (result) => {
-                    setemployees(result);
-                },
-                (error) => {
-                    setemployees(null);
-                }
-            );
-    };
+    const [ongoing, getongoing] = useState();
 
-    if (!projectlist) return <div>No Record Found</div>;
+    async function Getongoingproject() {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+            `${process.env.REACT_APP_API_URL}inprogress`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        const data = await response.data;
+        console.log(data);
+        getongoing(data);
+    }
+    useEffect(() => {
+        Getongoingproject();
+    }, []);
+
+    if (!ongoing) return <div>No Ongoin Projects</div>;
 
     const rows = ButtonArray();
-
-    const handleProjectClick = (event) => {
+    const handleProjectClick = (event, projectId) => {
         event.preventDefault();
-        navigate("/sales/projectdetails"); // replace with the desired path
+        localStorage.setItem("projectId", projectId);
+        navigate("/sales/projectdetails");
     };
 
     return (
@@ -82,14 +86,20 @@ export default function OngoingProject({ showMoreLink = true }) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {projectlist.map((row) => (
+                        {ongoing.map((row) => (
                             <TableRow key={row.id}>
-                                <TableCell onClick={handleProjectClick}>
+                                <TableCell
+                                    onClick={(event) =>
+                                        handleProjectClick(event, row._id)
+                                    }
+                                >
                                     {row.projectAddress}
                                 </TableCell>
                                 <TableCell>{row.customerName}</TableCell>
                                 <TableCell>{row.startDate}</TableCell>
-                                <TableCell>{`$${row.totalCost}`}</TableCell>
+                                <TableCell>{`$${
+                                    row.totalCost ?? 0
+                                }`}</TableCell>
 
                                 <TableCell
                                     style={{

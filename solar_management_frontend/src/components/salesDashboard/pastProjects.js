@@ -1,5 +1,6 @@
 import * as React from "react";
-import {useState,  useEffect} from "react";
+import axios from "axios";
+import { useState, useEffect } from "react";
 import Link from "@mui/material/Link";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -14,71 +15,70 @@ import { useNavigate } from "react-router-dom";
 
 // Generate Order Data
 
-
-
 export default function PastProject({ showMoreLink = true }) {
     const navigate = useNavigate();
 
     const handleSeeMoreClick = (event) => {
         event.preventDefault();
         navigate("/pastprojects"); // replace with the desired path
-     };
+    };
 
-function ButtonArray() {
-    const buttonArray = ["PDF"];
+    function ButtonArray() {
+        const buttonArray = ["PDF"];
 
-    return (
-        <div>
-            {/* <EditButton>buttonArray[0]</EditButton>
+        return (
+            <div>
+                {/* <EditButton>buttonArray[0]</EditButton>
               <button >buttonArray[0]</button>
               <button >buttonArray[0]</button> */}
 
-            {buttonArray.map((buttonText, index) => (
-                <button style={{ marginLeft: "10px" }} key={index}>
-                    {buttonText}
-                </button>
-            ))}
-        </div>
-    );
-}
-
-const [projectlist, setemployees] = useState(null)
-    useEffect(() => {
-        getemployees()
-    }, [])
-    const getemployees = () => {
-        fetch("http://localhost:4000/finished")
-            .then(res => res.json())
-            .then(
-                (result) => {                    
-                    setemployees(result)
-                },
-                (error) => {
-                    setemployees(null);
-                }
-            )
+                {buttonArray.map((buttonText, index) => (
+                    <button style={{ marginLeft: "10px" }} key={index}>
+                        {buttonText}
+                    </button>
+                ))}
+            </div>
+        );
     }
 
-    if (!projectlist) return (<div>No Record Found</div>)
+    const [past, getpast] = useState();
 
+    async function Getpastproject() {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+            `${process.env.REACT_APP_API_URL}finished`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        const data = await response.data;
+        console.log(data);
+        getpast(data);
+    }
+    useEffect(() => {
+        Getpastproject();
+    }, []);
 
+    if (!past) return <div>No Finished Projects</div>;
 
-const rows = ButtonArray();
+    const rows = ButtonArray();
 
-    const handleProjectClick = (event) => {
+    const handleProjectClick = (event, projectId) => {
         event.preventDefault();
-        navigate("/projectdetails"); // replace with the desired path
+        localStorage.setItem("projectId", projectId);
+        navigate("/sales/projectdetails");
     };
-
 
     return (
         <ThemeProvider theme={theme}>
             <React.Fragment>
-                <Title>Past Projects</Title>
+                <Title>On-Going Projects</Title>
                 <Table size="small">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Project Address</TableCell>
+                            <TableCell>Product Address</TableCell>
                             <TableCell>Customer Name</TableCell>
                             <TableCell>Date</TableCell>
                             <TableCell>Cost</TableCell>
@@ -87,19 +87,28 @@ const rows = ButtonArray();
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {projectlist.map((row) => (
+                        {past.map((row) => (
                             <TableRow key={row.id}>
-                                <TableCell onClick={handleProjectClick}>{row.ProductName}</TableCell>
-                                <TableCell>{row.CustomerName}</TableCell>
-                                <TableCell>{row.date}</TableCell>
-                                <TableCell>{`$${row.cost}`}</TableCell>
+                                <TableCell
+                                    onClick={(event) =>
+                                        handleProjectClick(event, row._id)
+                                    }
+                                >
+                                    {row.projectAddress}
+                                </TableCell>
+                                <TableCell>{row.customerName}</TableCell>
+                                <TableCell>{row.startDate}</TableCell>
+                                <TableCell>{`$${
+                                    row.totalCost ?? 0
+                                }`}</TableCell>
 
                                 <TableCell
                                     style={{
                                         color:
                                             row.projectStatus === "Cancelled"
                                                 ? theme.palette.error.main
-                                                : row.projectStatus === "Finished"
+                                                : row.projectStatus ===
+                                                  "Finished"
                                                 ? theme.palette.success.light
                                                 : "",
                                     }}
@@ -112,14 +121,15 @@ const rows = ButtonArray();
                     </TableBody>
                 </Table>
                 {showMoreLink && (
-                <Link
-                    color="primary"
-                    href="#"
-                    onClick={handleSeeMoreClick}
-                    sx={{ mt: 3 }}
-                >
-                    See more Projects
-                </Link>)}
+                    <Link
+                        color="primary"
+                        href="#"
+                        onClick={handleSeeMoreClick}
+                        sx={{ mt: 3 }}
+                    >
+                        See more Projects
+                    </Link>
+                )}
             </React.Fragment>
         </ThemeProvider>
     );

@@ -1,4 +1,6 @@
 import * as React from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -14,84 +16,229 @@ import theme from "../theme";
 import { ThemeProvider } from "@mui/material/styles";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14
-  }
+    [`&.${tableCellClasses.head}`]: {
+        backgroundColor: theme.palette.common.black,
+        color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+        fontSize: 14,
+    },
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover
-  },
-  // hide last border
-  "&:last-child td, &:last-child th": {
-    border: 0
-  }
+    "&:nth-of-type(odd)": {
+        backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    "&:last-child td, &:last-child th": {
+        border: 0,
+    },
 }));
 
-function createData(title, details) {
-  return { title, details };
-}
-
-const rows = [
-  createData("Project Name", "Xyz"),
-  createData("Address", "1728 somestreet USA")
-];
-
 function CustomizedTables() {
-  return (
-    <ThemeProvider theme={theme}>
-    <Container sx={{border:3, borderRadius:2, borderColor:'gray'}}>
-      <Grid container spacing={3} marginBottom={3}>
-        <Grid item md={4}>
-          <h1>Project Information</h1>
-        </Grid>
-        <Grid
-          item
-          md={8}
-          display="flex"
-          alignItems={{ xs: "center", md: "flex-end", lg: "flex-end" }}
-          justifyContent="flex-end"
-          sx={{ marginBottom: 2 }}
-        >
-          <ButtonGroup variant="outlined">
-            <Button color="secondary">Start</Button>
-            <Button color="success">Finish</Button>
-            <Button color="error">Cancel</Button>
-          </ButtonGroup>
-        </Grid>
-        <Grid item lg={6}>
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 400 }} aria-label="customized table">
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell>Title</StyledTableCell>
-                  <StyledTableCell align="right">Details</StyledTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows.map((row) => (
-                  <StyledTableRow key={row.title}>
-                    <StyledTableCell component="th" scope="row">
-                      {row.title}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {row.details}
-                    </StyledTableCell>
-                  </StyledTableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Grid>
-      </Grid>
-    </Container>
-    </ThemeProvider>
-  );
+    const [customer, getcustomer] = useState();
+
+    async function GetcustomerDetails() {
+        const token = localStorage.getItem("token");
+        const projectId = localStorage.getItem("projectId");
+        const response = await axios.get(
+            `${process.env.REACT_APP_API_URL}customer/${projectId}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        const data = await response.data;
+        getcustomer(data);
+    }
+    useEffect(() => {
+        GetcustomerDetails();
+    }, []);
+
+    if (!customer) return <div>No Customer Found</div>;
+    console.log(customer);
+
+    return (
+        <ThemeProvider theme={theme}>
+            <Container sx={{ border: 3, borderRadius: 2, borderColor: "gray" }}>
+                <Grid container spacing={3} marginBottom={3}>
+                    <Grid item md={4}>
+                        <h1>Project Information</h1>
+                    </Grid>
+                    <Grid
+                        item
+                        md={8}
+                        display="flex"
+                        alignItems={{
+                            xs: "center",
+                            md: "flex-end",
+                            lg: "flex-end",
+                        }}
+                        justifyContent="flex-end"
+                        sx={{ marginBottom: 2 }}
+                    >
+                        <ButtonGroup variant="outlined">
+                            <Button color="secondary">Start</Button>
+                            <Button color="success">Finish</Button>
+                            <Button color="error">Cancel</Button>
+                        </ButtonGroup>
+                    </Grid>
+                    <Grid item lg={6}>
+                        <TableContainer component={Paper}>
+                            <Table
+                                sx={{ minWidth: 400 }}
+                                aria-label="customized table"
+                            >
+                                <TableHead>
+                                    <TableRow>
+                                        <StyledTableCell>Title</StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            Details
+                                        </StyledTableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            Customer Name
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {customer.customerName}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            Customer Number
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {customer.customerNumber}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            Customer Address
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {customer.customerAddress}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            Project Address
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {customer.projectAddress}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            Site Inspector
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {customer.siteInspector}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            Operations Engineer
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {customer.operationsEngineer}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            Team Lead
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {customer.teamLead}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            Project Status
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {customer.projectStatus}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            Project Progress
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {customer.projectProgress}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            Start Date
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {customer.projectStartDate}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            End Date
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {customer.projectEndDate}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            Total Cost
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {customer.totalCost}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Grid>
+                </Grid>
+            </Container>
+        </ThemeProvider>
+    );
 }
 
 export default CustomizedTables;

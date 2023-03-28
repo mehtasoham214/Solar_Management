@@ -28,14 +28,17 @@ const createProject = async (data) => {
     let customerNumber = data.customerNumber.trim();
     let projectAddress = data.projectAddress.trim();
     let sales = data.username;
-    let siteInspector = undefined;
+    let siteInspector = "Not Assigned";
+    let operationEngineer = "Not Assigned";
+    let teamLead = "Not Assigned";
     let startDate = new Date().toLocaleDateString();
     let appointmentDate = data.date;
-    let endDate = undefined;
+    let projectProgress = "With Operations Manager";
+    let endDate = "Not Assigned";
     let areaInfo = [];
     let images = [];
     let equipment = [];
-    let totalCost = undefined;
+    let totalCost = "Not Assigned";
     let projectStatus = "Pending";
     let addedNotes = undefined;
     let whoAdded = undefined;
@@ -82,8 +85,11 @@ const createProject = async (data) => {
             customerName: customerName,
             projectAddress: projectAddress,
             projectStatus: projectStatus,
+            projectProgress: projectProgress,
             salesIncharge: sales,
             siteInspector: siteInspector,
+            operationEngineer: operationEngineer,
+            teamLead: teamLead,
             startDate: startDate,
             endDate: endDate,
             areaInfo: areaInfo,
@@ -186,25 +192,25 @@ const getOngoingProjects = async (username) => {
     const projectCollection = await project();
 
     let staffUser = await user.getUser(username);
-    let inProgressProjects = undefined;
+    let onGoingProjects = undefined;
     if (staffUser.position == "Sales Team") {
-        inProgressProjects = await projectCollection
+        onGoingProjects = await projectCollection
             .find({
                 projectStatus: { $in: ["In-Progress", "Pending"] },
                 salesIncharge: username,
             })
             .toArray();
     } else {
-        inProgressProjects = await projectCollection
+        onGoingProjects = await projectCollection
             .find({
                 projectStatus: { $in: ["In-Progress", "Pending"] },
             })
             .toArray();
     }
-    if (finishedProjects.length == 0) {
+    if (onGoingProjects.length == 0) {
         throw `No Projects Found`;
     }
-    return finishedProjects;
+    return onGoingProjects;
 };
 
 // To get finished five projects
@@ -513,10 +519,14 @@ const getOngoingCount = async (username) => {
             })
             .toArray();
     }
-    return ongoingProjects.length;
+    if (ongoingProjects.length > 0) {
+        return ongoingProjects.length;
+    } else {
+        return 0;
+    }
 };
 
-const getFinishedCount = async () => {
+const getFinishedCount = async (username) => {
     const projectCollection = await project();
     let staffUser = await user.getUser(username);
     let finishedProjects = undefined;
@@ -524,6 +534,7 @@ const getFinishedCount = async () => {
         finishedProjects = await projectCollection
             .find({
                 projectStatus: { $in: ["Cancelled", "Finished"] },
+                salesIncharge: username,
             })
             .toArray();
     } else {
@@ -533,7 +544,11 @@ const getFinishedCount = async () => {
             })
             .toArray();
     }
-    return finishedProjects.length;
+    if (finishedProjects.length > 0) {
+        return finishedProjects.length;
+    } else {
+        return 0;
+    }
 };
 
 const getCost = async (username) => {

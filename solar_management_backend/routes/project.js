@@ -56,6 +56,8 @@ router.post("/login", async (req, res, next) => {
         // Generate and sign JWT token
         const token = jwt.sign({ username }, process.env.JWT_SECRET);
         // Return success response with JWT token
+        //res.setHeader('Set-Cookie',`token=${token};HttpOnly`);
+        res.cookie("token", token, { httpOnly: true });
         res.status(200).json(token);
     } catch (e) {
         res.status(404).json({ error: `Failed to : ${e}` });
@@ -84,7 +86,6 @@ router.post("/register", async (req, res, next) => {
         );
 
         // Generate and sign JWT token
-        console.log(process.env.JWT_SECRET);
         const token = jwt.sign({ username }, process.env.JWT_SECRET);
 
         // Return success response with JWT token
@@ -296,6 +297,8 @@ router.get(
     async (req, res, next) => {
         const { username } = req.user;
         try {
+            const { username } = req.user;
+            const token = req.headers.authorization.split(" ")[1];
             const inprogressProjects =
                 await projectData.getInProgressFiveProjects(username);
             res.json(inprogressProjects);
@@ -311,7 +314,11 @@ router.get(
     passport.authenticate("jwt", { session: false }),
     async (req, res, next) => {
         try {
-            const finishedProjects = await projectData.getOngoingProjects(username);
+            const { username } = req.user;
+            const token = req.headers.authorization.split(" ")[1];
+            const finishedProjects = await projectData.getOngoingProjects(
+                username
+            );
             res.json(finishedProjects);
         } catch (e) {
             res.status(404).json({ error: `Failed to get projects: ${e}` });
@@ -325,8 +332,11 @@ router.get(
     passport.authenticate("jwt", { session: false }),
     async (req, res, next) => {
         try {
-            const finishedProjects =
-                await projectData.getFinishedFiveProjects(username);
+            const { username } = req.user;
+            const token = req.headers.authorization.split(" ")[1];
+            const finishedProjects = await projectData.getFinishedFiveProjects(
+                username
+            );
             res.json(finishedProjects);
         } catch (e) {
             res.status(404).json({ error: `Failed to get projects: ${e}` });
@@ -340,7 +350,11 @@ router.get(
     passport.authenticate("jwt", { session: false }),
     async (req, res, next) => {
         try {
-            const finishedProjects = await projectData.getFinishedProjects(username);
+            const { username } = req.user;
+            const token = req.headers.authorization.split(" ")[1];
+            const finishedProjects = await projectData.getFinishedProjects(
+                username
+            );
             res.json(finishedProjects);
         } catch (e) {
             res.status(404).json({ error: `Failed to get projects: ${e}` });
@@ -408,6 +422,8 @@ router.get(
     passport.authenticate("jwt", { session: false }),
     async (req, res, next) => {
         try {
+            const { username } = req.user;
+            const token = req.headers.authorization.split(" ")[1];
             const leads = await customerData.getLeads(username);
             res.json(leads);
         } catch (e) {
@@ -422,6 +438,8 @@ router.get(
     passport.authenticate("jwt", { session: false }),
     async (req, res, next) => {
         try {
+            const { username } = req.user;
+            const token = req.headers.authorization.split(" ")[1];
             const salesTeam = await userData.getAllSalesTeam(username);
             res.json(salesTeam);
         } catch (e) {
@@ -435,6 +453,8 @@ router.get(
     passport.authenticate("jwt", { session: false }),
     async (req, res, next) => {
         try {
+            const { username } = req.user;
+            const token = req.headers.authorization.split(" ")[1];
             const siteInspectors = await userData.getAllSiteInspector(username);
             res.json(siteInspectors);
         } catch (e) {
@@ -448,8 +468,11 @@ router.get(
     passport.authenticate("jwt", { session: false }),
     async (req, res, next) => {
         try {
-            const operationsEgineers =
-                await userData.getAllOperationsEngineer(username);
+            const { username } = req.user;
+            const token = req.headers.authorization.split(" ")[1];
+            const operationsEgineers = await userData.getAllOperationsEngineer(
+                username
+            );
             res.json(operationsEgineers);
         } catch (e) {
             res.status(404).json({ error: `Failed to get users: ${e}` });
@@ -462,6 +485,8 @@ router.get(
     passport.authenticate("jwt", { session: false }),
     async (req, res, next) => {
         try {
+            const { username } = req.user;
+            const token = req.headers.authorization.split(" ")[1];
             const teamLeads = await userData.getAllTeamLeads(username);
             res.json(teamLeads);
         } catch (e) {
@@ -511,5 +536,36 @@ router.patch(
     }
 );
 
+// Get Ongoing Counts
+router.get(
+    "/ongoingcount",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res, next) => {
+        try {
+            const { username } = req.user;
+            const token = req.headers.authorization.split(" ")[1];
+            const ongoingCounts = await projectData.getOngoingCount(username);
+            res.json({ counts: ongoingCounts });
+        } catch (e) {
+            res.status(404).json({ error: `Failed to get users: ${e}` });
+        }
+    }
+);
+
+// Get Past Counts
+router.get(
+    "/pastcount",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res, next) => {
+        try {
+            const { username } = req.user;
+            const token = req.headers.authorization.split(" ")[1];
+            const finishedCount = await projectData.getFinishedCount(username);
+            res.json({ counts: finishedCount });
+        } catch (e) {
+            res.status(404).json({ error: `Failed to get users: ${e}` });
+        }
+    }
+);
 
 module.exports = router;

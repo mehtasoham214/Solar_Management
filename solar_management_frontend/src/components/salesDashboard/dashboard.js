@@ -1,5 +1,8 @@
 import * as React from "react";
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
+
+// import axios
+import axios from "axios";
 //Theme Imports
 import theme from "../theme";
 import { ThemeProvider } from "@mui/material/styles";
@@ -53,33 +56,44 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 // import AllLeads from "../leads";
 // import AllCustomer from "../customers";
 
-
 function SalesDashboardContent() {
+    // Setting Ongoing Project Count
+    const [ongoing, setOngoing] = useState();
+    async function fetchData() {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+            `${process.env.REACT_APP_API_URL}ongoingcount`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        const data = await response.data.counts;
+        setOngoing(data);
+    }
+    useEffect(() => {
+        fetchData();
+    }, []);
 
-// Setting Ongoing Project Count
-const [ongoing, setOngoing] = useState();
-const getOngoingCount = async () => {
-    const response = await fetch(
-      "http://localhost:4000/ongoingcount"
-    ).then((response) => response.json());
-  
-    // update the state
-    setOngoing(response.count);
-  };
-  useEffect(() => {
-    getOngoingCount();
-  }, []);
-// Setting Past Project Count
-  const [past, setPast] = useState();
-  const getPastCount = async () => {
-    const response = await fetch(
-      "http://localhost:4000/pastcount"
-    ).then((response) => response.json());
-    setPast(response.count);
-  };
-  useEffect(() => {
-    getPastCount();
-  }, []);
+    //  Setting Past Project Count
+    const [past, setPast] = useState();
+    async function getPastCount() {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+            `${process.env.REACT_APP_API_URL}pastcount`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        const data = await response.data.counts;
+        setPast(data);
+    }
+    useEffect(() => {
+        getPastCount();
+    }, []);
 
     const [openDialog, setOpenDialog] = useState(false);
 
@@ -92,31 +106,40 @@ const getOngoingCount = async () => {
         setOpenDialog(false);
     };
 
-    function handleSubmit() {
-        // get the form data
-        const formData = {
-            customerName: document.getElementById("customer-name").value,
-            customerNumber: document.getElementById("customer-number").value,
-            customerAddress: document.getElementById("customer-address").value,
-            projectAddress: document.getElementById("project-address").value,
-        };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const data = {
+                customerName: customerName,
+                    customerNumber: customerNumber ,
+                    customerAddress: customerAddress,
+                    projectAddress: projectAddress,
+                    date: date,
+            };
+            const token = localStorage.getItem("token");
+            const response = await axios.post(
+                `${process.env.REACT_APP_API_URL}projects/add`,
+                data,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                    
+            
+                });
+            console.log(response.data)
 
-        // submit the form data to the server or do any other processing here
-        console.log(formData);
-        fetch(process.env.REACT_APP_API_URL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-        });
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
-        
-        // close the dialog box
-        handleCloseDialog();
-        
-    }
-    
+    const [customerName, setCustomerName] = useState("");
+    const [customerNumber, setCustomerNumber] = useState("");
+    const [customerAddress, setCustomerAddress] = useState("");
+    const [projectAddress, setProjectAddress] = useState("");
+    const [date, setDate] = useState("");
+
     return (
         <ThemeProvider theme={theme}>
             <Box sx={{ display: "flex", mt: 2 }}>
@@ -146,7 +169,7 @@ const getOngoingCount = async () => {
                                     <Counter
                                         title="On-going Projects"
                                         icon={<InsertDriveFileIcon />}
-                                        count = {JSON.stringify(ongoing,null)}
+                                        count={JSON.stringify(ongoing, 0)}
                                     />
                                 </Paper>
                             </Grid>
@@ -163,7 +186,7 @@ const getOngoingCount = async () => {
                                     <Counter
                                         title="Past Projects"
                                         icon={<FactCheckIcon />}
-                                        count={JSON.stringify(past,null)}
+                                        count={JSON.stringify(past, 0)}
                                     />
                                 </Paper>
                             </Grid>
@@ -215,6 +238,7 @@ const getOngoingCount = async () => {
                                                 id="customer-name"
                                                 label="Customer Name"
                                                 variant="outlined"
+                                                onChange={(e) => setCustomerName(e.target.value)}
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
@@ -232,6 +256,7 @@ const getOngoingCount = async () => {
                                                 id="customer-number"
                                                 label="Customer Number"
                                                 variant="outlined"
+                                                onChange={(e) => setCustomerNumber(e.target.value)}
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
@@ -249,6 +274,7 @@ const getOngoingCount = async () => {
                                                 id="customer-address"
                                                 label="Customer Address"
                                                 variant="outlined"
+                                                onChange={(e) => setCustomerAddress(e.target.value)}
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
@@ -266,6 +292,7 @@ const getOngoingCount = async () => {
                                                 id="project-address"
                                                 label="Project Address"
                                                 variant="outlined"
+                                                onChange={(e) => setProjectAddress(e.target.value)}
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
@@ -284,6 +311,7 @@ const getOngoingCount = async () => {
                                                 label="Appointment Date"
                                                 variant="outlined"
                                                 type="datetime-local"
+                                                onChange={(e) => setDate(e.target.value)}
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">

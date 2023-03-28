@@ -1,11 +1,12 @@
 import * as React from "react";
+import axios from "axios";
 import PermanentDrawerLeft from "../salesDashboard/navBar";
 import theme from "../theme";
 import { ThemeProvider } from "@mui/material/styles";
 import { Box, Container } from "@mui/system";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-import {useState,  useEffect} from "react";
+import { useState, useEffect } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -15,50 +16,47 @@ import Title from "../salesDashboard/Title";
 import { useNavigate } from "react-router-dom";
 export default function ALLOngoingProjects() {
     const navigate = useNavigate();
-function ButtonArray() {
-    const buttonArray = ["Edit", "Done", "Delete"];
+    function ButtonArray() {
+        const buttonArray = ["Edit", "Done", "Delete"];
 
-    return (
-        <div>
-            {/* <EditButton>buttonArray[0]</EditButton>
-              <button >buttonArray[0]</button>
-              <button >buttonArray[0]</button> */}
-
-            {buttonArray.map((buttonText, index) => (
-                <button style={{ marginLeft: "10px" }} key={index}>
-                    {buttonText}
-                </button>
-            ))}
-        </div>
-    );
-}
-
-const [projectlist, setemployees] = useState(null)
-    useEffect(() => {
-        getemployees()
-    }, [])
-    const getemployees = () => {
-        fetch("http://localhost:4000/allinprogress")
-            .then(res => res.json())
-            .then(
-                (result) => {                    
-                    setemployees(result)
-                },
-                (error) => {
-                    setemployees(null);
-                }
-            )
+        return (
+            <div>
+                {buttonArray.map((buttonText, index) => (
+                    <button style={{ marginLeft: "10px" }} key={index}>
+                        {buttonText}
+                    </button>
+                ))}
+            </div>
+        );
     }
 
-    if (!projectlist) return (<div>No Record Found</div>)
+    const [ongoing, getongoing] = useState();
+    async function Getongoingproject() {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+            `${process.env.REACT_APP_API_URL}allinprogress`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        const data = await response.data;
+        console.log(data);
+        getongoing(data);
+    }
+    useEffect(() => {
+        Getongoingproject();
+    }, []);
 
+    if (!ongoing) return <div>No Ongoin Projects</div>;
 
+    const rows = ButtonArray();
 
-const rows = ButtonArray();
-
-    const handleProjectClick = (event) => {
+    const handleProjectClick = (event, projectId) => {
         event.preventDefault();
-        navigate("/projectdetails"); // replace with the desired path
+        localStorage.setItem("projectId", projectId);
+        navigate("/sales/projectdetails");
     };
     return (
         <ThemeProvider theme={theme}>
@@ -85,46 +83,92 @@ const rows = ButtonArray();
                                     }}
                                 >
                                     <ThemeProvider theme={theme}>
-            <React.Fragment>
-                <Title>On-Going Projects</Title>
-                <Table size="small">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Product Id</TableCell>
-                            <TableCell>Customer Name</TableCell>
-                            <TableCell>Date</TableCell>
-                            <TableCell>Cost</TableCell>
-                            <TableCell>Status</TableCell>
-                            <TableCell>Action</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {projectlist.map((row) => (
-                            <TableRow key={row.id}>
-                                <TableCell onClick={handleProjectClick}>{row._id}</TableCell>
-                                <TableCell>{row.customerName}</TableCell>
-                                <TableCell>{row.startDate}</TableCell>
-                                <TableCell>{`$${row.cost}`}</TableCell>
+                                        <React.Fragment>
+                                            <Title>On-Going Projects</Title>
+                                            <Table size="small">
+                                                <TableHead>
+                                                    <TableRow>
+                                                        <TableCell>
+                                                            Product Address
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            Customer Name
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            Date
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            Cost
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            Status
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            Action
+                                                        </TableCell>
+                                                    </TableRow>
+                                                </TableHead>
+                                                <TableBody>
+                                                    {ongoing.map((row) => (
+                                                        <TableRow key={row.id}>
+                                                            <TableCell
+                                                                onClick={(
+                                                                    event
+                                                                ) =>
+                                                                    handleProjectClick(
+                                                                        event,
+                                                                        row._id
+                                                                    )
+                                                                }
+                                                            >
+                                                                {
+                                                                    row.projectAddress
+                                                                }
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                {
+                                                                    row.customerName
+                                                                }
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                {row.startDate}
+                                                            </TableCell>
+                                                            <TableCell>{`$${
+                                                                row.totalCost ??
+                                                                0
+                                                            }`}</TableCell>
 
-                                <TableCell
-                                    style={{
-                                        color:
-                                            row.projectStatus === "Pending"
-                                                ? theme.palette.error.main
-                                                : row.projectStatus === "In-Progress"
-                                                ? theme.palette.warning.main
-                                                : "",
-                                    }}
-                                >
-                                    {row.projectStatus}
-                                </TableCell>
-                                <TableCell>{rows}</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </React.Fragment>
-        </ThemeProvider>
+                                                            <TableCell
+                                                                style={{
+                                                                    color:
+                                                                        row.projectStatus ===
+                                                                        "Pending"
+                                                                            ? theme
+                                                                                  .palette
+                                                                                  .error
+                                                                                  .main
+                                                                            : row.projectStatus ===
+                                                                              "In-Progress"
+                                                                            ? theme
+                                                                                  .palette
+                                                                                  .warning
+                                                                                  .main
+                                                                            : "",
+                                                                }}
+                                                            >
+                                                                {
+                                                                    row.projectStatus
+                                                                }
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                {rows}
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    ))}
+                                                </TableBody>
+                                            </Table>
+                                        </React.Fragment>
+                                    </ThemeProvider>
                                 </Paper>
                             </Grid>
                         </Container>

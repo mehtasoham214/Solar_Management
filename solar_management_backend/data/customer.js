@@ -1,8 +1,10 @@
 const mongoCollections = require("../db/collection");
 const customer = mongoCollections.customer;
+const project = mongoCollections.project;
 const leads = mongoCollections.leads;
 const { ObjectId } = require("mongodb");
 const validator = require("../validator");
+const user = require("./user");
 
 // update customer details
 const patchCustomer = async (
@@ -52,25 +54,73 @@ const patchCustomer = async (
 
 // get Customer by ID
 const getCustomerByid = async (id) => {
-    validator.validateId(id);
     if (typeof id == "string") {
         id = new ObjectId(id);
     }
+    const projectCollection = await project();
+    const projectinfo = await projectCollection.findOne({ _id: id });
+    const customerId = projectinfo.customerId;
     const customerCollection = await customer();
-    const customerinfo = await customerCollection.findOne({ _id: id });
-    if (!customerinfo) {
+    const customerinformation = await customerCollection.findOne({
+        _id: customerId,
+    });
+    let finalInfo = {
+        customerName: customerinformation.customerName,
+        customerNumber: customerinformation.customerNumber,
+        customerAddress: customerinformation.customerAddress,
+        projectAddress: projectinfo.projectAddress,
+        siteInspector: projectinfo.siteInspector,
+        operationsEngineer: projectinfo.operationsEngineer,
+        teamLead: projectinfo.teamLead,
+        projectStatus: projectinfo.projectStatus,
+        projectProgress: projectinfo.projectProgress,
+        projectStartDate: projectinfo.projectStartDate,
+        projectEndDate: projectinfo.projectEndDate,
+        totalCost: projectinfo.totalCost,
+    };
+    if (!finalInfo.siteInspector) {
+        finalInfo.siteInspector = "Not Assigned";
+    }
+    if (!finalInfo.operationsEngineer) {
+        finalInfo.operationsEngineer = "Not Assigned";
+    }
+    if (!finalInfo.teamLead) {
+        finalInfo.teamLead = "Not Assigned";
+    }
+    if (!finalInfo.projectStartDate) {
+        finalInfo.projectStartDate = "Not Assigned";
+    }
+    if (!finalInfo.projectEndDate) {
+        finalInfo.projectEndDate = "Not Assigned";
+    }
+    if (!finalInfo.totalCost) {
+        finalInfo.totalCost = "Not Assigned";
+    }
+
+    console.log(finalInfo);
+    if (!finalInfo) {
         throw `No Customer Found`;
     }
-    return customerinfo;
+    return finalInfo;
 };
 
-const getLeads = async () => {
-    const leadsCollection = await leads();
-    const leadsList = await leadsCollection.find({}).toArray();
-    if (!leadsList) {
+const getLeads = async (username) => {
+    const leadCollection = await leads();
+    let staffUser = await user.getUser(username);
+    let leadslist = undefined;
+    if (staffUser.position == "Sales Team") {
+        leadslist = await leadCollection
+            .find({
+                salesIncharge: username,
+            })
+            .toArray();
+    } else {
+        leadslist = await leadCollection.find({}).toArray();
+    }
+    if (leadslist.length == 0) {
         throw `No Leads Found`;
     }
-    return leadsList;
+    return leadslist;
 };
 
 module.exports = {
