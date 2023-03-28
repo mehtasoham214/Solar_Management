@@ -518,6 +518,12 @@ const getOngoingCount = async (username) => {
                 salesIncharge: username,
             })
             .toArray();
+    } else {
+        ongoingProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["In-Progress", "Pending"] },
+            })
+            .toArray();
     }
     if (ongoingProjects.length > 0) {
         return ongoingProjects.length;
@@ -571,9 +577,12 @@ const getCost = async (username) => {
     }
     let totalSales = 0;
     for (let i = 0; i < cost.length; i++) {
+        if (cost[i].totalCost == "Not Assigned") {
+            cost[i].totalCost = 0;
+        }
         totalSales += cost[i].totalCost;
     }
-    return Sales;
+    return totalSales;
 };
 
 //Update Equipment

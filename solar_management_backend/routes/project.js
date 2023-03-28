@@ -576,6 +576,21 @@ router.get(
 );
 
 router.get(
+    "/gettotalCost",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res, next) => {
+        try {
+            const { username } = req.user;
+            const token = req.headers.authorization.split(" ")[1];
+            const totalSales = await projectData.getCost(username);
+            res.json({ cost: totalSales });
+        } catch (e) {
+            res.status(404).json({ error: `Failed to get users: ${e}` });
+        }
+    }
+);
+
+router.get(
     "/customers",
     passport.authenticate("jwt", { session: false }),
     async (req, res, next) => {

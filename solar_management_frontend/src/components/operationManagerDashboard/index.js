@@ -32,7 +32,6 @@ import FactCheckIcon from "@mui/icons-material/FactCheck";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
 
-
 // Navigation Imports
 // import { Route, Routes } from "react-router-dom";
 // import ALLOngoingProjects from "../onGoingProjects"
@@ -45,6 +44,7 @@ function OMDashboard() {
     // Setting Ongoing Project Count
     const [ongoing, setOngoing] = useState();
     async function fetchData() {
+        debugger;
         const token = localStorage.getItem("token");
         const response = await axios.get(
             `${process.env.REACT_APP_API_URL}ongoingcount`,
@@ -78,6 +78,23 @@ function OMDashboard() {
     }
     useEffect(() => {
         getPastCount();
+    }, []);
+    const [totalcost, settotalcost] = useState();
+    async function gettotalcostcount() {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+            `${process.env.REACT_APP_API_URL}gettotalCost`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        const data = await response.data.cost;
+        settotalcost(data);
+    }
+    useEffect(() => {
+        gettotalcostcount();
     }, []);
 
     return (
@@ -143,7 +160,7 @@ function OMDashboard() {
                                     <Counter
                                         title="Total Sales"
                                         icon={<RequestQuoteIcon />}
-                                        count={13}
+                                        count={JSON.stringify(totalcost, 0)}
                                     />
                                 </Paper>
                             </Grid>

@@ -2,6 +2,7 @@ const mongoCollections = require("../db/collection");
 const customer = mongoCollections.customer;
 const project = mongoCollections.project;
 const leads = mongoCollections.leads;
+const companyuser = mongoCollections.users;
 const { ObjectId } = require("mongodb");
 const validator = require("../validator");
 const user = require("./user");
@@ -57,6 +58,10 @@ const getCustomerByid = async (id) => {
     if (typeof id == "string") {
         id = new ObjectId(id);
     }
+    let salesIncharge = undefined;
+    let siteInspector = undefined;
+    let operationsEngineer = undefined;
+    let teamLead = undefined;
     const projectCollection = await project();
     const projectinfo = await projectCollection.findOne({ _id: id });
     const customerId = projectinfo.customerId;
@@ -64,29 +69,55 @@ const getCustomerByid = async (id) => {
     const customerinformation = await customerCollection.findOne({
         _id: customerId,
     });
+    const companyuserInfo = await companyuser();
+    if (projectinfo.salesIncharge != "Not Assigned") {
+        salesIncharge = await companyuserInfo.findOne({
+            username: projectinfo.salesIncharge,
+        });
+        salesIncharge = salesIncharge.name;
+    } else {
+        salesIncharge = "Not Assigned";
+    }
+    if (projectinfo.siteInspector != "Not Assigned") {
+        siteInspector = await companyuserInfo.findOne({
+            username: projectinfo.siteInspector,
+        });
+        siteInspector = siteInspector.name;
+    } else {
+        siteInspector = "Not Assigned";
+    }
+    if (projectinfo.operationsEngineer != "Not Assigned") {
+        operationsEngineer = await companyuserInfo.findOne({
+            username: projectinfo.operationsEngineer,
+        });
+        operationsEngineer = operationsEngineer.name;
+    } else {
+        operationsEngineer = "Not Assigned";
+    }
+    if (projectinfo.teamLead != "Not Assigned") {
+        teamLead = await companyuserInfo.findOne({
+            username: projectinfo.teamLead,
+        });
+        teamLead = teamLead.name;
+    } else {
+        teamLead = "Not Assigned";
+    }
+
     let finalInfo = {
         customerName: customerinformation.customerName,
         customerNumber: customerinformation.customerNumber,
         customerAddress: customerinformation.customerAddress,
         projectAddress: projectinfo.projectAddress,
-        siteInspector: projectinfo.siteInspector,
-        operationsEngineer: projectinfo.operationsEngineer,
-        teamLead: projectinfo.teamLead,
+        salesIncharge: salesIncharge,
+        siteInspector: siteInspector,
+        operationsEngineer: operationsEngineer,
+        teamLead: teamLead,
         projectStatus: projectinfo.projectStatus,
         projectProgress: projectinfo.projectProgress,
         projectStartDate: projectinfo.projectStartDate,
         projectEndDate: projectinfo.projectEndDate,
         totalCost: projectinfo.totalCost,
     };
-    if (!finalInfo.siteInspector) {
-        finalInfo.siteInspector = "Not Assigned";
-    }
-    if (!finalInfo.operationsEngineer) {
-        finalInfo.operationsEngineer = "Not Assigned";
-    }
-    if (!finalInfo.teamLead) {
-        finalInfo.teamLead = "Not Assigned";
-    }
     if (!finalInfo.projectStartDate) {
         finalInfo.projectStartDate = "Not Assigned";
     }
@@ -97,7 +128,6 @@ const getCustomerByid = async (id) => {
         finalInfo.totalCost = "Not Assigned";
     }
 
-    console.log(finalInfo);
     if (!finalInfo) {
         throw `No Customer Found`;
     }
@@ -128,45 +158,45 @@ const getCustomers = async (username) => {
     const projectCollection = await project();
     let ongoingProjects = undefined;
     if (staffUser.position == "Sales Team") {
-      ongoingProjects = await projectCollection
-        .find({ salesIncharge: username })
-        .toArray();
+        ongoingProjects = await projectCollection
+            .find({ salesIncharge: username })
+            .toArray();
     }
     const customerCollection = await customer();
     let customerList = await customerCollection
-      .aggregate([
-        {
-          $lookup: {
-            from: "project",
-            localField: "_id",
-            foreignField: "customerId",
-            as: "projects",
-          },
-        },
-        {
-          $match: {
-            "projects.salesIncharge": username,
-          },
-        },
-        {
-          $project: {
-            customerName: "$customerName",
-            customerNumber: "$customerNumber",
-            customerAddress: "$customerAddress",
-            projectAddress: "$projects.projectAddress",
-          },
-        },
-      ])
-      .toArray();
-  
+        .aggregate([
+            {
+                $lookup: {
+                    from: "project",
+                    localField: "_id",
+                    foreignField: "customerId",
+                    as: "projects",
+                },
+            },
+            {
+                $match: {
+                    "projects.salesIncharge": username,
+                },
+            },
+            {
+                $project: {
+                    customerName: "$customerName",
+                    customerNumber: "$customerNumber",
+                    customerAddress: "$customerAddress",
+                    projectAddress: "$projects.projectAddress",
+                },
+            },
+        ])
+        .toArray();
+
     if (customerList.length == 0) {
-      throw `No Customers Found`;
+        throw `No Customers Found`;
     }
     return customerList;
-  };
+};
 module.exports = {
     getCustomerByid,
     patchCustomer,
     getLeads,
-    getCustomers
+    getCustomers,
 };

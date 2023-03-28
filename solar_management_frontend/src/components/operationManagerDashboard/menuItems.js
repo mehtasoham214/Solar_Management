@@ -115,7 +115,7 @@ export const mainListItems = (
 export const secondaryListItems = (
     <ThemeProvider theme={theme}>
         <React.Fragment>
-            <ListItemButton sx={{ mt: 15 }} onClick={handleLogout}>
+            <ListItemButton onClick={handleLogout}>
                 <ListItemIcon>
                     <LogoutIcon sx={{ color: "primary.main" }} />
                 </ListItemIcon>

@@ -15,7 +15,6 @@ import { Container, Grid } from "@mui/material";
 import theme from "../../theme";
 import { ThemeProvider } from "@mui/material/styles";
 import OMDropBox from "./dropbox";
-
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.common.black,
@@ -135,6 +134,17 @@ function OMCustomizedTables() {
                                         </StyledTableCell>
                                         <StyledTableCell align="right">
                                             {customer.projectAddress}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            Sales Incharge
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {customer.salesIncharge}
                                         </StyledTableCell>
                                     </StyledTableRow>
                                     <StyledTableRow>
