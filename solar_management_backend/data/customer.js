@@ -54,11 +54,10 @@ const patchCustomer = async (
 
 // get Customer by ID
 const getCustomerByid = async (id) => {
-    validator.validateId(id);
     if (typeof id == "string") {
         id = new ObjectId(id);
     }
-    const projectCollection = await customer();
+    const projectCollection = await project();
     const projectinfo = await projectCollection.findOne({ _id: id });
     const customerId = projectinfo.customerId;
     const customerCollection = await customer();
@@ -79,7 +78,26 @@ const getCustomerByid = async (id) => {
         projectEndDate: projectinfo.projectEndDate,
         totalCost: projectinfo.totalCost,
     };
+    if (!finalInfo.siteInspector) {
+        finalInfo.siteInspector = "Not Assigned";
+    }
+    if (!finalInfo.operationsEngineer) {
+        finalInfo.operationsEngineer = "Not Assigned";
+    }
+    if (!finalInfo.teamLead) {
+        finalInfo.teamLead = "Not Assigned";
+    }
+    if (!finalInfo.projectStartDate) {
+        finalInfo.projectStartDate = "Not Assigned";
+    }
+    if (!finalInfo.projectEndDate) {
+        finalInfo.projectEndDate = "Not Assigned";
+    }
+    if (!finalInfo.totalCost) {
+        finalInfo.totalCost = "Not Assigned";
+    }
 
+    console.log(finalInfo);
     if (!finalInfo) {
         throw `No Customer Found`;
     }
@@ -97,9 +115,7 @@ const getLeads = async (username) => {
             })
             .toArray();
     } else {
-        leadslist = await leadCollection
-            .find({})
-            .toArray();
+        leadslist = await leadCollection.find({}).toArray();
     }
     if (leadslist.length == 0) {
         throw `No Leads Found`;

@@ -35,24 +35,14 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-function createData(title, details) {
-    return { title, details };
-}
-
-const rows = [
-    createData("Project Name", "Xyz"),
-    createData("Address", "1728 somestreet USA"),
-];
-
 function CustomizedTables() {
     const [customer, getcustomer] = useState();
 
     async function GetcustomerDetails() {
         const token = localStorage.getItem("token");
         const projectId = localStorage.getItem("projectId");
-        localStorage.removeItem("projectId");
         const response = await axios.get(
-            `${process.env.REACT_APP_API_URL}inprogress?id=${projectId}`,
+            `${process.env.REACT_APP_API_URL}customer/${projectId}`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -60,7 +50,6 @@ function CustomizedTables() {
             }
         );
         const data = await response.data;
-        console.log(data);
         getcustomer(data);
     }
     useEffect(() => {
@@ -68,6 +57,7 @@ function CustomizedTables() {
     }, []);
 
     if (!customer) return <div>No Customer Found</div>;
+    console.log(customer);
 
     return (
         <ThemeProvider theme={theme}>
@@ -109,19 +99,138 @@ function CustomizedTables() {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {rows.map((row) => (
-                                        <StyledTableRow key={row.title}>
-                                            <StyledTableCell
-                                                component="th"
-                                                scope="row"
-                                            >
-                                                {row.title}
-                                            </StyledTableCell>
-                                            <StyledTableCell align="right">
-                                                {row.details}
-                                            </StyledTableCell>
-                                        </StyledTableRow>
-                                    ))}
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            Customer Name
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {customer.customerName}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            Customer Number
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {customer.customerNumber}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            Customer Address
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {customer.customerAddress}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            Project Address
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {customer.projectAddress}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            Site Inspector
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {customer.siteInspector}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            Operations Engineer
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {customer.operationsEngineer}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            Team Lead
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {customer.teamLead}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            Project Status
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {customer.projectStatus}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            Project Progress
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {customer.projectProgress}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            Start Date
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {customer.projectStartDate}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            End Date
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {customer.projectEndDate}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            Total Cost
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {customer.totalCost}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
                                 </TableBody>
                             </Table>
                         </TableContainer>

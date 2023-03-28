@@ -90,7 +90,7 @@ export default function ALLOngoingProjects() {
                                                 <TableHead>
                                                     <TableRow>
                                                         <TableCell>
-                                                            Product Id
+                                                            Product Address
                                                         </TableCell>
                                                         <TableCell>
                                                             Customer Name
@@ -118,7 +118,7 @@ export default function ALLOngoingProjects() {
                                                                 ) =>
                                                                     handleProjectClick(
                                                                         event,
-                                                                        row._id
+                                                                        row.projectAddress
                                                                     )
                                                                 }
                                                             >
