@@ -106,28 +106,39 @@ function SalesDashboardContent() {
         setOpenDialog(false);
     };
 
-    function handleSubmit() {
-        // get the form data
-        const formData = {
-            customerName: document.getElementById("customer-name").value,
-            customerNumber: document.getElementById("customer-number").value,
-            customerAddress: document.getElementById("customer-address").value,
-            projectAddress: document.getElementById("project-address").value,
-        };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const data = {
+                customerName: customerName,
+                    customerNumber: customerNumber ,
+                    customerAddress: customerAddress,
+                    projectAddress: projectAddress,
+                    date: date,
+            };
+            const token = localStorage.getItem("token");
+            const response = await axios.post(
+                `${process.env.REACT_APP_API_URL}projects/add`,
+                data,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                    
+            
+                });
+            console.log(response.data)
 
-        // submit the form data to the server or do any other processing here
-        console.log(formData);
-        fetch(process.env.REACT_APP_API_URL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-        });
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
-        // close the dialog box
-        handleCloseDialog();
-    }
+    const [customerName, setCustomerName] = useState("");
+    const [customerNumber, setCustomerNumber] = useState("");
+    const [customerAddress, setCustomerAddress] = useState("");
+    const [projectAddress, setProjectAddress] = useState("");
+    const [date, setDate] = useState("");
 
     return (
         <ThemeProvider theme={theme}>
@@ -227,6 +238,7 @@ function SalesDashboardContent() {
                                                 id="customer-name"
                                                 label="Customer Name"
                                                 variant="outlined"
+                                                onChange={(e) => setCustomerName(e.target.value)}
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
@@ -244,6 +256,7 @@ function SalesDashboardContent() {
                                                 id="customer-number"
                                                 label="Customer Number"
                                                 variant="outlined"
+                                                onChange={(e) => setCustomerNumber(e.target.value)}
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
@@ -261,6 +274,7 @@ function SalesDashboardContent() {
                                                 id="customer-address"
                                                 label="Customer Address"
                                                 variant="outlined"
+                                                onChange={(e) => setCustomerAddress(e.target.value)}
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
@@ -278,6 +292,7 @@ function SalesDashboardContent() {
                                                 id="project-address"
                                                 label="Project Address"
                                                 variant="outlined"
+                                                onChange={(e) => setProjectAddress(e.target.value)}
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
@@ -296,6 +311,7 @@ function SalesDashboardContent() {
                                                 label="Appointment Date"
                                                 variant="outlined"
                                                 type="datetime-local"
+                                                onChange={(e) => setDate(e.target.value)}
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">

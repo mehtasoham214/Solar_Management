@@ -4,6 +4,7 @@ const project = mongoCollections.project;
 const leads = mongoCollections.leads;
 const { ObjectId } = require("mongodb");
 const validator = require("../validator");
+const user = require("./user");
 
 // update customer details
 const patchCustomer = async (
@@ -85,13 +86,25 @@ const getCustomerByid = async (id) => {
     return finalInfo;
 };
 
-const getLeads = async () => {
-    const leadsCollection = await leads();
-    const leadsList = await leadsCollection.find({}).toArray();
-    if (!leadsList) {
+const getLeads = async (username) => {
+    const leadCollection = await leads();
+    let staffUser = await user.getUser(username);
+    let leadslist = undefined;
+    if (staffUser.position == "Sales Team") {
+        leadslist = await leadCollection
+            .find({
+                salesIncharge: username,
+            })
+            .toArray();
+    } else {
+        leadslist = await leadCollection
+            .find({})
+            .toArray();
+    }
+    if (leadslist.length == 0) {
         throw `No Leads Found`;
     }
-    return leadsList;
+    return leadslist;
 };
 
 module.exports = {
