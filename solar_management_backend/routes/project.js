@@ -589,4 +589,19 @@ router.get(
     }
 );
 
+router.get(
+    "/userinfo",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res, next) => {
+        try {
+            const { username } = req.user;
+            const token = req.headers.authorization.split(" ")[1];
+            const user = await userData.getUser(username);
+            res.json(user);
+        } catch (e) {
+            res.status(404).json({ error: `Failed to get users: ${e}` });
+        }
+    }
+);
+
 module.exports = router;
