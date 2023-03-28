@@ -20,7 +20,7 @@ export default function PastProject({ showMoreLink = true }) {
 
     const handleSeeMoreClick = (event) => {
         event.preventDefault();
-        navigate("/pastprojects"); // replace with the desired path
+        navigate("/sales/pastprojects"); // replace with the desired path
     };
 
     function ButtonArray() {
