@@ -1,24 +1,23 @@
 import * as React from "react";
 import axios from "axios";
-import PermanentDrawerLeft from "../salesDashboard/navBar";
-import theme from "../theme";
+import OMPermanentDrawerLeft from "../navBar";
+import theme from "../../theme";
 import { ThemeProvider } from "@mui/material/styles";
 import { Box, Container } from "@mui/system";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-// import GetPastProjects from "../salesDashboard/pastProjects"
 import { useState, useEffect } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Title from "../salesDashboard/Title";
+import Title from "../../salesDashboard/Title";
 import { useNavigate } from "react-router-dom";
-export default function ALLPastProjects() {
+export default function AllOMOngoingProjects() {
     const navigate = useNavigate();
     function ButtonArray() {
-        const buttonArray = ["PDF"];
+        const buttonArray = ["Edit", "Done", "Delete"];
 
         return (
             <div>
@@ -31,14 +30,11 @@ export default function ALLPastProjects() {
         );
     }
 
-    const [past, getpast] = useState();
-
-    async function Getpastproject() {
+    const [ongoing, getongoing] = useState();
+    async function Getongoingproject() {
         const token = localStorage.getItem("token");
-        console.log(token);
-        debugger;
         const response = await axios.get(
-            `${process.env.REACT_APP_API_URL}allfinished`,
+            `${process.env.REACT_APP_API_URL}allinprogress`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -47,26 +43,26 @@ export default function ALLPastProjects() {
         );
         const data = await response.data;
         console.log(data);
-        getpast(data);
+        getongoing(data);
     }
     useEffect(() => {
-        Getpastproject();
+        Getongoingproject();
     }, []);
 
-    if (!past) return <div>No Finished Projects</div>;
+    if (!ongoing) return <div>No Ongoing Projects</div>;
 
     const rows = ButtonArray();
 
     const handleProjectClick = (event, projectId) => {
         event.preventDefault();
         localStorage.setItem("projectId", projectId);
-        navigate("/sales/projectdetails");
+        navigate("/ops-manager/projectdetails");
     };
     return (
         <ThemeProvider theme={theme}>
             <React.Fragment>
                 <Box sx={{ display: "flex", mt: 2 }}>
-                    <PermanentDrawerLeft />
+                    <OMPermanentDrawerLeft />
                     <Box
                         component="main"
                         sx={{
@@ -77,6 +73,7 @@ export default function ALLPastProjects() {
                         }}
                     >
                         <Container maxWidth="lg" sx={{ mt: 2 }}>
+                            {/* On going projects */}
                             <Grid item xs={12}>
                                 <Paper
                                     sx={{
@@ -85,12 +82,9 @@ export default function ALLPastProjects() {
                                         flexDirection: "column",
                                     }}
                                 >
-                                    <br />
-                                    <br />
-                                    {/* <GetPastProjects /> */}
                                     <ThemeProvider theme={theme}>
                                         <React.Fragment>
-                                            <Title>Past Projects</Title>
+                                            <Title>On-Going Projects</Title>
                                             <Table size="small">
                                                 <TableHead>
                                                     <TableRow>
@@ -115,7 +109,7 @@ export default function ALLPastProjects() {
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
-                                                    {past.map((row) => (
+                                                    {ongoing.map((row) => (
                                                         <TableRow key={row.id}>
                                                             <TableCell
                                                                 onClick={(
@@ -123,11 +117,13 @@ export default function ALLPastProjects() {
                                                                 ) =>
                                                                     handleProjectClick(
                                                                         event,
-                                                                        row.projectAddress
+                                                                        row._id
                                                                     )
                                                                 }
                                                             >
-                                                                {row._id}
+                                                                {
+                                                                    row.projectAddress
+                                                                }
                                                             </TableCell>
                                                             <TableCell>
                                                                 {
@@ -141,21 +137,22 @@ export default function ALLPastProjects() {
                                                                 row.totalCost ??
                                                                 0
                                                             }`}</TableCell>
+
                                                             <TableCell
                                                                 style={{
                                                                     color:
                                                                         row.projectStatus ===
-                                                                        "Cancelled"
+                                                                        "Pending"
                                                                             ? theme
                                                                                   .palette
                                                                                   .error
                                                                                   .main
                                                                             : row.projectStatus ===
-                                                                              "Finished"
+                                                                              "In-Progress"
                                                                             ? theme
                                                                                   .palette
-                                                                                  .success
-                                                                                  .light
+                                                                                  .warning
+                                                                                  .main
                                                                             : "",
                                                                 }}
                                                             >

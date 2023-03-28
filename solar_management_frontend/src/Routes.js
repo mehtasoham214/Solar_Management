@@ -12,6 +12,9 @@ import SIDashboard from "./components/siteInspectorDashboard";
 import TLDashboard from "./components/teamLeadDashboard";
 import Login from "./components/login";
 import Register from "./components/register";
+import AllOMOngoingProjects from "./components/operationManagerDashboard/onGoingProjectComponent";
+import AllOMPastProjects from "./components/operationManagerDashboard/pastProjectComponent";
+import OMProjectDashboard from "./components/operationManagerDashboard/projectDetails";
 
 
 function ProjectRouter(){
@@ -20,12 +23,21 @@ function ProjectRouter(){
                 <Route exact path="/" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route exact path="/sales" element={<Dashboard />} />
-                <Route path="/sales/ongoingprojects" element={<ALLOngoingProjects />} />
-                <Route path="/sales/pastprojects" element={<ALLPastProjects />} />
-                <Route path="/sales/projectdetails" element={<ProjectDashboard />} />
-                <Route path="/sales/leads" element={<AllLeads />} />
-                <Route path="/sales/customers" element={<AllCustomer />} />
-                <Route path="/ops-manager" element={<OMDashboard />} />
+                    <Route path="/sales/ongoingprojects" element={<ALLOngoingProjects />} />
+                    <Route path="/sales/pastprojects" element={<ALLPastProjects />} />
+                    <Route path="/sales/projectdetails" element={<ProjectDashboard />} />
+                    <Route path="/sales/leads" element={<AllLeads />} />
+                    <Route path="/sales/customers" element={<AllCustomer />} />
+                <Route exact path="/ops-manager" element={<OMDashboard />} />
+                    <Route path="/ops-manager/ongoingprojects" element={<AllOMOngoingProjects />} />
+                    <Route path="/ops-manager/pastprojects" element={<AllOMPastProjects />} />
+                    <Route path="/ops-manager/projectdetails" element={<OMProjectDashboard />} />
+                    <Route path="/ops-manager/requests" element={<OMDashboard />} />
+                    <Route path="/ops-manager/equipments" element={<OMDashboard />} />
+                    <Route path="/ops-manager/operationengineer" element={<OMDashboard />} />
+                    <Route path="/ops-manager/siteinspector" element={<OMDashboard />} />
+                    <Route path="/ops-manager/sales" element={<OMDashboard />} />
+                    <Route path="/ops-manager/teamlead" element={<OMDashboard />} />
                 <Route path="/ops-engineer" element={<OEDashboard/>} />
                 <Route path="/site-inspector" element={<SIDashboard/>} />
                 <Route path="/team-lead" element={<TLDashboard/>} />

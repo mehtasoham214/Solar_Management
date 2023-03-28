@@ -1,7 +1,7 @@
 import * as React from "react";
 import axios from "axios";
-import PermanentDrawerLeft from "../salesDashboard/navBar";
-import theme from "../theme";
+import OMPermanentDrawerLeft from "../navBar";
+import theme from "../../theme";
 import { ThemeProvider } from "@mui/material/styles";
 import { Box, Container } from "@mui/system";
 import Grid from "@mui/material/Grid";
@@ -13,9 +13,9 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Title from "../salesDashboard/Title";
+import Title from "../../salesDashboard/Title";
 import { useNavigate } from "react-router-dom";
-export default function ALLPastProjects() {
+export default function AllOMPastProjects() {
     const navigate = useNavigate();
     function ButtonArray() {
         const buttonArray = ["PDF"];
@@ -35,8 +35,6 @@ export default function ALLPastProjects() {
 
     async function Getpastproject() {
         const token = localStorage.getItem("token");
-        console.log(token);
-        debugger;
         const response = await axios.get(
             `${process.env.REACT_APP_API_URL}allfinished`,
             {
@@ -60,13 +58,13 @@ export default function ALLPastProjects() {
     const handleProjectClick = (event, projectId) => {
         event.preventDefault();
         localStorage.setItem("projectId", projectId);
-        navigate("/sales/projectdetails");
+        navigate("/ops-manager/projectdetails");
     };
     return (
         <ThemeProvider theme={theme}>
             <React.Fragment>
                 <Box sx={{ display: "flex", mt: 2 }}>
-                    <PermanentDrawerLeft />
+                    <OMPermanentDrawerLeft />
                     <Box
                         component="main"
                         sx={{

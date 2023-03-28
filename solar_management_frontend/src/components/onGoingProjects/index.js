@@ -49,7 +49,7 @@ export default function ALLOngoingProjects() {
         Getongoingproject();
     }, []);
 
-    if (!ongoing) return <div>No Ongoin Projects</div>;
+    if (!ongoing) return <div>No Ongoing Projects</div>;
 
     const rows = ButtonArray();
 

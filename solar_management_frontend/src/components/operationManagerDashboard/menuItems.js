@@ -6,8 +6,13 @@ import ListItemText from "@mui/material/ListItemText";
 import LogoutIcon from "@mui/icons-material/Logout";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import FactCheckIcon from "@mui/icons-material/FactCheck";
-import PersonIcon from '@mui/icons-material/Person';
 import HomeIcon from '@mui/icons-material/Home';
+import HardwareIcon from '@mui/icons-material/Hardware';
+import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown';
+import EngineeringIcon from '@mui/icons-material/Engineering';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import PriceChangeIcon from '@mui/icons-material/PriceChange';
+import HandymanIcon from '@mui/icons-material/Handyman';
 import theme from "../theme";
 import { ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
@@ -15,7 +20,7 @@ import { Link } from "react-router-dom";
 export const mainListItems = (
     <ThemeProvider theme={theme}>
         <React.Fragment>
-            <Link to="/" href="#" sx={{ mt: 3}}>
+            <Link to="/ops-manager" href="#" sx={{ mt: 3}}>
                 <ListItemButton sx={{ color: "primary.main" }}>
                     <ListItemIcon>
                         <HomeIcon sx={{ color: "primary.main" }} />
@@ -23,7 +28,7 @@ export const mainListItems = (
                     <ListItemText primary="Dashboard" />
                 </ListItemButton>
             </Link>
-            <Link to="/ongoingprojects" href="#" sx={{ mt: 3}}>
+            <Link to="/ops-manager/ongoingprojects" href="#" sx={{ mt: 3}}>
                 <ListItemButton sx={{ color: "primary.main" }}>
                     <ListItemIcon>
                         <InsertDriveFileIcon sx={{ color: "primary.main" }} />
@@ -31,7 +36,7 @@ export const mainListItems = (
                     <ListItemText primary="On-going Projects" />
                 </ListItemButton>
             </Link>
-            <Link to="/pastprojects" href="#" sx={{ mt: 3 }}>
+            <Link to="/ops-manager/pastprojects" href="#" sx={{ mt: 3 }}>
                 <ListItemButton sx={{ color: "primary.main" }}>
                     <ListItemIcon>
                         <FactCheckIcon sx={{ color: "primary.main" }} />
@@ -39,34 +44,50 @@ export const mainListItems = (
                     <ListItemText primary="Past Projects" />
                 </ListItemButton>
             </Link>
-            <Link>
+            <Link to="/ops-manager/requests" href="#" sx={{ mt: 3 }}>
             <ListItemButton sx={{ color: "primary.main" }}>
                 <ListItemIcon>
-                    <PersonIcon sx={{ color: "primary.main" }} />
+                    <ThumbsUpDownIcon sx={{ color: "primary.main" }} />
+                </ListItemIcon>
+                <ListItemText primary="Requests" />
+            </ListItemButton>
+            </Link>
+            <Link to="/ops-manager/equipments" href="#" sx={{ mt: 3 }}>
+            <ListItemButton sx={{ color: "primary.main" }}>
+                <ListItemIcon>
+                    <HardwareIcon sx={{ color: "primary.main" }} />
+                </ListItemIcon>
+                <ListItemText primary="Equipments" />
+            </ListItemButton>
+            </Link>
+            <Link to="/ops-manager/operationengineer" href="#" sx={{ mt: 3 }}>
+            <ListItemButton sx={{ color: "primary.main" }}>
+                <ListItemIcon>
+                    <EngineeringIcon sx={{ color: "primary.main" }} />
                 </ListItemIcon>
                 <ListItemText primary="Operation Engineer" />
             </ListItemButton>
             </Link>
-            <Link>
+            <Link to="/ops-manager/siteinspector" href="#" sx={{ mt: 3 }}>
             <ListItemButton sx={{ color: "primary.main" }}>
                 <ListItemIcon>
-                    <PersonIcon sx={{ color: "primary.main" }} />
+                    <ManageAccountsIcon sx={{ color: "primary.main" }} />
                 </ListItemIcon>
                 <ListItemText primary="Site Inspector" />
             </ListItemButton>
             </Link>
-            <Link>
+            <Link to="/ops-manager/sales" href="#" sx={{ mt: 3 }}>
             <ListItemButton sx={{ color: "primary.main" }}>
                 <ListItemIcon>
-                    <PersonIcon sx={{ color: "primary.main" }} />
+                    <PriceChangeIcon sx={{ color: "primary.main" }} />
                 </ListItemIcon>
                 <ListItemText primary="Sales" />
             </ListItemButton>
             </Link>
-            <Link>
+            <Link to="/ops-manager/teamlead" href="#" sx={{ mt: 3 }}>
             <ListItemButton sx={{ color: "primary.main" }}>
                 <ListItemIcon>
-                    <PersonIcon sx={{ color: "primary.main" }} />
+                    <HandymanIcon sx={{ color: "primary.main" }} />
                 </ListItemIcon>
                 <ListItemText primary="Team Lead" />
             </ListItemButton>
@@ -78,7 +99,7 @@ export const mainListItems = (
 export const secondaryListItems = (
     <ThemeProvider theme={theme}>
         <React.Fragment>
-            <ListItemButton sx={{ mt: 30 }}>
+            <ListItemButton>
                 <ListItemIcon>
                     <LogoutIcon sx={{ color: "primary.main" }} />
                 </ListItemIcon>
