@@ -60,7 +60,7 @@ const getCustomerByid = async (id) => {
     }
     let salesIncharge = undefined;
     let siteInspector = undefined;
-    let operationsEngineer = undefined;
+    let operationEngineer = undefined;
     let teamLead = undefined;
     const projectCollection = await project();
     const projectinfo = await projectCollection.findOne({ _id: id });
@@ -86,13 +86,13 @@ const getCustomerByid = async (id) => {
     } else {
         siteInspector = "Not Assigned";
     }
-    if (projectinfo.operationsEngineer != "Not Assigned") {
-        operationsEngineer = await companyuserInfo.findOne({
-            username: projectinfo.operationsEngineer,
+    if (projectinfo.operationEngineer != "Not Assigned") {
+        operationEngineer = await companyuserInfo.findOne({
+            username: projectinfo.operationEngineer,
         });
-        operationsEngineer = operationsEngineer.name;
+        operationEngineer = operationEngineer.name;
     } else {
-        operationsEngineer = "Not Assigned";
+        operationEngineer = "Not Assigned";
     }
     if (projectinfo.teamLead != "Not Assigned") {
         teamLead = await companyuserInfo.findOne({
@@ -107,10 +107,11 @@ const getCustomerByid = async (id) => {
         customerName: customerinformation.customerName,
         customerNumber: customerinformation.customerNumber,
         customerAddress: customerinformation.customerAddress,
+        projectID: projectinfo._id,
         projectAddress: projectinfo.projectAddress,
         salesIncharge: salesIncharge,
         siteInspector: siteInspector,
-        operationsEngineer: operationsEngineer,
+        operationEngineer: operationEngineer,
         teamLead: teamLead,
         projectStatus: projectinfo.projectStatus,
         projectProgress: projectinfo.projectProgress,

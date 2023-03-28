@@ -161,7 +161,7 @@ function CustomizedTables() {
                                             Operations Engineer
                                         </StyledTableCell>
                                         <StyledTableCell align="right">
-                                            {customer.operationsEngineer}
+                                            {customer.operationEngineer}
                                         </StyledTableCell>
                                     </StyledTableRow>
                                     <StyledTableRow>

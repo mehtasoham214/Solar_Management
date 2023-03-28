@@ -11,7 +11,6 @@ export default function TeamLeadPermanentDrawerLeft() {
     const [userName, getuserName] = useState();
     async function GetUserInfo() {
         const token = localStorage.getItem("token");
-        debugger;
         const response = await axios.get(
             `${process.env.REACT_APP_API_URL}userInfo`,
             {
