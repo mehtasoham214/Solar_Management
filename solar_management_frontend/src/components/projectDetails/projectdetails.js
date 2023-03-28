@@ -41,6 +41,8 @@ function CustomizedTables() {
     async function GetcustomerDetails() {
         const token = localStorage.getItem("token");
         const projectId = localStorage.getItem("projectId");
+        console.log(projectId);
+        console.log(token);
         const response = await axios.get(
             `${process.env.REACT_APP_API_URL}customer/${projectId}`,
             {

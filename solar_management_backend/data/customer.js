@@ -115,8 +115,8 @@ const getCustomerByid = async (id) => {
         teamLead: teamLead,
         projectStatus: projectinfo.projectStatus,
         projectProgress: projectinfo.projectProgress,
-        projectStartDate: projectinfo.projectStartDate,
-        projectEndDate: projectinfo.projectEndDate,
+        projectStartDate: projectinfo.startDate,
+        projectEndDate: projectinfo.endDate,
         totalCost: projectinfo.totalCost,
     };
     if (!finalInfo.projectStartDate) {
