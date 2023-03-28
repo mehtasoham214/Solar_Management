@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 export default function ALLOngoingProjects() {
     const navigate = useNavigate();
     function ButtonArray() {
-        const buttonArray = ["Edit", "Done", "Delete"];
+        const buttonArray = ["PDF"];
 
         return (
             <div>
@@ -34,6 +34,8 @@ export default function ALLOngoingProjects() {
 
     async function Getpastproject() {
         const token = localStorage.getItem("token");
+        console.log(token);
+        debugger;
         const response = await axios.get(
             `${process.env.REACT_APP_API_URL}allfinished`,
             {

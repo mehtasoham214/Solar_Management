@@ -12,6 +12,22 @@ import HomeIcon from "@mui/icons-material/Home";
 import theme from "../theme";
 import { ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
+import axios from "axios";
+
+const handleLogout = () => {
+    axios({
+        method: "post",
+        url: `${process.env.REACT_APP_API_URL}logout`,
+        withCredentials: true,
+    })
+        .then((res) => {
+            localStorage.removeItem("token");
+            window.location.href = "/"; // Navigate to the login page
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+};
 
 export const mainListItems = (
     <ThemeProvider theme={theme}>
@@ -63,7 +79,7 @@ export const mainListItems = (
 export const secondaryListItems = (
     <ThemeProvider theme={theme}>
         <React.Fragment>
-            <ListItemButton sx={{ mt: 15 }}>
+            <ListItemButton sx={{ mt: 15 }} onClick={handleLogout}>
                 <ListItemIcon>
                     <LogoutIcon sx={{ color: "primary.main" }} />
                 </ListItemIcon>

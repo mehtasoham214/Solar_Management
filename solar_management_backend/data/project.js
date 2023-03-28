@@ -242,7 +242,7 @@ const getFinishedFiveProjects = async (username) => {
 };
 
 // To get all finished projects
-const getFinishedProjects = async () => {
+const getFinishedProjects = async (username) => {
     const projectCollection = await project();
     let staffUser = await user.getUser(username);
     let finishedProjects = undefined;

@@ -64,6 +64,12 @@ router.post("/login", async (req, res, next) => {
     }
 });
 
+router.post("/logout", async (req, res) => {
+    // Clear the user's session and remove the access token from local storage
+    res.clearCookie("jwt");
+    res.status(200).send({ message: "Logged out successfully" });
+});
+
 //Register User
 router.post("/register", async (req, res, next) => {
     const username = req.body.username;

@@ -20,7 +20,7 @@ export default function OngoingProject({ showMoreLink = true }) {
 
     const handleSeeMoreClick = (event) => {
         event.preventDefault();
-        navigate("/ongoingprojects"); // replace with the desired path
+        navigate("/sales/ongoingprojects"); // replace with the desired path
     };
 
     function ButtonArray() {
