@@ -287,7 +287,7 @@ const buttonClick = async (id, type) => {
 
     if (type == "start") {
         projectStatus.status = "In-Progress";
-        progress = "With Boots on Ground";
+        projectProgress = "With Boots on Ground";
         let startDate = new Date().toLocaleDateString();
         await projectCollection().updateOne(
             { _id: id },
@@ -295,7 +295,7 @@ const buttonClick = async (id, type) => {
                 $set: {
                     status: projectStatus.status,
                     startDate: startDate,
-                    progress: progress,
+                    projectProgress: projectProgress,
                 },
             }
         );
@@ -303,14 +303,14 @@ const buttonClick = async (id, type) => {
     if (type == "finished") {
         projectStatus.status = "Finished";
         let endDate = new Date().toLocaleDateString();
-        let progress = "Completed";
+        let projectProgress = "Completed";
         await projectCollection().updateOne(
             { _id: id },
             {
                 $set: {
                     status: projectStatus.status,
                     endDate: endDate,
-                    progress: progress,
+                    projectProgress: projectProgress,
                 },
             }
         );
@@ -318,14 +318,14 @@ const buttonClick = async (id, type) => {
     if (type == "cancelled") {
         projectStatus.status = "Cancelled";
         let endDate = new Date().toLocaleDateString();
-        let progress = "Cancelled";
+        let projectProgress = "Cancelled";
         await projectCollection().updateOne(
             { _id: id },
             {
                 $set: {
                     status: projectStatus.status,
                     endDate: endDate,
-                    progress: progress,
+                    projectProgress: projectProgress,
                 },
             }
         );
@@ -373,7 +373,7 @@ const siteInspectorUpdate = async (
             $set: {
                 areaInfo: siteInspector,
                 images: pictures,
-                progress: progressStatus,
+                projectProgress: progressStatus,
             },
         }
     );
@@ -421,7 +421,7 @@ const addStaff = async (id, siteInspector, operationsEngineer, teamLead) => {
                 siteInspector: siteInspector,
                 operationsEngineer: operationsEngineer,
                 teamLead: teamLead,
-                progress: progressStatus,
+                projectProgress: progressStatus,
             },
         }
     );
@@ -494,7 +494,7 @@ const addEquipment = async (
         {
             $set: {
                 equipment: equipment,
-                progress: progressStatus,
+                projectProgress: progressStatus,
                 totalCost: totalCost,
             },
         }
