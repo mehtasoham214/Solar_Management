@@ -36,7 +36,7 @@ const handleLogout = () => {
 export const mainListItems = (
     <ThemeProvider theme={theme}>
         <React.Fragment>
-            <Link to="/ops-manager" href="#" sx={{ mt: 3 }}>
+            <Link to="/ops-manager" href="#">
                 <ListItemButton sx={{ color: "primary.main" }}>
                     <ListItemIcon>
                         <HomeIcon sx={{ color: "primary.main" }} />

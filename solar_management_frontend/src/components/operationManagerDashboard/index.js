@@ -44,7 +44,6 @@ function OMDashboard() {
     // Setting Ongoing Project Count
     const [ongoing, setOngoing] = useState();
     async function fetchData() {
-        debugger;
         const token = localStorage.getItem("token");
         const response = await axios.get(
             `${process.env.REACT_APP_API_URL}ongoingcount`,
@@ -57,9 +56,6 @@ function OMDashboard() {
         const data = await response.data.counts;
         setOngoing(data);
     }
-    useEffect(() => {
-        fetchData();
-    }, []);
 
     //  Setting Past Project Count
     const [past, setPast] = useState();
@@ -76,9 +72,6 @@ function OMDashboard() {
         const data = await response.data.counts;
         setPast(data);
     }
-    useEffect(() => {
-        getPastCount();
-    }, []);
     const [totalcost, settotalcost] = useState();
     async function gettotalcostcount() {
         const token = localStorage.getItem("token");
@@ -94,6 +87,8 @@ function OMDashboard() {
         settotalcost(data);
     }
     useEffect(() => {
+        fetchData();
+        getPastCount();
         gettotalcostcount();
     }, []);
 

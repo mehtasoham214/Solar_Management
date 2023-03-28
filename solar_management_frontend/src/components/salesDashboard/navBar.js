@@ -1,6 +1,6 @@
 import * as React from "react";
 import axios from "axios";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { mainListItems, secondaryListItems } from "./menuItems";
 import { Avatar, Drawer, Typography, List } from "@mui/material";
 import theme from "../theme";
@@ -15,7 +15,7 @@ export default function PermanentDrawerLeft() {
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
-                }
+                },
             }
         );
         setUserInfo(response.data);

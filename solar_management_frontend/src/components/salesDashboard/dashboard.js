@@ -72,9 +72,6 @@ function SalesDashboardContent() {
         const data = await response.data.counts;
         setOngoing(data);
     }
-    useEffect(() => {
-        fetchData();
-    }, []);
 
     //  Setting Past Project Count
     const [past, setPast] = useState();
@@ -91,8 +88,24 @@ function SalesDashboardContent() {
         const data = await response.data.counts;
         setPast(data);
     }
+    const [totalcost, settotalcost] = useState();
+    async function gettotalcostcount() {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+            `${process.env.REACT_APP_API_URL}gettotalCost`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        const data = await response.data.cost;
+        settotalcost(data);
+    }
     useEffect(() => {
+        fetchData();
         getPastCount();
+        gettotalcostcount();
     }, []);
 
     const [openDialog, setOpenDialog] = useState(false);
@@ -201,7 +214,7 @@ function SalesDashboardContent() {
                                     <Counter
                                         title="Total Sales"
                                         icon={<RequestQuoteIcon />}
-                                        count={13}
+                                        count={totalcost}
                                     />
                                 </Paper>
                             </Grid>
