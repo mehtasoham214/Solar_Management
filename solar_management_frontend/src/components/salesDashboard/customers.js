@@ -1,4 +1,6 @@
 import * as React from "react";
+import {useState, useEffect} from "react";
+import axios from 'axios'
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -11,30 +13,6 @@ import { useNavigate } from "react-router-dom";
 //import { Button } from "@mui/material";
 
 // Generate Order Data
-function createData(customerName, customerNumber, customerAddress, projectAddress) {
-    return { customerName, customerNumber, customerAddress, projectAddress };
-}
-
-const rows = [
-    createData(
-        "Jim Smith",
-        1234567890,
-        "128 somerville, NJ",
-        "128 somerville, NJ"
-    ),
-    createData(
-        "Tom Jefferson",
-        1234567890,
-        "128 somerville, NJ",
-        "128 somerville, NJ"
-    ),
-    createData(
-        "Mark Bistro",
-        1234567890,
-        "128 somerville, NJ",
-        "128 somerville, NJ"
-    ),
-];
 
 // function preventDefault(event) {
 //     event.preventDefault();
@@ -47,6 +25,25 @@ export default function Customer() {
         event.preventDefault();
         navigate("/sales/projectdetails"); // replace with the desired path
     };
+
+    const [customerlist, setCustomerList] = useState([]);
+    async function getLeads() {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+            `${process.env.REACT_APP_API_URL}customers`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            }
+        );
+        setCustomerList(response.data);
+    }
+    useEffect(() => {
+        getLeads();
+    }, []);
+    if (!customerlist) return (<div>No Leads Found</div>)
+
 
     return (
         <ThemeProvider theme={theme}>
@@ -62,12 +59,12 @@ export default function Customer() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row) => (
-                            <TableRow key={row.id}>
-                                <TableCell onClick={handleProjectClick}>{row.customerName}</TableCell>
-                                <TableCell>{row.customerNumber}</TableCell>
-                                <TableCell>{row.customerAddress}</TableCell>
-                                <TableCell>{row.projectAddress}</TableCell>
+                        {customerlist.map((customer) => (
+                            <TableRow key={customer.id}>
+                                <TableCell onClick={handleProjectClick}>{customer.customerName}</TableCell>
+                                <TableCell>{customer.customerNumber}</TableCell>
+                                <TableCell>{customer.customerAddress}</TableCell>
+                                <TableCell>{customer.projectAddress}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

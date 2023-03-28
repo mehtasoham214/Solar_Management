@@ -123,8 +123,50 @@ const getLeads = async (username) => {
     return leadslist;
 };
 
+const getCustomers = async (username) => {
+    let staffUser = await user.getUser(username);
+    const projectCollection = await project();
+    let ongoingProjects = undefined;
+    if (staffUser.position == "Sales Team") {
+      ongoingProjects = await projectCollection
+        .find({ salesIncharge: username })
+        .toArray();
+    }
+    const customerCollection = await customer();
+    let customerList = await customerCollection
+      .aggregate([
+        {
+          $lookup: {
+            from: "project",
+            localField: "_id",
+            foreignField: "customerId",
+            as: "projects",
+          },
+        },
+        {
+          $match: {
+            "projects.salesIncharge": username,
+          },
+        },
+        {
+          $project: {
+            customerName: "$customerName",
+            customerNumber: "$customerNumber",
+            customerAddress: "$customerAddress",
+            projectAddress: "$projects.projectAddress",
+          },
+        },
+      ])
+      .toArray();
+  
+    if (customerList.length == 0) {
+      throw `No Customers Found`;
+    }
+    return customerList;
+  };
 module.exports = {
     getCustomerByid,
     patchCustomer,
     getLeads,
+    getCustomers
 };
