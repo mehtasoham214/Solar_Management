@@ -1,5 +1,6 @@
 const mongoCollections = require("../db/collection");
 const customer = mongoCollections.customer;
+const project = mongoCollections.project;
 const leads = mongoCollections.leads;
 const { ObjectId } = require("mongodb");
 const validator = require("../validator");
@@ -56,12 +57,32 @@ const getCustomerByid = async (id) => {
     if (typeof id == "string") {
         id = new ObjectId(id);
     }
+    const projectCollection = await customer();
+    const projectinfo = await projectCollection.findOne({ _id: id });
+    const customerId = projectinfo.customerId;
     const customerCollection = await customer();
-    const customerinfo = await customerCollection.findOne({ _id: id });
-    if (!customerinfo) {
+    const customerinformation = await customerCollection.findOne({
+        _id: customerId,
+    });
+    let finalInfo = {
+        customerName: customerinformation.customerName,
+        customerNumber: customerinformation.customerNumber,
+        customerAddress: customerinformation.customerAddress,
+        projectAddress: projectinfo.projectAddress,
+        siteInspector: projectinfo.siteInspector,
+        operationsEngineer: projectinfo.operationsEngineer,
+        teamLead: projectinfo.teamLead,
+        projectStatus: projectinfo.projectStatus,
+        projectProgress: projectinfo.projectProgress,
+        projectStartDate: projectinfo.projectStartDate,
+        projectEndDate: projectinfo.projectEndDate,
+        totalCost: projectinfo.totalCost,
+    };
+
+    if (!finalInfo) {
         throw `No Customer Found`;
     }
-    return customerinfo;
+    return finalInfo;
 };
 
 const getLeads = async () => {

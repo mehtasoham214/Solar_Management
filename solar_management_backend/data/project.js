@@ -29,8 +29,11 @@ const createProject = async (data) => {
     let projectAddress = data.projectAddress.trim();
     let sales = data.username;
     let siteInspector = undefined;
+    let operationEngineer = undefined;
+    let teamLead = undefined;
     let startDate = new Date().toLocaleDateString();
     let appointmentDate = data.date;
+    let projectProgress = "With Operations Manager";
     let endDate = undefined;
     let areaInfo = [];
     let images = [];
@@ -82,8 +85,11 @@ const createProject = async (data) => {
             customerName: customerName,
             projectAddress: projectAddress,
             projectStatus: projectStatus,
+            projectProgress: projectProgress,
             salesIncharge: sales,
             siteInspector: siteInspector,
+            operationEngineer: operationEngineer,
+            teamLead: teamLead,
             startDate: startDate,
             endDate: endDate,
             areaInfo: areaInfo,

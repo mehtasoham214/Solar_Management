@@ -86,7 +86,6 @@ router.post("/register", async (req, res, next) => {
         );
 
         // Generate and sign JWT token
-        console.log(process.env.JWT_SECRET);
         const token = jwt.sign({ username }, process.env.JWT_SECRET);
 
         // Return success response with JWT token
@@ -545,7 +544,6 @@ router.get(
         try {
             const { username } = req.user;
             const token = req.headers.authorization.split(" ")[1];
-            console.log(token);
             const ongoingCounts = await projectData.getOngoingCount(username);
             res.json({ counts: ongoingCounts });
         } catch (e) {
@@ -562,7 +560,6 @@ router.get(
         try {
             const { username } = req.user;
             const token = req.headers.authorization.split(" ")[1];
-            console.log(token);
             const finishedCount = await projectData.getFinishedCount(username);
             res.json({ counts: finishedCount });
         } catch (e) {
