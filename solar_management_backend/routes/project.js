@@ -44,6 +44,7 @@ router.post("/login", async (req, res, next) => {
         if (!userinfo) {
             return res.status(401).json({ message: "Invalid credentials" });
         }
+        position = userinfo.position;
         // Compare provided password with hashed password from database
         const passwordMatches = await bcrypt.compare(
             password,
@@ -58,7 +59,7 @@ router.post("/login", async (req, res, next) => {
         // Return success response with JWT token
         //res.setHeader('Set-Cookie',`token=${token};HttpOnly`);
         res.cookie("token", token, { httpOnly: true });
-        res.status(200).json(token);
+        res.status(200).json({ token, position });
     } catch (e) {
         res.status(404).json({ error: `Failed to : ${e}` });
     }

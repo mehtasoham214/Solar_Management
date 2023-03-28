@@ -42,7 +42,6 @@ export default function AllOMOngoingProjects() {
             }
         );
         const data = await response.data;
-        console.log(data);
         getongoing(data);
     }
     useEffect(() => {

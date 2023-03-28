@@ -57,7 +57,6 @@ function CustomizedTables() {
     }, []);
 
     if (!customer) return <div>No Customer Found</div>;
-    console.log(customer);
 
     return (
         <ThemeProvider theme={theme}>

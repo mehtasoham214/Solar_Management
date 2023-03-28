@@ -35,7 +35,6 @@ export default function ALLPastProjects() {
 
     async function Getpastproject() {
         const token = localStorage.getItem("token");
-        console.log(token);
         debugger;
         const response = await axios.get(
             `${process.env.REACT_APP_API_URL}allfinished`,
@@ -46,7 +45,6 @@ export default function ALLPastProjects() {
             }
         );
         const data = await response.data;
-        console.log(data);
         getpast(data);
     }
     useEffect(() => {

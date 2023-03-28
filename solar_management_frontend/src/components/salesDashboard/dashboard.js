@@ -111,10 +111,10 @@ function SalesDashboardContent() {
         try {
             const data = {
                 customerName: customerName,
-                    customerNumber: customerNumber ,
-                    customerAddress: customerAddress,
-                    projectAddress: projectAddress,
-                    date: date,
+                customerNumber: customerNumber,
+                customerAddress: customerAddress,
+                projectAddress: projectAddress,
+                date: date,
             };
             const token = localStorage.getItem("token");
             const response = await axios.post(
@@ -124,11 +124,9 @@ function SalesDashboardContent() {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
-                    
-            
-                });
-            console.log(response.data)
-
+                }
+            );
+            console.log(response.data);
         } catch (error) {
             console.error(error);
         }
@@ -238,7 +236,11 @@ function SalesDashboardContent() {
                                                 id="customer-name"
                                                 label="Customer Name"
                                                 variant="outlined"
-                                                onChange={(e) => setCustomerName(e.target.value)}
+                                                onChange={(e) =>
+                                                    setCustomerName(
+                                                        e.target.value
+                                                    )
+                                                }
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
@@ -256,7 +258,11 @@ function SalesDashboardContent() {
                                                 id="customer-number"
                                                 label="Customer Number"
                                                 variant="outlined"
-                                                onChange={(e) => setCustomerNumber(e.target.value)}
+                                                onChange={(e) =>
+                                                    setCustomerNumber(
+                                                        e.target.value
+                                                    )
+                                                }
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
@@ -274,7 +280,11 @@ function SalesDashboardContent() {
                                                 id="customer-address"
                                                 label="Customer Address"
                                                 variant="outlined"
-                                                onChange={(e) => setCustomerAddress(e.target.value)}
+                                                onChange={(e) =>
+                                                    setCustomerAddress(
+                                                        e.target.value
+                                                    )
+                                                }
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
@@ -292,7 +302,11 @@ function SalesDashboardContent() {
                                                 id="project-address"
                                                 label="Project Address"
                                                 variant="outlined"
-                                                onChange={(e) => setProjectAddress(e.target.value)}
+                                                onChange={(e) =>
+                                                    setProjectAddress(
+                                                        e.target.value
+                                                    )
+                                                }
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
@@ -311,7 +325,9 @@ function SalesDashboardContent() {
                                                 label="Appointment Date"
                                                 variant="outlined"
                                                 type="datetime-local"
-                                                onChange={(e) => setDate(e.target.value)}
+                                                onChange={(e) =>
+                                                    setDate(e.target.value)
+                                                }
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">

@@ -25,9 +25,27 @@ export default function Login() {
                     password: password,
                 }
             );
-            console.log(response.data); // You can use this data to store the token in local storage or cookies
-            let token = response.data;
+            let token = response.data.token;
             localStorage.setItem("token", token);
+            switch (response.data.position) {
+                case "Sales Team":
+                    window.location.href = "/sales";
+                    break;
+                case "Operations Manager":
+                    window.location.href = "/ops-manager";
+                    break;
+                case "Operations Engineer":
+                    window.location.href = "/ops-engineer";
+                    break;
+                case "Site Inspector":
+                    window.location.href = "/site-inspector";
+                    break;
+                case "Team Lead":
+                    window.location.href = "/team-lead";
+                    break;
+                default:
+                // handle unknown role
+            }
         } catch (error) {
             console.error(error);
         }

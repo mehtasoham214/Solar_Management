@@ -44,7 +44,6 @@ export default function AllOMPastProjects() {
             }
         );
         const data = await response.data;
-        console.log(data);
         getpast(data);
     }
     useEffect(() => {

@@ -54,7 +54,6 @@ export default function OMOngoingProject({ showMoreLink = true }) {
             }
         );
         const data = await response.data;
-        console.log(data);
         getongoing(data);
     }
     useEffect(() => {

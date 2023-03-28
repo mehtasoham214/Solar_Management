@@ -58,7 +58,6 @@ function OMCustomizedTables() {
     }, []);
 
     if (!customer) return <div>No Customer Found</div>;
-    console.log(customer);
 
     return (
         <ThemeProvider theme={theme}>
@@ -78,8 +77,7 @@ function OMCustomizedTables() {
                         }}
                         justifyContent="flex-end"
                         sx={{ marginBottom: 2 }}
-                    >
-                    </Grid>
+                    ></Grid>
                     <Grid item lg={6}>
                         <TableContainer component={Paper}>
                             <Table
@@ -232,7 +230,7 @@ function OMCustomizedTables() {
                         </TableContainer>
                     </Grid>
                     <Grid item md={6}>
-                    <OMDropBox/>
+                        <OMDropBox />
                     </Grid>
                 </Grid>
             </Container>

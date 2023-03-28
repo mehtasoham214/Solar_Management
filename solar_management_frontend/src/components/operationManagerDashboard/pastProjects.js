@@ -54,7 +54,6 @@ export default function OMPastProject({ showMoreLink = true }) {
             }
         );
         const data = await response.data;
-        console.log(data);
         getpast(data);
     }
     useEffect(() => {
