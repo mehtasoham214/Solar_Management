@@ -74,7 +74,7 @@ export default function PastProject({ showMoreLink = true }) {
     return (
         <ThemeProvider theme={theme}>
             <React.Fragment>
-                <Title>On-Going Projects</Title>
+                <Title>Past Projects</Title>
                 <Table size="small">
                     <TableHead>
                         <TableRow>
