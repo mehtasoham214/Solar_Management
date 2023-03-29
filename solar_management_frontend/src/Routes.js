@@ -20,6 +20,7 @@ import OMProjectDashboard from "./components/operationManagerDashboard/projectDe
 function ProjectRouter(){
     return (
             <Routes>
+                
                 <Route exact path="/" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route exact path="/sales" element={<Dashboard />} />

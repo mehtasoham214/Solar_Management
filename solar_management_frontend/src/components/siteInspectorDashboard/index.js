@@ -10,6 +10,7 @@ import Container from "@mui/material/Container";
 
 import SiPermanentDrawerLeft from "./navBar";
 import { Typography } from "@mui/material";
+import SiteInspectorForm from "./SiteInspectorForm";
 
 function SIDashboard() {
   return (
@@ -28,7 +29,7 @@ function SIDashboard() {
                 >
                     <Toolbar />
                     <Container maxWidth="lg">
-                        <Typography>Some content here</Typography>
+                      <SiteInspectorForm/>
                     </Container>
 
         </Box>
