@@ -120,11 +120,13 @@ export default function AllOMPastProjects() {
                                                                 ) =>
                                                                     handleProjectClick(
                                                                         event,
-                                                                        row.projectAddress
+                                                                        row._id
                                                                     )
                                                                 }
                                                             >
-                                                                {row._id}
+                                                                {
+                                                                    row.projectAddress
+                                                                }
                                                             </TableCell>
                                                             <TableCell>
                                                                 {
