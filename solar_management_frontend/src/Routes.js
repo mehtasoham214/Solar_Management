@@ -15,7 +15,7 @@ import Register from "./components/register";
 import AllOMOngoingProjects from "./components/operationManagerDashboard/onGoingProjectComponent";
 import AllOMPastProjects from "./components/operationManagerDashboard/pastProjectComponent";
 import OMProjectDashboard from "./components/operationManagerDashboard/projectDetails";
-
+import OEMaterials from "./components/operationEngineerDashboard/materials";
 
 function ProjectRouter(){
     return (
@@ -40,6 +40,7 @@ function ProjectRouter(){
                     <Route path="/ops-manager/sales" element={<OMDashboard />} />
                     <Route path="/ops-manager/teamlead" element={<OMDashboard />} />
                 <Route path="/ops-engineer" element={<OEDashboard/>} />
+                    <Route path="/ops-engineer/materials" element={<OEMaterials/>}></Route>
                 <Route path="/site-inspector" element={<SIDashboard/>} />
                 <Route path="/team-lead" element={<TLDashboard/>} />
             </Routes>

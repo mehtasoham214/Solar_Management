@@ -35,7 +35,7 @@ export const mainListItems = (
                     <ListItemText primary="Dashboard" />
                 </ListItemButton>
             </Link>
-            <Link to="/ongoingprojects" href="#" sx={{ mt: 3 }}>
+            <Link to="/ops-engineer/materials" href="#" sx={{ mt: 3 }}>
                 <ListItemButton sx={{ color: "primary.main" }}>
                     <ListItemIcon>
                         <HardwareIcon sx={{ color: "primary.main" }} />
