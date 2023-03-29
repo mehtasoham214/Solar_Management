@@ -282,48 +282,52 @@ const getProjectByid = async (id) => {
 
 //Update project stats by button click
 const buttonClick = async (id, type) => {
+    let updatedInfo = undefined;
     const projectCollection = await project();
     const projectStatus = await getProjectByid(id);
-
-    if (type == "start") {
-        projectStatus.status = "In-Progress";
+    let status = undefined;
+    if (typeof id == "string") {
+        id = new ObjectId(id);
+    }
+    if (type == "Start") {
+        status = "In-Progress";
         projectProgress = "With Boots on Ground";
         let startDate = new Date().toLocaleDateString();
-        await projectCollection().updateOne(
+        updatedInfo = await projectCollection.updateOne(
             { _id: id },
             {
                 $set: {
-                    status: projectStatus.status,
+                    projectStatus: status,
                     startDate: startDate,
                     projectProgress: projectProgress,
                 },
             }
         );
     }
-    if (type == "finished") {
-        projectStatus.status = "Finished";
+    if (type == "Finish") {
+        status = "Finished";
         let endDate = new Date().toLocaleDateString();
         let projectProgress = "Completed";
-        await projectCollection().updateOne(
+        updatedInfo = await projectCollection.updateOne(
             { _id: id },
             {
                 $set: {
-                    status: projectStatus.status,
+                    projectStatus: status,
                     endDate: endDate,
                     projectProgress: projectProgress,
                 },
             }
         );
     }
-    if (type == "cancelled") {
-        projectStatus.status = "Cancelled";
+    if (type == "Cancel") {
+        status = "Cancelled";
         let endDate = new Date().toLocaleDateString();
         let projectProgress = "Cancelled";
-        await projectCollection().updateOne(
+        updatedInfo = await projectCollection.updateOne(
             { _id: id },
             {
                 $set: {
-                    status: projectStatus.status,
+                    projectStatus: status,
                     endDate: endDate,
                     projectProgress: projectProgress,
                 },
@@ -333,7 +337,7 @@ const buttonClick = async (id, type) => {
     if (updatedInfo.modifiedCount == 0) {
         throw `Couldn't update Status of Project`;
     } else {
-        return "Project Status : " + projectStatus.status;
+        return "Project Status : " + status;
     }
 };
 
@@ -795,5 +799,5 @@ module.exports = {
     addRequest,
     updateRequest,
     addNote,
-    getNotes,
+    getNotes
 };

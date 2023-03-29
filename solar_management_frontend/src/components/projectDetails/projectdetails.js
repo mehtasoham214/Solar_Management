@@ -60,6 +60,23 @@ function CustomizedTables() {
 
     if (!customer) return <div>No Customer Found</div>;
 
+    //Button Action
+    const handleButton = async (type,id) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.patch(
+                `${process.env.REACT_APP_API_URL}projectstatus`,
+                {type,id
+                }, 
+                { headers: { 'Authorization': `Bearer ${token}` } }
+            )
+            if (response.status === 200) {
+                window.location.reload();}
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     return (
         <ThemeProvider theme={theme}>
             <Container sx={{ border: 3, borderRadius: 2, borderColor: "gray" }}>
@@ -80,9 +97,9 @@ function CustomizedTables() {
                         sx={{ marginBottom: 2 }}
                     >
                         <ButtonGroup variant="outlined">
-                            <Button color="secondary">Start</Button>
-                            <Button color="success">Finish</Button>
-                            <Button color="error">Cancel</Button>
+                            <Button color="secondary" onClick={()=>handleButton('Start',customer.projectId)}>Start</Button>
+                            <Button color="success" onClick={()=>handleButton('Finish',customer.projectId)}>Finish</Button>
+                            <Button color="error" onClick={()=>handleButton('Cancel',customer.projectId)}>Cancel</Button>
                         </ButtonGroup>
                     </Grid>
                     <Grid item lg={6}>

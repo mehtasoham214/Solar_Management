@@ -97,17 +97,15 @@ export default function OMPastProject({ showMoreLink = true }) {
                                 </TableCell>
                                 <TableCell>{row.customerName}</TableCell>
                                 <TableCell>{row.startDate}</TableCell>
-                                <TableCell>{`$${
-                                    row.totalCost ?? 0
-                                }`}</TableCell>
+                                <TableCell>{`${row.totalCost === 'Not assigned'? 0: row.totalCost}`}
+                                </TableCell>
 
                                 <TableCell
                                     style={{
                                         color:
                                             row.projectStatus === "Cancelled"
                                                 ? theme.palette.error.main
-                                                : row.projectStatus ===
-                                                  "Finished"
+                                                : row.projectStatus ==="Finished"
                                                 ? theme.palette.success.light
                                                 : "",
                                     }}

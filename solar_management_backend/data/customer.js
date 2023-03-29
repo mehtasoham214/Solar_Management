@@ -109,6 +109,7 @@ const getCustomerByid = async (id) => {
         customerAddress: customerinformation.customerAddress,
         projectID: projectinfo._id,
         projectAddress: projectinfo.projectAddress,
+        projectId:projectinfo._id,
         salesIncharge: salesIncharge,
         siteInspector: siteInspector,
         operationEngineer: operationEngineer,

@@ -634,4 +634,36 @@ router.get(
     }
 );
 
+// Update Project Status
+router.patch(
+    "/projectstatus",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res, next) => {
+        try {
+            const { username } = req.user;
+            const token = req.headers.authorization.split(" ")[1];
+            const type = req.body.type;
+            const projectId = req.body.id;
+            if(type == 'Edit'){
+                
+        }
+            else if (type == 'Finish'){
+                const project = await projectData.buttonClick(projectId,type);
+            res.json(project);
+            }
+            else if (type == 'Cancel'){
+                const project = await projectData.buttonClick(projectId,type);
+            res.json(project);
+            }
+            else if (type == 'Start'){
+                const project = await projectData.buttonClick(projectId,type);
+            res.json(project);
+            }
+
+        } catch (e) {
+            res.status(404).json({ error: `Failed to get leads: ${e}` });
+        }
+    }
+);
+
 module.exports = router;

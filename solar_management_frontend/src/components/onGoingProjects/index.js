@@ -132,10 +132,7 @@ export default function ALLOngoingProjects() {
                                                             <TableCell>
                                                                 {row.startDate}
                                                             </TableCell>
-                                                            <TableCell>{`$${
-                                                                row.totalCost ??
-                                                                0
-                                                            }`}</TableCell>
+                                                            <TableCell>{`${row.totalCost === 'Not assigned'? 0: row.totalCost}`}</TableCell>
 
                                                             <TableCell
                                                                 style={{

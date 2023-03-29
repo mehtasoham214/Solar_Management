@@ -23,8 +23,24 @@ export default function OngoingProject({ showMoreLink = true }) {
         navigate("/sales/ongoingprojects"); // replace with the desired path
     };
 
-    function ButtonArray() {
-        const buttonArray = ["Edit", "Done", "Delete"];
+    const handleButton = async (type,id) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.patch(
+                `${process.env.REACT_APP_API_URL}projectstatus`,
+                {type,id
+                }, 
+                { headers: { 'Authorization': `Bearer ${token}` } }
+            )
+            if (response.status === 200) {
+                window.location.reload();}
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    function ButtonArray(id) {
+        const buttonArray = ["Edit", "Finish", "Cancel"];
 
         return (
             <div>
@@ -33,7 +49,7 @@ export default function OngoingProject({ showMoreLink = true }) {
                         <button >buttonArray[0]</button> */}
 
                 {buttonArray.map((buttonText, index) => (
-                    <button style={{ marginLeft: "10px" }} key={index}>
+                    <button style={{ marginLeft: "10px" }} key={index} onClick={()=>handleButton(buttonArray[index],id)}>
                         {buttonText}
                     </button>
                 ))}
@@ -61,9 +77,8 @@ export default function OngoingProject({ showMoreLink = true }) {
         Getongoingproject();
     }, []);
 
-    if (!ongoing) return <div>No Ongoin Projects</div>;
+    if (!ongoing) return <div>No Ongoing Projects</div>;
 
-    const rows = ButtonArray();
     const handleProjectClick = (event, projectId) => {
         event.preventDefault();
         localStorage.setItem("projectId", projectId);
@@ -97,9 +112,8 @@ export default function OngoingProject({ showMoreLink = true }) {
                                 </TableCell>
                                 <TableCell>{row.customerName}</TableCell>
                                 <TableCell>{row.startDate}</TableCell>
-                                <TableCell>{`$${
-                                    row.totalCost ?? 0
-                                }`}</TableCell>
+                                <TableCell>{`${row.totalCost === 'Not assigned'? 0: row.totalCost}`}
+                                </TableCell>
 
                                 <TableCell
                                     style={{
@@ -114,7 +128,7 @@ export default function OngoingProject({ showMoreLink = true }) {
                                 >
                                     {row.projectStatus}
                                 </TableCell>
-                                <TableCell>{rows}</TableCell>
+                                <TableCell>{ButtonArray(row._id)}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

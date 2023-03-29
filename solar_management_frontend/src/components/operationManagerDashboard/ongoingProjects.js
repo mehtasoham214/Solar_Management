@@ -96,17 +96,15 @@ export default function OMOngoingProject({ showMoreLink = true }) {
                                 </TableCell>
                                 <TableCell>{row.customerName}</TableCell>
                                 <TableCell>{row.startDate}</TableCell>
-                                <TableCell>{`$${
-                                    row.totalCost ?? 0
-                                }`}</TableCell>
+                                <TableCell>{`${row.totalCost === 'Not assigned'? 0: row.totalCost}`}
+                                </TableCell>
 
                                 <TableCell
                                     style={{
                                         color:
                                             row.projectStatus === "Pending"
                                                 ? theme.palette.error.main
-                                                : row.projectStatus ===
-                                                  "In-Progress"
+                                                : row.projectStatus ==="In-Progress"
                                                 ? theme.palette.warning.main
                                                 : "",
                                     }}

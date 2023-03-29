@@ -18,19 +18,18 @@ import { ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-const handleLogout = () => {
-    axios({
-        method: "post",
-        url: `${process.env.REACT_APP_API_URL}logout`,
-        withCredentials: true,
-    })
-        .then((res) => {
-            localStorage.removeItem("token");
-            window.location.href = "/"; // Navigate to the login page
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+const handleLogout = async (e) => {
+    e.preventDefault();
+    try {
+        const response = await axios.post(
+            `${process.env.REACT_APP_API_URL}logout`
+        );
+        console.log(response);
+        localStorage.removeItem("token");
+        window.location.href = "/";
+    } catch (error) {
+        console.error(error);
+    }
 };
 
 export const mainListItems = (
