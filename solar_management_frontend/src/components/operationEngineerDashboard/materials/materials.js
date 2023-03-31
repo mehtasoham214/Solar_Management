@@ -1,4 +1,6 @@
 import React from 'react';
+import {useState,  useEffect} from "react";
+import axios from 'axios';
 // import { makeStyles } from '@mui/styles';
 // import { makeStyles } from '@mui/material';
 // import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
@@ -59,6 +61,24 @@ const dummyData = [
 // };
 
 const ProductTable = () => {
+  const [materiallist, setMaterialList] = useState([]);
+  async function getLeads() {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}materials`,
+          {
+              headers: {
+                  Authorization: `Bearer ${token}`,
+              }
+          }
+      );
+      setMaterialList(response.data);
+  }
+  useEffect(() => {
+      getLeads();
+  }, []);
+  if (!materiallist) return (<div>No Leads Found</div>)
+
   return (
     <TableContainer component={Paper}>
       <Table aria-label="simple table">
@@ -70,13 +90,13 @@ const ProductTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {dummyData.map((row, index) => (
+          {materiallist.map((material, index) => (
             <TableRow key={index}>
               <TableCell component="th" scope="row">
-                {row.name}
+                {material.type}
               </TableCell>
-              <TableCell align="right">{row.code}</TableCell>
-              <TableCell align="right">{row.quantity}</TableCell>
+              <TableCell align="right">{material.product_code}</TableCell>
+              <TableCell align="right">{material.quantity}</TableCell>
             </TableRow>
           ))}
         </TableBody>

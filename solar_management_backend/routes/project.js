@@ -2,6 +2,7 @@ const data = require("../data");
 const projectData = data.project;
 const customerData = data.customer;
 const userData = data.user;
+const materialData = data.materials;
 
 const express = require("express");
 const passport = require("passport");
@@ -662,6 +663,21 @@ router.patch(
 
         } catch (e) {
             res.status(404).json({ error: `Failed to get leads: ${e}` });
+        }
+    }
+);
+
+router.get(
+    "/materials",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res, next) => {
+        try {
+            const { username } = req.user;
+            const token = req.headers.authorization.split(" ")[1];
+            const materials = await materialData.getMaterials(username);
+            res.json(materials);
+        } catch (e) {
+            res.status(404).json({ error: `Failed to get users: ${e}` });
         }
     }
 );
