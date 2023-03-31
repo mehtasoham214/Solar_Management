@@ -771,15 +771,37 @@ const addNote = async (id, note, postedby) => {
     }
 };
 
-const getNotes = async (id) => {
+// PUT THE BELOW IN A NEW FILE
+// GET ALL THE NOTES
+const getNotes = async () => {
     const notesCollection = await notes();
-    const notes = await notesCollection.find({ projectid: id }).toArray();
-    if (!notes) {
-        throw `No Notes found`;
+    let notesList = await materialCollection.find({}).toArray();
+    if (notesList.length == 0) {
+        throw `No Customers Found`;
+    }
+    return notesList;
+};
+
+// POST NOTES BY PROJECT
+const postNotes = async (incomingnote, projectid, username) => {
+    const notesCollection = await notes();
+    if (incomingnote.length == 0) {
+        throw `Note Cannnot Be Empty`;
+    }
+    const notesData = {
+        projectId: projectid,
+        note: incomingnote,
+        postedBy: username,
+        postedDate: new Date().toLocaleDateString(),
+    };
+    const newNotesInfo = await notesCollection.insertOne(notesData);
+    if (newNotesInfo.insertedCount == 0) {
+        throw `Error In Posting Note`;
     } else {
-        return notes;
+        return "Created Note";
     }
 };
+// TILL HERE
 
 module.exports = {
     createProject,
@@ -802,5 +824,7 @@ module.exports = {
     addRequest,
     updateRequest,
     addNote,
+    // NOTES
     getNotes,
+    postNotes,
 };
