@@ -682,4 +682,78 @@ router.get(
     }
 );
 
+// REMOVE THESE INTO A NEW ROUTER FILE
+router.get(
+    "/notes",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res, next) => {
+        try {
+            const token = req.headers.authorization.split(" ")[1];
+            const materials = await projectData.getNotes();
+            res.json(materials);
+        } catch (e) {
+            res.status(404).json({ error: `Failed to get users: ${e}` });
+        }
+    }
+);
+
+// ROUTE TO POST A NOTE
+router.post(
+    "/postnotes",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res, next) => {
+        try {
+            const { username } = req.user;
+            const token = req.headers.authorization.split(" ")[1];
+            const incomingNote = req.body.incomingNote;
+            const projectid = req.body.projectid;
+            const materials = await projectData.postNotes(incomingNote,projectid,username);
+            res.json(materials);
+        } catch (e) {
+            res.status(404).json({ error: `Failed to get users: ${e}` });
+        }
+    }
+);
+
+// patch project
+router.patch(
+    "/customer_patch",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res, next) => {
+        let projectId = req.body.proejectId;
+        let customerName = req.body.customerName;
+        let customerAddress = req.body.customerAddress;
+        let projectAddress = req.body.projectAddress;
+        let customerNumber = req.body.customerNumber;
+        let appointmentDate = req.body.appointmentDate;
+
+        try {
+            validator.validateId(customerId);
+            validator.validateId(projectId);
+            validator.validateCustomer(
+                customerName,
+                customerAddress,
+                customerNumber
+            );
+        } catch (e) {
+            res.status(400).json({ error: e });
+            return;
+        }
+
+        try {
+            const updateProject = await projectData.patchProject(
+                projectId,
+                customerName,
+                customerAddress,
+                projectAddress,
+                customerNumber,
+                appointmentDate
+            );
+            res.status(200).json(updateProject);
+        } catch (e) {
+            res.status(400).json({ error: e });
+        }
+    }
+);
+
 module.exports = router;

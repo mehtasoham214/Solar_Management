@@ -116,9 +116,11 @@ const getCustomerByid = async (id) => {
         teamLead: teamLead,
         projectStatus: projectinfo.projectStatus,
         projectProgress: projectinfo.projectProgress,
+        projectAppointmentDate: projectinfo.appointmentDate,
         projectStartDate: projectinfo.startDate,
         projectEndDate: projectinfo.endDate,
         totalCost: projectinfo.totalCost,
+
     };
     if (!finalInfo.projectStartDate) {
         finalInfo.projectStartDate = "Not Assigned";

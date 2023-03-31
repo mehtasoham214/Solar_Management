@@ -114,7 +114,11 @@ export default function OngoingProject({ showMoreLink = true }) {
                         <button >buttonArray[0]</button> */}
 
                 {buttonArray.map((buttonText, index) => (
-                    <button style={{ marginLeft: "10px" }} key={index} onClick={()=>handleButton(buttonArray[index],id)}>
+                    <button
+                        style={{ marginLeft: "10px" }}
+                        key={index}
+                        onClick={() => handleButton(buttonArray[index], id)}
+                    >
                         {buttonText}
                     </button>
                 ))}
@@ -177,7 +181,12 @@ export default function OngoingProject({ showMoreLink = true }) {
                                 </TableCell>
                                 <TableCell>{row.customerName}</TableCell>
                                 <TableCell>{row.startDate}</TableCell>
-                                <TableCell>{`${row.totalCost === 'Not assigned'? 0: row.totalCost}`}
+                                <TableCell>
+                                    {`${
+                                        row.totalCost === "Not Assigned"
+                                            ? 0
+                                            : row.totalCost
+                                    }`}
                                 </TableCell>
 
                                 <TableCell
