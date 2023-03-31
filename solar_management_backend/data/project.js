@@ -803,6 +803,73 @@ const postNotes = async (incomingnote, projectid, username) => {
 };
 // TILL HERE
 
+// Patch the project
+// update customer details
+const patchProject = async (
+    projectId,
+    customerName,
+    customerAddress,
+    projectAddress,
+    customerNumber,
+    appointmentDate
+) => {
+    if (typeof projectId == "string") {
+        projectId = new ObjectId(projectId);
+    }
+    let projectUpdate = undefined;
+    let customerUpdate = undefined;
+    const projectCollection = await projects();
+    let projectData = await projectCollection.findOne({_id : projectId});
+    let customerId = projectData.customerId;
+    const customerCollection = await customer();
+    let customerData = await customerCollection.findOne({_id : customerId});
+
+    if(projectAddress != projectData.projectAddress){
+        projectUpdate = await projectCollection.updateOne(
+            {_id : projectId},
+            {$set: {projectAddress: projectAddress}}
+            );
+    }
+    if(appointmentDate != projectData.appointmentDate){
+        projectUpdate = await projectCollection.updateOne(
+            {_id : projectId},
+            {$set: {appointmentDate: appointmentDate}}
+            );
+    }
+    if(customerName != projectData.customerName){
+        projectUpdate = await projectCollection.updateOne(
+            {_id : projectId},
+            {$set: {customerName: customerName}}
+            );
+    }
+    if(customerName != customerData.customerName){
+        customerUpdate = await customerCollection.updateOne(
+            {_id : customerId},
+            {$set: {customerName: customerName}}
+            );
+    }
+    if(customerNumber != customerData.customerNumber){
+        customerUpdate = await customerCollection.updateOne(
+            {_id: customerId},
+            {$set: {customerNumber: customerNumber}}
+        );
+    }
+    if(customerAddress != customerData.customerAddress){
+        customerUpdate = await customerCollection.updateOne(
+            {_id: customerId},
+            {$set: {customerAddress: customerAddress}}
+            );
+        }        
+
+
+    if (customerUpdate.modifiedCount == 0 || projectUpdate.modifiedCount==0) {
+        throw `No updates reflected`;
+    }
+
+    return "Project Details Updated";
+};
+
+
 module.exports = {
     createProject,
     getAllProjects,
@@ -827,4 +894,5 @@ module.exports = {
     // NOTES
     getNotes,
     postNotes,
+    patchProject
 };

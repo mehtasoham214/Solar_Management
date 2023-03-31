@@ -715,4 +715,45 @@ router.post(
     }
 );
 
+// patch project
+router.patch(
+    "/customer_patch",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res, next) => {
+        let projectId = req.body.proejectId;
+        let customerName = req.body.customerName;
+        let customerAddress = req.body.customerAddress;
+        let projectAddress = req.body.projectAddress;
+        let customerNumber = req.body.customerNumber;
+        let appointmentDate = req.body.appointmentDate;
+
+        try {
+            validator.validateId(customerId);
+            validator.validateId(projectId);
+            validator.validateCustomer(
+                customerName,
+                customerAddress,
+                customerNumber
+            );
+        } catch (e) {
+            res.status(400).json({ error: e });
+            return;
+        }
+
+        try {
+            const updateProject = await projectData.patchProject(
+                projectId,
+                customerName,
+                customerAddress,
+                projectAddress,
+                customerNumber,
+                appointmentDate
+            );
+            res.status(200).json(updateProject);
+        } catch (e) {
+            res.status(400).json({ error: e });
+        }
+    }
+);
+
 module.exports = router;
