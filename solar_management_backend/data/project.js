@@ -90,6 +90,7 @@ const createProject = async (data) => {
             siteInspector: siteInspector,
             operationEngineer: operationEngineer,
             teamLead: teamLead,
+            appointmentDate: appointmentDate,
             startDate: startDate,
             endDate: endDate,
             areaInfo: areaInfo,
@@ -341,7 +342,7 @@ const buttonClick = async (id, type) => {
     }
 };
 
-//For site Inspector
+//Adding all site inspector info to project
 const siteInspectorUpdate = async (
     id,
     roofInfo,
@@ -350,8 +351,8 @@ const siteInspectorUpdate = async (
     irradiance,
     meterCompatible,
     coordinates,
+    permits,
     photos,
-    notes,
     feasible
 ) => {
     validator.validateId(id);
@@ -364,7 +365,7 @@ const siteInspectorUpdate = async (
         irradiance: irradiance,
         meterCompatible: meterCompatible,
         coordinates: coordinates,
-        notes: notes,
+        permits: permits,
         feasible: feasible,
     };
     let progressStatus = "At Operations Engineer";
@@ -388,6 +389,8 @@ const siteInspectorUpdate = async (
     }
 };
 
+// Getting all the site inspector information about specific project
+// For Operations Engineer
 const getSiteInspectorUpdate = async (id) => {
     validator.validateId(id);
     if (typeof id == "string") {
@@ -799,5 +802,5 @@ module.exports = {
     addRequest,
     updateRequest,
     addNote,
-    getNotes
+    getNotes,
 };

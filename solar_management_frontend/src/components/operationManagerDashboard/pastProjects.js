@@ -97,7 +97,12 @@ export default function OMPastProject({ showMoreLink = true }) {
                                 </TableCell>
                                 <TableCell>{row.customerName}</TableCell>
                                 <TableCell>{row.startDate}</TableCell>
-                                <TableCell>{`${row.totalCost === 'Not assigned'? 0: row.totalCost}`}
+                                <TableCell>
+                                    {`${
+                                        row.totalCost === "Not Assigned"
+                                            ? 0
+                                            : row.totalCost
+                                    }`}
                                 </TableCell>
 
                                 <TableCell
@@ -105,7 +110,8 @@ export default function OMPastProject({ showMoreLink = true }) {
                                         color:
                                             row.projectStatus === "Cancelled"
                                                 ? theme.palette.error.main
-                                                : row.projectStatus ==="Finished"
+                                                : row.projectStatus ===
+                                                  "Finished"
                                                 ? theme.palette.success.light
                                                 : "",
                                     }}
