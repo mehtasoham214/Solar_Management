@@ -31,11 +31,11 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 //   },
 // });
 
-const dummyData = [
-  { name: 'Product 1', code: 'ABC123', quantity: 10 },
-  { name: 'Product 2', code: 'DEF456', quantity: 5 },
-  { name: 'Product 3', code: 'GHI789', quantity: 2 },
-];
+// const dummyData = [
+//   { name: 'Product 1', code: 'ABC123', quantity: 10 },
+//   { name: 'Product 2', code: 'DEF456', quantity: 5 },
+//   { name: 'Product 3', code: 'GHI789', quantity: 2 },
+// ];
 
 // const DropdownAndSearch = () => {
 //   const classes = useStyles();

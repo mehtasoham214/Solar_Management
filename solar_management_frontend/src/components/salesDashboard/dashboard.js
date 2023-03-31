@@ -220,6 +220,7 @@ function SalesDashboardContent() {
                                 </Paper>
                             </Grid>
                             <Grid item xs={12} lg={4}>
+                                {/* Create Customer Button */}
                                 <Button
                                     variant="outlined"
                                     color="primary"
@@ -380,7 +381,6 @@ function SalesDashboardContent() {
                                     </DialogActions>
                                 </Dialog>
                             </Grid>
-
                             {/* On going projects */}
                             <Grid item xs={12}>
                                 <Paper

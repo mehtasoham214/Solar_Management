@@ -9,7 +9,6 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 
 import SiPermanentDrawerLeft from "./navBar";
-import { Typography } from "@mui/material";
 import SiteInspectorForm from "./SiteInspectorForm";
 
 function SIDashboard() {

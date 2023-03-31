@@ -79,9 +79,9 @@ function CustomizedTables() {
 
     return (
         <ThemeProvider theme={theme}>
-            <Container sx={{ border: 3, borderRadius: 2, borderColor: "gray" }}>
+            <Container sx={{border:3, borderRadius:2, borderColor:'gray'}}>
                 <Grid container spacing={3} marginBottom={3}>
-                    <Grid item md={4}>
+                    <Grid item md={4} >
                         <h1>Project Information</h1>
                     </Grid>
                     <Grid

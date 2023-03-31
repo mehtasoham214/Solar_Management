@@ -9,7 +9,6 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 
 import OEPermanentDrawerLeft from "../navBar";
-import { Typography } from "@mui/material";
 import DropdownAndTable from "./materials";
 
 function OEMaterials() {
