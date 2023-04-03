@@ -132,7 +132,14 @@ export default function AllOMOngoingProjects() {
                                                             <TableCell>
                                                                 {row.startDate}
                                                             </TableCell>
-                                                            <TableCell>{`${row.totalCost === 'Not assigned'? 0: row.totalCost}`} </TableCell>
+                                                            <TableCell>
+                                                                {`${
+                                                                    row.totalCost ===
+                                                                    "Not Assigned"
+                                                                        ? 0
+                                                                        : row.totalCost
+                                                                }`}{" "}
+                                                            </TableCell>
 
                                                             <TableCell
                                                                 style={{

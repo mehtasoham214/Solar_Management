@@ -12,7 +12,9 @@ const bcrypt = require("bcryptjs");
 const passportJWT = require("passport-jwt");
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
-
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 const validator = require("../validator");
 
 const options = {
@@ -34,6 +36,39 @@ passport.use(
         }
     })
 );
+
+// Define storage for uploaded images
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "public/images/" + req.body.projectid);
+    },
+    filename: (req, file, cb) => {
+        cb(
+            null,
+            file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+        );
+    },
+});
+
+// Initialize upload
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 1000000, // 1MB file size limit
+    },
+    fileFilter: (req, file, cb) => {
+        const filetypes = /jpeg|jpg|png/;
+        const extname = filetypes.test(
+            path.extname(file.originalname).toLowerCase()
+        );
+        const mimetype = filetypes.test(file.mimetype);
+        if (mimetype && extname) {
+            return cb(null, true);
+        } else {
+            cb("Error: Images Only!");
+        }
+    },
+}).array("photos", 10);
 
 router.post("/login", async (req, res, next) => {
     const username = req.body.username;
@@ -557,6 +592,35 @@ router.patch(
         }
     }
 );
+router.get("/image/:projectid/:imagename", (req, res) => {
+    const { projectid, imagename } = req.params;
+    const path = __dirname + "/../public/images/" + projectid + "/" + imagename;
+    fs.readFile(path, (err, data) => {
+        if (err) {
+            console.log(err);
+            res.status(404).send("Image not found!");
+        } else {
+            res.writeHead(200, { "Content-Type": "image/jpeg" });
+            res.end(data);
+        }
+    });
+});
+
+router.post("/submit/:projectid/:imagename", (req, res) => {
+    upload(req, res, (err) => {
+        if (err) {
+            console.log(err);
+            res.status(400).send(err);
+        } else {
+            // Save form data to database
+            const photos = req.files.map((file) => {
+                return "/images/" + req.body.projectid + "/" + file.filename;
+            });
+            // ... save the form data and photo paths to database
+            res.status(200).send("Form submitted successfully!");
+        }
+    });
+});
 
 // Get Ongoing Counts
 router.get(
@@ -645,22 +709,17 @@ router.patch(
             const token = req.headers.authorization.split(" ")[1];
             const type = req.body.type;
             const projectId = req.body.id;
-            if(type == 'Edit'){
-                
-        }
-            else if (type == 'Finish'){
-                const project = await projectData.buttonClick(projectId,type);
-            res.json(project);
+            if (type == "Edit") {
+            } else if (type == "Finish") {
+                const project = await projectData.buttonClick(projectId, type);
+                res.json(project);
+            } else if (type == "Cancel") {
+                const project = await projectData.buttonClick(projectId, type);
+                res.json(project);
+            } else if (type == "Start") {
+                const project = await projectData.buttonClick(projectId, type);
+                res.json(project);
             }
-            else if (type == 'Cancel'){
-                const project = await projectData.buttonClick(projectId,type);
-            res.json(project);
-            }
-            else if (type == 'Start'){
-                const project = await projectData.buttonClick(projectId,type);
-            res.json(project);
-            }
-
         } catch (e) {
             res.status(404).json({ error: `Failed to get leads: ${e}` });
         }
@@ -707,10 +766,55 @@ router.post(
             const token = req.headers.authorization.split(" ")[1];
             const incomingNote = req.body.incomingNote;
             const projectid = req.body.projectid;
-            const materials = await projectData.postNotes(incomingNote,projectid,username);
+            const materials = await projectData.postNotes(
+                incomingNote,
+                projectid,
+                username
+            );
             res.json(materials);
         } catch (e) {
             res.status(404).json({ error: `Failed to get users: ${e}` });
+        }
+    }
+);
+
+// patch project
+router.patch(
+    "/customer_patch",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res, next) => {
+        let projectId = req.body.proejectId;
+        let customerName = req.body.customerName;
+        let customerAddress = req.body.customerAddress;
+        let projectAddress = req.body.projectAddress;
+        let customerNumber = req.body.customerNumber;
+        let appointmentDate = req.body.appointmentDate;
+
+        try {
+            validator.validateId(customerId);
+            validator.validateId(projectId);
+            validator.validateCustomer(
+                customerName,
+                customerAddress,
+                customerNumber
+            );
+        } catch (e) {
+            res.status(400).json({ error: e });
+            return;
+        }
+
+        try {
+            const updateProject = await projectData.patchProject(
+                projectId,
+                customerName,
+                customerAddress,
+                projectAddress,
+                customerNumber,
+                appointmentDate
+            );
+            res.status(200).json(updateProject);
+        } catch (e) {
+            res.status(400).json({ error: e });
         }
     }
 );

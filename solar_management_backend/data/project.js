@@ -90,6 +90,7 @@ const createProject = async (data) => {
             siteInspector: siteInspector,
             operationEngineer: operationEngineer,
             teamLead: teamLead,
+            appointmentDate: appointmentDate,
             startDate: startDate,
             endDate: endDate,
             areaInfo: areaInfo,
@@ -341,7 +342,7 @@ const buttonClick = async (id, type) => {
     }
 };
 
-//For site Inspector
+//Adding all site inspector info to project
 const siteInspectorUpdate = async (
     id,
     roofInfo,
@@ -350,8 +351,8 @@ const siteInspectorUpdate = async (
     irradiance,
     meterCompatible,
     coordinates,
+    permits,
     photos,
-    notes,
     feasible
 ) => {
     validator.validateId(id);
@@ -364,7 +365,7 @@ const siteInspectorUpdate = async (
         irradiance: irradiance,
         meterCompatible: meterCompatible,
         coordinates: coordinates,
-        notes: notes,
+        permits: permits,
         feasible: feasible,
     };
     let progressStatus = "At Operations Engineer";
@@ -388,6 +389,8 @@ const siteInspectorUpdate = async (
     }
 };
 
+// Getting all the site inspector information about specific project
+// For Operations Engineer
 const getSiteInspectorUpdate = async (id) => {
     validator.validateId(id);
     if (typeof id == "string") {
@@ -768,14 +771,11 @@ const addNote = async (id, note, postedby) => {
     }
 };
 
-
 // PUT THE BELOW IN A NEW FILE
 // GET ALL THE NOTES
 const getNotes = async () => {
     const notesCollection = await notes();
-    let notesList = await materialCollection
-            .find({})
-            .toArray();
+    let notesList = await materialCollection.find({}).toArray();
     if (notesList.length == 0) {
         throw `No Customers Found`;
     }
@@ -783,27 +783,92 @@ const getNotes = async () => {
 };
 
 // POST NOTES BY PROJECT
-const postNotes = async (incomingnote,projectid,username) => {
+const postNotes = async (incomingnote, projectid, username) => {
     const notesCollection = await notes();
-    if(incomingnote.length==0){
-        throw `Note Cannnot Be Empty`
+    if (incomingnote.length == 0) {
+        throw `Note Cannnot Be Empty`;
     }
     const notesData = {
         projectId: projectid,
-        note:incomingnote,
-        postedBy:username,
-        postedDate: new Date().toLocaleDateString()
+        note: incomingnote,
+        postedBy: username,
+        postedDate: new Date().toLocaleDateString(),
     };
     const newNotesInfo = await notesCollection.insertOne(notesData);
-    if (
-        newNotesInfo.insertedCount == 0
-    ) {
+    if (newNotesInfo.insertedCount == 0) {
         throw `Error In Posting Note`;
     } else {
         return "Created Note";
     }
 };
 // TILL HERE
+
+// Patch the project
+// update customer details
+const patchProject = async (
+    projectId,
+    customerName,
+    customerAddress,
+    projectAddress,
+    customerNumber,
+    appointmentDate
+) => {
+    if (typeof projectId == "string") {
+        projectId = new ObjectId(projectId);
+    }
+    let projectUpdate = undefined;
+    let customerUpdate = undefined;
+    const projectCollection = await projects();
+    let projectData = await projectCollection.findOne({_id : projectId});
+    let customerId = projectData.customerId;
+    const customerCollection = await customer();
+    let customerData = await customerCollection.findOne({_id : customerId});
+
+    if(projectAddress != projectData.projectAddress){
+        projectUpdate = await projectCollection.updateOne(
+            {_id : projectId},
+            {$set: {projectAddress: projectAddress}}
+            );
+    }
+    if(appointmentDate != projectData.appointmentDate){
+        projectUpdate = await projectCollection.updateOne(
+            {_id : projectId},
+            {$set: {appointmentDate: appointmentDate}}
+            );
+    }
+    if(customerName != projectData.customerName){
+        projectUpdate = await projectCollection.updateOne(
+            {_id : projectId},
+            {$set: {customerName: customerName}}
+            );
+    }
+    if(customerName != customerData.customerName){
+        customerUpdate = await customerCollection.updateOne(
+            {_id : customerId},
+            {$set: {customerName: customerName}}
+            );
+    }
+    if(customerNumber != customerData.customerNumber){
+        customerUpdate = await customerCollection.updateOne(
+            {_id: customerId},
+            {$set: {customerNumber: customerNumber}}
+        );
+    }
+    if(customerAddress != customerData.customerAddress){
+        customerUpdate = await customerCollection.updateOne(
+            {_id: customerId},
+            {$set: {customerAddress: customerAddress}}
+            );
+        }        
+
+
+    if (customerUpdate.modifiedCount == 0 || projectUpdate.modifiedCount==0) {
+        throw `No updates reflected`;
+    }
+
+    return "Project Details Updated";
+};
+
 
 module.exports = {
     createProject,
@@ -828,5 +893,6 @@ module.exports = {
     addNote,
     // NOTES
     getNotes,
-    postNotes
+    postNotes,
+    patchProject
 };
