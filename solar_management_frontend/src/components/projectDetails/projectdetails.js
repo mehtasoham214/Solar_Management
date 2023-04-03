@@ -86,8 +86,8 @@ function CustomizedTables() {
                     </Grid>
                     <Grid
                         item
-                        md={8}
-                        display="flex"
+                            md={8}
+                            display="flex"
                         alignItems={{
                             xs: "center",
                             md: "flex-end",
