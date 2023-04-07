@@ -15,25 +15,29 @@ import Title from "../../salesDashboard/Title";
 
 
 export default function TeamLeadList() {
-    const [ongoing, getongoing] = useState();
-    async function Getongoingproject() {
+    const [teamLead, setteamLead] = useState("");
+    async function GetTeamLead() {
         const token = localStorage.getItem("token");
-        const response = await axios.get(
-            `${process.env.REACT_APP_API_URL}allinprogress`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
-        const data = await response.data;
-        getongoing(data);
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_API_URL}getteamlead`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            const data = await response.data;
+            setteamLead(data);
+        } catch (error) {
+            console.log(error);
+        }
     }
     useEffect(() => {
-        Getongoingproject();
+        GetTeamLead();
     }, []);
 
-    if (!ongoing) return <div>No Ongoing Projects</div>;
+    if (!teamLead) return <div>No TeamLead Member</div>;
 
     return (
         <ThemeProvider theme={theme}>
@@ -67,28 +71,23 @@ export default function TeamLeadList() {
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
-                                                    {ongoing.map((row) => (
+                                                    {teamLead.map((row) => (
                                                         <TableRow key={row.id}>
                                                             <TableCell>
                                                                 {
-                                                                    row.projectAddress
+                                                                    row.name
                                                                 }
                                                             </TableCell>
                                                             <TableCell>
                                                                 {
-                                                                    row.customerName
+                                                                    row.username
                                                                 }
                                                             </TableCell>
                                                             <TableCell>
-                                                                {row.startDate}
+                                                                {row.position}
                                                             </TableCell>
                                                             <TableCell>
-                                                                {`${
-                                                                    row.totalCost ===
-                                                                    "Not Assigned"
-                                                                        ? 0
-                                                                        : row.totalCost
-                                                                }`}{" "}
+                                                                {row.contact}
                                                             </TableCell>
                                                         </TableRow>
                                                     ))}
