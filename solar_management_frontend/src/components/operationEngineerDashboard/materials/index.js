@@ -27,7 +27,9 @@ function OEMaterials() {
                     }}
                 >
                     <Toolbar />
-                    <Container maxWidth="lg" sx={{ border: 3, borderRadius: 2, borderColor: "gray" }}>
+                    <Container maxWidth="lg"
+                    //  sx={{ border: 3, borderRadius: 2, borderColor: "gray" }}
+                     >
                         <DropdownAndTable/>
                     </Container>
 

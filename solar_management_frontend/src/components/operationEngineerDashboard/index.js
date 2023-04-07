@@ -7,9 +7,13 @@ import { ThemeProvider } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
+import OngoingProject from "./ongoingProjects";
+import PastProject from "./pastProjects";
 
 import OEPermanentDrawerLeft from "./navBar";
 import { Typography } from "@mui/material";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
 
 function OEDashboard() {
   return (
@@ -28,7 +32,31 @@ function OEDashboard() {
                 >
                     <Toolbar />
                     <Container maxWidth="lg">
-                        <Typography>Some content here</Typography>
+                        {/* <Typography>Some content here</Typography> */}
+                        <Grid container spacing={3}>
+                          <Grid item xs={12}>
+                                <Paper
+                                    sx={{
+                                        p: 2,
+                                        display: "flex",
+                                        flexDirection: "column",
+                                    }}
+                                >
+                                    <OngoingProject />
+                                </Paper>
+                          </Grid>
+                          <Grid item xs={12}>
+                                <Paper
+                                    sx={{
+                                        p: 2,
+                                        display: "flex",
+                                        flexDirection: "column",
+                                    }}
+                                >
+                                    <PastProject />
+                                </Paper>
+                          </Grid>
+                        </Grid>
                     </Container>
 
         </Box>

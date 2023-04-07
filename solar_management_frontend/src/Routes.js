@@ -16,6 +16,10 @@ import AllOMOngoingProjects from "./components/operationManagerDashboard/onGoing
 import AllOMPastProjects from "./components/operationManagerDashboard/pastProjectComponent";
 import OMProjectDashboard from "./components/operationManagerDashboard/projectDetails";
 import OEMaterials from "./components/operationEngineerDashboard/materials";
+import OEProjectDetails from "./components/operationEngineerDashboard/projectDetails/projectDetailsDashboard";
+import OEALLOngoingProjects from "./components/operationEngineerDashboard/onGoingProjectsComponent";
+import OEALLPastProjects from "./components/operationEngineerDashboard/pastProjectsComponents";
+
 import Requests from "./components/operationManagerDashboard/requests";
 import Equipments from "./components/operationManagerDashboard/equipments";
 import OpsEnginner from "./components/operationManagerDashboard/opsEngineer";
@@ -46,6 +50,9 @@ function ProjectRouter(){
                     <Route path="/ops-manager/teamlead" element={<TeamLead />} />
                 <Route path="/ops-engineer" element={<OEDashboard/>} />
                     <Route path="/ops-engineer/materials" element={<OEMaterials/>}></Route>
+                    <Route path="/ops-engineer/projectdetails" element={<OEProjectDetails/>}></Route>
+                    <Route path="/ops-engineer/ongoingprojects" element={<OEALLOngoingProjects/>}></Route>
+                    <Route path="/ops-engineer/pastprojects" element={<OEALLPastProjects/>}></Route>
                 <Route path="/site-inspector" element={<SIDashboard/>} />
                 <Route path="/team-lead" element={<TLDashboard/>} />
             </Routes>
