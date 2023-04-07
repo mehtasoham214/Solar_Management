@@ -76,7 +76,7 @@ export default function OMOngoingProject({ showMoreLink = true }) {
                 <Table size="small">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Product Address</TableCell>
+                            <TableCell>Project Address</TableCell>
                             <TableCell>Customer Name</TableCell>
                             <TableCell>Date</TableCell>
                             <TableCell>Cost</TableCell>

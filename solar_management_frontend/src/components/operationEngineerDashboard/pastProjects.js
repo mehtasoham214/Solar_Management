@@ -23,24 +23,6 @@ export default function PastProject({ showMoreLink = true }) {
         navigate("/ops-engineer/pastprojects"); // replace with the desired path
     };
 
-    function ButtonArray() {
-        const buttonArray = ["PDF"];
-
-        return (
-            <div>
-                {/* <EditButton>buttonArray[0]</EditButton>
-              <button >buttonArray[0]</button>
-              <button >buttonArray[0]</button> */}
-
-                {buttonArray.map((buttonText, index) => (
-                    <button style={{ marginLeft: "10px" }} key={index}>
-                        {buttonText}
-                    </button>
-                ))}
-            </div>
-        );
-    }
-
     const [past, getpast] = useState();
 
     async function Getpastproject() {
@@ -63,8 +45,6 @@ export default function PastProject({ showMoreLink = true }) {
 
     if (!past) return <div>No Finished Projects</div>;
 
-    const rows = ButtonArray();
-
     const handleProjectClick = (event, projectId) => {
         event.preventDefault();
         localStorage.setItem("projectId", projectId);
@@ -74,17 +54,13 @@ export default function PastProject({ showMoreLink = true }) {
     return (
         <ThemeProvider theme={theme}>
             <React.Fragment>
-                {/* <Title>Past Projects</Title> */}
                 <h1>Past Projects</h1>
                 <Table size="small">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Product Address</TableCell>
+                            <TableCell>Project Address</TableCell>
                             <TableCell>Customer Name</TableCell>
                             <TableCell>Date</TableCell>
-                            {/* <TableCell>Cost</TableCell>
-                            <TableCell>Status</TableCell>
-                            <TableCell>Action</TableCell> */}
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -99,28 +75,6 @@ export default function PastProject({ showMoreLink = true }) {
                                 </TableCell>
                                 <TableCell>{row.customerName}</TableCell>
                                 <TableCell>{row.startDate}</TableCell>
-                                {/* <TableCell>
-                                    {`${
-                                        row.totalCost === "Not Assigned"
-                                            ? 0
-                                            : row.totalCost
-                                    }`}
-                                </TableCell> */}
-
-                                {/* <TableCell
-                                    style={{
-                                        color:
-                                            row.projectStatus === "Cancelled"
-                                                ? theme.palette.error.main
-                                                : row.projectStatus ===
-                                                  "Finished"
-                                                ? theme.palette.success.light
-                                                : "",
-                                    }}
-                                >
-                                    {row.projectStatus}
-                                </TableCell> */}
-                                {/* <TableCell>{rows}</TableCell> */}
                             </TableRow>
                         ))}
                     </TableBody>

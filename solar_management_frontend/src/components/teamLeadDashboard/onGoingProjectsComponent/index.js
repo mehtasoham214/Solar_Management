@@ -1,6 +1,6 @@
 import * as React from "react";
 import axios from "axios";
-import OMPermanentDrawerLeft from "../navBar";
+
 import theme from "../../theme";
 import { ThemeProvider } from "@mui/material/styles";
 import { Box, Container } from "@mui/system";
@@ -14,10 +14,13 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Title from "../../salesDashboard/Title";
 import { useNavigate } from "react-router-dom";
-export default function AllOMOngoingProjects() {
+import OEPermanentDrawerLeft from "../navBar";
+
+
+export default function TLALLOngoingProjects() {
     const navigate = useNavigate();
     function ButtonArray() {
-        const buttonArray = ["Edit", "Done", "Delete"];
+        const buttonArray = ["Done"];
 
         return (
             <div>
@@ -55,13 +58,13 @@ export default function AllOMOngoingProjects() {
     const handleProjectClick = (event, projectId) => {
         event.preventDefault();
         localStorage.setItem("projectId", projectId);
-        navigate("/ops-manager/projectdetails");
+        navigate("/team-lead/projectdetails");
     };
     return (
-        <ThemeProvider theme={theme}>
+         <ThemeProvider theme={theme}>
             <React.Fragment>
                 <Box sx={{ display: "flex", mt: 2 }}>
-                    <OMPermanentDrawerLeft />
+                    <OEPermanentDrawerLeft />
                     <Box
                         component="main"
                         sx={{
@@ -91,12 +94,12 @@ export default function AllOMOngoingProjects() {
                                                             Project Address
                                                         </TableCell>
                                                         <TableCell>
-                                                            Customer Name
+                                                            Crew
                                                         </TableCell>
                                                         <TableCell>
-                                                            Date
+                                                            Action
                                                         </TableCell>
-                                                        <TableCell>
+                                                        {/* <TableCell>
                                                             Cost
                                                         </TableCell>
                                                         <TableCell>
@@ -104,7 +107,7 @@ export default function AllOMOngoingProjects() {
                                                         </TableCell>
                                                         <TableCell>
                                                             Action
-                                                        </TableCell>
+                                                        </TableCell> */}
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
@@ -130,40 +133,6 @@ export default function AllOMOngoingProjects() {
                                                                 }
                                                             </TableCell>
                                                             <TableCell>
-                                                                {row.startDate}
-                                                            </TableCell>
-                                                            <TableCell>
-                                                                {`${
-                                                                    row.totalCost ===
-                                                                    "Not Assigned"
-                                                                        ? 0
-                                                                        : row.totalCost
-                                                                }`}{" "}
-                                                            </TableCell>
-
-                                                            <TableCell
-                                                                style={{
-                                                                    color:
-                                                                        row.projectStatus ===
-                                                                        "Pending"
-                                                                            ? theme
-                                                                                  .palette
-                                                                                  .error
-                                                                                  .main
-                                                                            : row.projectStatus ===
-                                                                              "In-Progress"
-                                                                            ? theme
-                                                                                  .palette
-                                                                                  .warning
-                                                                                  .main
-                                                                            : "",
-                                                                }}
-                                                            >
-                                                                {
-                                                                    row.projectStatus
-                                                                }
-                                                            </TableCell>
-                                                            <TableCell>
                                                                 {rows}
                                                             </TableCell>
                                                         </TableRow>
@@ -171,13 +140,13 @@ export default function AllOMOngoingProjects() {
                                                 </TableBody>
                                             </Table>
                                         </React.Fragment>
-                                    </ThemeProvider>
+                                    </ThemeProvider> 
                                 </Paper>
                             </Grid>
                         </Container>
                     </Box>
                 </Box>
             </React.Fragment>
-        </ThemeProvider>
+         </ThemeProvider>
     );
 }

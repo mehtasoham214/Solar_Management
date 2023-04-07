@@ -93,7 +93,7 @@ export default function OEALLPastProjects() {
                                                 <TableHead>
                                                     <TableRow>
                                                         <TableCell>
-                                                            Product Address
+                                                            Project Address
                                                         </TableCell>
                                                         <TableCell>
                                                             Customer Name

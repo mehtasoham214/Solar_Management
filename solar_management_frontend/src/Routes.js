@@ -19,6 +19,11 @@ import OEMaterials from "./components/operationEngineerDashboard/materials";
 import OEProjectDetails from "./components/operationEngineerDashboard/projectDetails/projectDetailsDashboard";
 import OEALLOngoingProjects from "./components/operationEngineerDashboard/onGoingProjectsComponent";
 import OEALLPastProjects from "./components/operationEngineerDashboard/pastProjectsComponents";
+import TLALLOngoingProjects from "./components/teamLeadDashboard/onGoingProjectsComponent";
+import TLALLPastProjects from "./components/teamLeadDashboard/pastProjectsComponents";
+import TLProjectDetails from "./components/teamLeadDashboard/projectDetails/projectDetailsDashboard";
+import TLRequests from "./components/teamLeadDashboard/requests";
+
 
 import Requests from "./components/operationManagerDashboard/requests";
 import Equipments from "./components/operationManagerDashboard/equipments";
@@ -55,6 +60,10 @@ function ProjectRouter(){
                     <Route path="/ops-engineer/pastprojects" element={<OEALLPastProjects/>}></Route>
                 <Route path="/site-inspector" element={<SIDashboard/>} />
                 <Route path="/team-lead" element={<TLDashboard/>} />
+                    <Route path="/team-lead/ongoingprojects" element={<TLALLOngoingProjects />} />
+                    <Route path="/team-lead/pastprojects" element={<TLALLPastProjects />} />
+                    <Route path="/team-lead/projectdetails" element={<TLProjectDetails />} />
+                    <Route path="/team-lead/requests" element={<TLRequests />} />
             </Routes>
     );
 }

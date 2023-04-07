@@ -89,7 +89,7 @@ export default function OEALLOngoingProjects() {
                                                 <TableHead>
                                                     <TableRow>
                                                         <TableCell>
-                                                            Product Address
+                                                            Project Address
                                                         </TableCell>
                                                         <TableCell>
                                                             Customer Name

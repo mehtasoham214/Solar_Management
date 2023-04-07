@@ -22,9 +22,26 @@ export default function OngoingProject({ showMoreLink = true }) {
 
     const handleSeeMoreClick = (event) => {
         event.preventDefault();
-        navigate("/ops-engineer/ongoingprojects"); // replace with the desired path
+        navigate("/team-lead/ongoingprojects"); // replace with the desired path
         
     };
+
+    function ButtonArray(id) {
+        const buttonArray = ["Done"];
+
+        return (
+            <div>
+                {buttonArray.map((buttonText, index) => (
+                    <button
+                        style={{ marginLeft: "10px" }}
+                        key={index}
+                    >
+                        {buttonText}
+                    </button>
+                ))}
+            </div>
+        );
+    }
 
     const [ongoing, getongoing] = useState();
 
@@ -52,7 +69,7 @@ export default function OngoingProject({ showMoreLink = true }) {
         event.preventDefault();
         localStorage.setItem("projectId", projectId);
         // navigate("/sales/projectdetails");
-        navigate("/ops-engineer/projectdetails")
+        navigate("/team-lead/projectdetails")
     };
 
     return (
@@ -64,8 +81,8 @@ export default function OngoingProject({ showMoreLink = true }) {
                     <TableHead>
                         <TableRow>
                             <TableCell>Project Address</TableCell>
-                            <TableCell>Customer Name</TableCell>
-                            <TableCell>Date</TableCell>
+                            <TableCell>Crew</TableCell>
+                            <TableCell>Action</TableCell>
                             {/* <TableCell>Cost</TableCell>
                             <TableCell>Status</TableCell>
                             <TableCell>Action</TableCell> */}
@@ -82,30 +99,7 @@ export default function OngoingProject({ showMoreLink = true }) {
                                     {row.projectAddress}
                                 </TableCell>
                                 <TableCell>{row.customerName}</TableCell>
-                                <TableCell>{row.startDate}</TableCell>
-                                {/* <TableCell>
-                                    {`${
-                                        row.totalCost === "Not Assigned"
-                                            ? 0
-                                            : row.totalCost
-                                    }`}
-                                </TableCell> */}
-
-                                {/* <TableCell
-                                    style={{
-                                        color:
-                                            row.projectStatus === "Pending"
-                                                ? theme.palette.error.main
-                                                : row.projectStatus ===
-                                                  "In-Progress"
-                                                ? theme.palette.warning.main
-                                                : "",
-                                    }}
-                                >
-                                    {row.projectStatus}
-                                </TableCell>
-                                <TableCell>{ButtonArray(row._id)}</TableCell> */}
-                                
+                                <TableCell>{ButtonArray(row._id)}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

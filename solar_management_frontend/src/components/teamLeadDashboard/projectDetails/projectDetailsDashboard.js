@@ -9,15 +9,12 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 
 import OEPermanentDrawerLeft from "../navBar";
-// import DropdownAndTable from "./materials";
-import CustomerDetailsTables from "./customerDetailsTable";
-import MaterialSubmissionForm from "./materialSubmissionForm";
-import SiteInspectorInfo from "./siteInspectorInfo";
+
+import TLOpsEngineerInfo from "./opsEngineerInfo";
+import TLProjectDetailsTable from "./projectDetailsTable";
 
 
-
-
-function OEProjectDetails() {
+function TLProjectDetails() {
   return (
     <ThemeProvider theme={theme}>
         <Box sx={{ display: "flex", mt: 2 }}>
@@ -34,13 +31,10 @@ function OEProjectDetails() {
                 >
                     <Toolbar />
                     <Container maxWidth="lg">
-                        <CustomerDetailsTables />
+                        <TLProjectDetailsTable />
                         <br></br>
                         <br></br>
-                        <SiteInspectorInfo />
-                        <br></br>
-                        <br></br>
-                        <MaterialSubmissionForm />
+                        <TLOpsEngineerInfo />
                     </Container>
 
         </Box>
@@ -49,4 +43,4 @@ function OEProjectDetails() {
   );
 }
 
-export default OEProjectDetails;
+export default TLProjectDetails;

@@ -11,27 +11,24 @@ import TableRow from "@mui/material/TableRow";
 import theme from "../theme";
 import { ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
-
-
 //import { Button } from "@mui/material";
 
 // Generate Order Data
 
-export default function OngoingProject({ showMoreLink = true }) {
+export default function PastProject({ showMoreLink = true }) {
     const navigate = useNavigate();
 
     const handleSeeMoreClick = (event) => {
         event.preventDefault();
-        navigate("/ops-engineer/ongoingprojects"); // replace with the desired path
-        
+        navigate("/ops-engineer/pastprojects"); // replace with the desired path
     };
 
-    const [ongoing, getongoing] = useState();
+    const [past, getpast] = useState();
 
-    async function Getongoingproject() {
+    async function Getpastproject() {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-            `${process.env.REACT_APP_API_URL}inprogress`,
+            `${process.env.REACT_APP_API_URL}finished`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -40,39 +37,34 @@ export default function OngoingProject({ showMoreLink = true }) {
         );
         const data = await response.data;
         console.log(data);
-        getongoing(data);
+        getpast(data);
     }
     useEffect(() => {
-        Getongoingproject();
+        Getpastproject();
     }, []);
 
-    if (!ongoing) return <div>No Ongoing Projects</div>;
+    if (!past) return <div>No Finished Projects</div>;
 
     const handleProjectClick = (event, projectId) => {
         event.preventDefault();
         localStorage.setItem("projectId", projectId);
-        // navigate("/sales/projectdetails");
-        navigate("/ops-engineer/projectdetails")
+        navigate("/team-lead/projectdetails");
     };
 
     return (
         <ThemeProvider theme={theme}>
             <React.Fragment>
-                {/* <Title>On-Going Projects</Title> */}
-                <h1>On-Going Projects</h1>
+                <h1>Past Projects</h1>
                 <Table size="small">
                     <TableHead>
                         <TableRow>
                             <TableCell>Project Address</TableCell>
-                            <TableCell>Customer Name</TableCell>
-                            <TableCell>Date</TableCell>
-                            {/* <TableCell>Cost</TableCell>
-                            <TableCell>Status</TableCell>
-                            <TableCell>Action</TableCell> */}
+                            <TableCell>Crew</TableCell>
+                            <TableCell>End Date</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {ongoing.map((row) => (
+                        {past.map((row) => (
                             <TableRow key={row.id}>
                                 <TableCell
                                     onClick={(event) =>
@@ -83,29 +75,6 @@ export default function OngoingProject({ showMoreLink = true }) {
                                 </TableCell>
                                 <TableCell>{row.customerName}</TableCell>
                                 <TableCell>{row.startDate}</TableCell>
-                                {/* <TableCell>
-                                    {`${
-                                        row.totalCost === "Not Assigned"
-                                            ? 0
-                                            : row.totalCost
-                                    }`}
-                                </TableCell> */}
-
-                                {/* <TableCell
-                                    style={{
-                                        color:
-                                            row.projectStatus === "Pending"
-                                                ? theme.palette.error.main
-                                                : row.projectStatus ===
-                                                  "In-Progress"
-                                                ? theme.palette.warning.main
-                                                : "",
-                                    }}
-                                >
-                                    {row.projectStatus}
-                                </TableCell>
-                                <TableCell>{ButtonArray(row._id)}</TableCell> */}
-                                
                             </TableRow>
                         ))}
                     </TableBody>
