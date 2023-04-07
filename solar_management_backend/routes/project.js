@@ -546,6 +546,21 @@ router.get(
     }
 );
 
+router.get(
+    "/getsalesteam",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res, next) => {
+        try {
+            const { username } = req.user;
+            const token = req.headers.authorization.split(" ")[1];
+            const salesTeam = await userData.getAllSalesTeam();
+            res.json(salesTeam);
+        } catch (e) {
+            res.status(404).json({ error: `Failed to get users: ${e}` });
+        }
+    }
+);
+
 router.patch(
     "/projects/equipment/update",
     passport.authenticate("jwt", { session: false }),

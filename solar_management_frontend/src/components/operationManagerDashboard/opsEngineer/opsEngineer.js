@@ -13,90 +13,72 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Title from "../../salesDashboard/Title";
 
-
 export default function OpsEngineerList() {
-    const [ongoing, getongoing] = useState();
-    async function Getongoingproject() {
+    const [operationEngineer, setOperationEngineer] = useState("");
+    async function GetOperationsEngineer() {
         const token = localStorage.getItem("token");
-        const response = await axios.get(
-            `${process.env.REACT_APP_API_URL}allinprogress`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
-        const data = await response.data;
-        getongoing(data);
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_API_URL}getoperationsengineer`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            const data = await response.data;
+            setOperationEngineer(data);
+        } catch (error) {
+            console.log(error);
+        }
     }
     useEffect(() => {
-        Getongoingproject();
+        GetOperationsEngineer();
     }, []);
 
-    if (!ongoing) return <div>No Ongoing Projects</div>;
+    if (!operationEngineer) return <div>No Operations Engineer</div>;
 
     return (
         <ThemeProvider theme={theme}>
             <React.Fragment>
-                        <Container maxWidth="lg" sx={{ mt: 2 }}>
-                            {/* On going projects */}
-                            <Grid item xs={12}>
-                                <Paper
-                                    sx={{
-                                        p: 2,
-                                        display: "flex",
-                                        flexDirection: "column",
-                                    }}
-                                >
-                                            <Title>Operation Engineers</Title>
-                                            <Table size="small">
-                                                <TableHead>
-                                                    <TableRow>
-                                                        <TableCell>
-                                                            Name
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            Username
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            Position
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            Contact
-                                                        </TableCell>
-                                                    </TableRow>
-                                                </TableHead>
-                                                <TableBody>
-                                                    {ongoing.map((row) => (
-                                                        <TableRow key={row.id}>
-                                                            <TableCell>
-                                                                {
-                                                                    row.projectAddress
-                                                                }
-                                                            </TableCell>
-                                                            <TableCell>
-                                                                {
-                                                                    row.customerName
-                                                                }
-                                                            </TableCell>
-                                                            <TableCell>
-                                                                {row.startDate}
-                                                            </TableCell>
-                                                            <TableCell>
-                                                                {`${
-                                                                    row.totalCost ===
-                                                                    "Not Assigned"
-                                                                        ? 0
-                                                                        : row.totalCost
-                                                                }`}{" "}
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    ))}
-                                                </TableBody>
-                                            </Table>
-                                </Paper>
-                            </Grid>
-                        </Container>
+                <Container maxWidth="lg" sx={{ mt: 2 }}>
+                    {/* On going projects */}
+                    <Grid item xs={12}>
+                        <Paper
+                            sx={{
+                                p: 2,
+                                display: "flex",
+                                flexDirection: "column",
+                            }}
+                        >
+                            <Title>Operation Engineers</Title>
+                            <Table size="small">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Name</TableCell>
+                                        <TableCell>Username</TableCell>
+                                        <TableCell>Position</TableCell>
+                                        <TableCell>Contact</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {operationEngineer.map((row) => (
+                                        <TableRow key={row.id}>
+                                            <TableCell>{row.name}</TableCell>
+                                            <TableCell>
+                                                {row.username}
+                                            </TableCell>
+                                            <TableCell>
+                                                {row.position}
+                                            </TableCell>
+                                            <TableCell>{row.contact}</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </Paper>
+                    </Grid>
+                </Container>
             </React.Fragment>
         </ThemeProvider>
     );
