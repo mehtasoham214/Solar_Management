@@ -175,60 +175,221 @@ export default function SiteInspectorForm() {
                 <FormControl  component="fieldset" variant="standard">
         <FormLabel component="legend"  >Permits</FormLabel>
         <FormGroup>
-        <FormControlLabel
-            control={
-              <Checkbox  sx={{ m: 3 }} onChange={handleChange} name="Environmental" />
-            }
-            label="Environmental"
-          />
-           <FormControlLabel
-            control={
-              <Checkbox sx={{ m: 3 }} onChange={handleChange} name="Building" />
-            }
-            label="Building"
-          />
-             <FormControlLabel
-            control={
-              <Checkbox sx={{ m: 3 }} onChange={handleChange} name="Electrical" />
-            }
-            label="Electrical"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox sx={{ m: 3 }} onChange={handleChange} name="Zone" />
-            }
-            label="Zone"
-          />
-            <FormControlLabel
-            control={
-              <Checkbox  sx={{ m: 3 }} onChange={handleChange} name="LandUse" />
-            }
-            label="Land Use"
-          />
-             <FormControlLabel
-            control={
-              <Checkbox  sx={{ m: 3 }} onChange={handleChange} name="Interconnection_Agreement" />
-            }
-            label="Interconnection Agreement"
-          />
-            <FormControlLabel
-            control={
-              <Checkbox  sx={{ m: 3 }} onChange={handleChange} name="NetMetering_Agreement" />
-            }
-            label="Net Metering Agreement"
-          />
-           <FormControlLabel
-            control={
-              <Checkbox  sx={{ m: 3 }} onChange={handleChange} name="PropertyEasement_Agreement" />
-            }
-            label="Property Easement Agreement"
-          />
-           <FormControlLabel
-            control={
-              <Checkbox  sx={{ m: 3 }} onChange={handleChange} name="HOA_Approval" />
-            }
-            label="HOA Approval"
-          />
+        
+          <Grid item xs={6} md={8}>
+                    
+                        <FormControl
+                            sx={{
+                                m : 3,
+                                display: "flex",
+                                flexDirection: "row",
+                                alignItems: "center",
+                            }}
+                        >
+                            <RadioGroup
+                                sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                defaultValue="On-Grid"
+                                name="radio-buttons-group"
+                            >
+                          
+                                
+                                    <Stack direction="row" spacing={5} sx={{m:3}}>
+                                        <FormLabel id="demo-radio-buttons-group-label">
+                                            Environmental
+                                        </FormLabel>
+                                        <FormControlLabel
+                                            value="Yes"
+                                            control={<Radio />}
+                                            label="Yes"
+                                        />
+                                        <FormControlLabel
+                                            value="No"
+                                            control={<Radio />}
+                                            label="No"
+                                        />
+                                        <FormControlLabel
+                                            value="Not required"
+                                            control={<Radio />}
+                                            label="Not required"
+                                        />
+                                    </Stack>
+                                  
+                                    <Stack direction="row" spacing={5} sx={{m:3}}>
+                                        <FormLabel id="demo-radio-buttons-group-label">
+                                            Building
+                                        </FormLabel>
+                                        <FormControlLabel
+                                            value="Yes"
+                                            control={<Radio />}
+                                            label="Yes"
+                                        />
+                                        <FormControlLabel
+                                            value="No"
+                                            control={<Radio />}
+                                            label="No"
+                                        />
+                                        <FormControlLabel
+                                            value="Not required"
+                                            control={<Radio />}
+                                            label="Not required"
+                                        />
+                                    </Stack>
+                                    <Stack direction="row" spacing={5} sx={{m:3}}>
+                                        <FormLabel id="demo-radio-buttons-group-label">
+                                            Electrical
+                                        </FormLabel>
+                                        <FormControlLabel
+                                            value="Yes"
+                                            control={<Radio />}
+                                            label="Yes"
+                                        />
+                                        <FormControlLabel
+                                            value="No"
+                                            control={<Radio />}
+                                            label="No"
+                                        />
+                                        <FormControlLabel
+                                            value="Not required"
+                                            control={<Radio />}
+                                            label="Not required"
+                                        />
+                                    </Stack>
+                                    <Stack direction="row" spacing={5} sx={{m:3}}>
+                                        <FormLabel id="demo-radio-buttons-group-label">
+                                            Zone
+                                        </FormLabel>
+                                        <FormControlLabel
+                                            value="Yes"
+                                            control={<Radio />}
+                                            label="Yes"
+                                        />
+                                        <FormControlLabel
+                                            value="No"
+                                            control={<Radio />}
+                                            label="No"
+                                        />
+                                        <FormControlLabel
+                                            value="Not required"
+                                            control={<Radio />}
+                                            label="Not required"
+                                        />
+                                    </Stack>
+                                    <Stack direction="row" spacing={5} sx={{m:3}}>
+                                        <FormLabel id="demo-radio-buttons-group-label">
+                                            Land Use
+                                        </FormLabel>
+                                        <FormControlLabel
+                                            value="Yes"
+                                            control={<Radio />}
+                                            label="Yes"
+                                        />
+                                        <FormControlLabel
+                                            value="No"
+                                            control={<Radio />}
+                                            label="No"
+                                        />
+                                        <FormControlLabel
+                                            value="Not required"
+                                            control={<Radio />}
+                                            label="Not required"
+                                        />
+                                    </Stack>
+                                    <Stack direction="row" spacing={5} sx={{m:3}}>
+                                        <FormLabel id="demo-radio-buttons-group-label">
+                                            Interconnection Agreement
+                                        </FormLabel>
+                                        <FormControlLabel
+                                            value="Yes"
+                                            control={<Radio />}
+                                            label="Yes"
+                                        />
+                                        <FormControlLabel
+                                            value="No"
+                                            control={<Radio />}
+                                            label="No"
+                                        />
+                                        <FormControlLabel
+                                            value="Not required"
+                                            control={<Radio />}
+                                            label="Not required"
+                                        />
+                                    </Stack>
+                                    <Stack direction="row" spacing={5} sx={{m:3}}>
+                                        <FormLabel id="demo-radio-buttons-group-label">
+                                            Net Metering Agreement
+                                        </FormLabel>
+                                        <FormControlLabel
+                                            value="Yes"
+                                            control={<Radio />}
+                                            label="Yes"
+                                        />
+                                        <FormControlLabel
+                                            value="No"
+                                            control={<Radio />}
+                                            label="No"
+                                        />
+                                        <FormControlLabel
+                                            value="Not required"
+                                            control={<Radio />}
+                                            label="Not required"
+                                        />
+                                    </Stack>
+                                    <Stack direction="row" spacing={5} sx={{m:3}}>
+                                        <FormLabel id="demo-radio-buttons-group-label">
+                                            Property Easement Agreement 
+                                        </FormLabel>
+                                        <FormControlLabel
+                                            value="Yes"
+                                            control={<Radio />}
+                                            label="Yes"
+                                        />
+                                        <FormControlLabel
+                                            value="No"
+                                            control={<Radio />}
+                                            label="No"
+                                        />
+                                        <FormControlLabel
+                                            value="Not required"
+                                            control={<Radio />}
+                                            label="Not required"
+                                        />
+                                    </Stack>
+
+                                    <Stack direction="row" spacing={5} sx={{m:3}}>
+                                        <FormLabel id="demo-radio-buttons-group-label">
+                                            HOA Approval
+                                        </FormLabel>
+                                        <FormControlLabel
+                                            value="Yes"
+                                            control={<Radio />}
+                                            label="Yes"
+                                        />
+                                        <FormControlLabel
+                                            value="No"
+                                            control={<Radio />}
+                                            label="No"
+                                        />
+                                        <FormControlLabel
+                                            value="Not required"
+                                            control={<Radio />}
+                                            label="Not required"
+                                        />
+                                    </Stack>
+                                    
+                               
+                            </RadioGroup>
+                        </FormControl>
+                  
+                </Grid>
+
+           
+          
+         
+            
+           
+           
+          
 
 
            </FormGroup>
