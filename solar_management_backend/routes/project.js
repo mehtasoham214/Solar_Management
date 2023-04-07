@@ -329,12 +329,7 @@ router.patch(
             const siteInspector = req.body.siteInspector;
             const operationEngineer = req.body.operationEngineer;
             const teamLead = req.body.teamLead;
-
-            if (!siteInspector) {
-                throw new Error("siteInspector data is missing");
-            }
-
-            const updatedProject = await projectData.updateSiteInspector(
+            const updatedProject = await projectData.addStaff(
                 projectId,
                 siteInspector,
                 operationEngineer,
@@ -506,13 +501,13 @@ router.get(
 );
 
 router.get(
-    "/siteinspectors",
+    "/getsiteinspectors",
     passport.authenticate("jwt", { session: false }),
     async (req, res, next) => {
         try {
             const { username } = req.user;
             const token = req.headers.authorization.split(" ")[1];
-            const siteInspectors = await userData.getAllSiteInspector(username);
+            const siteInspectors = await userData.getAllSiteInspector();
             res.json(siteInspectors);
         } catch (e) {
             res.status(404).json({ error: `Failed to get users: ${e}` });
@@ -521,16 +516,15 @@ router.get(
 );
 
 router.get(
-    "/operationsengineer",
+    "/getoperationsengineer",
     passport.authenticate("jwt", { session: false }),
     async (req, res, next) => {
         try {
             const { username } = req.user;
             const token = req.headers.authorization.split(" ")[1];
-            const operationsEgineers = await userData.getAllOperationsEngineer(
-                username
-            );
-            res.json(operationsEgineers);
+            const operationsEngineers =
+                await userData.getAllOperationsEngineer();
+            res.json(operationsEngineers);
         } catch (e) {
             res.status(404).json({ error: `Failed to get users: ${e}` });
         }
@@ -538,13 +532,13 @@ router.get(
 );
 
 router.get(
-    "/teamlead",
+    "/getteamlead",
     passport.authenticate("jwt", { session: false }),
     async (req, res, next) => {
         try {
             const { username } = req.user;
             const token = req.headers.authorization.split(" ")[1];
-            const teamLeads = await userData.getAllTeamLeads(username);
+            const teamLeads = await userData.getAllTeamLeads();
             res.json(teamLeads);
         } catch (e) {
             res.status(404).json({ error: `Failed to get users: ${e}` });

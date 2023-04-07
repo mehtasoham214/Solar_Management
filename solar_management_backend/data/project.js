@@ -417,25 +417,27 @@ const getImages = async (id) => {
     return projectinfo.images;
 };
 //For Operations Engineer
-const addStaff = async (id, siteInspector, operationsEngineer, teamLead) => {
-    const projectCollection = await project();
-    const project = await projectCollection.findOne({ _id: id });
+const addStaff = async (id, si, oe, tl) => {
     let progressStatus = "With Site Inspector";
-    await project().update(
+    const projectCollection = await project();
+    if (typeof id == "string") {
+        id = new ObjectId(id);
+    }
+    let updatedInfo = await projectCollection.updateOne(
         { _id: id },
         {
             $set: {
-                siteInspector: siteInspector,
-                operationsEngineer: operationsEngineer,
-                teamLead: teamLead,
+                siteInspector: si,
+                operationEngineer: oe,
+                teamLead: tl,
                 projectProgress: progressStatus,
             },
         }
     );
     if (updatedInfo.modifiedCount == 0) {
-        throw `Couldn't add Site Inspector`;
+        throw `Couldn't add Staff Information`;
     } else {
-        return "Site Inspector added";
+        return "Staff Information added";
     }
 };
 
@@ -819,56 +821,54 @@ const patchProject = async (
     let projectUpdate = undefined;
     let customerUpdate = undefined;
     const projectCollection = await projects();
-    let projectData = await projectCollection.findOne({_id : projectId});
+    let projectData = await projectCollection.findOne({ _id: projectId });
     let customerId = projectData.customerId;
     const customerCollection = await customer();
-    let customerData = await customerCollection.findOne({_id : customerId});
+    let customerData = await customerCollection.findOne({ _id: customerId });
 
-    if(projectAddress != projectData.projectAddress){
+    if (projectAddress != projectData.projectAddress) {
         projectUpdate = await projectCollection.updateOne(
-            {_id : projectId},
-            {$set: {projectAddress: projectAddress}}
-            );
-    }
-    if(appointmentDate != projectData.appointmentDate){
-        projectUpdate = await projectCollection.updateOne(
-            {_id : projectId},
-            {$set: {appointmentDate: appointmentDate}}
-            );
-    }
-    if(customerName != projectData.customerName){
-        projectUpdate = await projectCollection.updateOne(
-            {_id : projectId},
-            {$set: {customerName: customerName}}
-            );
-    }
-    if(customerName != customerData.customerName){
-        customerUpdate = await customerCollection.updateOne(
-            {_id : customerId},
-            {$set: {customerName: customerName}}
-            );
-    }
-    if(customerNumber != customerData.customerNumber){
-        customerUpdate = await customerCollection.updateOne(
-            {_id: customerId},
-            {$set: {customerNumber: customerNumber}}
+            { _id: projectId },
+            { $set: { projectAddress: projectAddress } }
         );
     }
-    if(customerAddress != customerData.customerAddress){
+    if (appointmentDate != projectData.appointmentDate) {
+        projectUpdate = await projectCollection.updateOne(
+            { _id: projectId },
+            { $set: { appointmentDate: appointmentDate } }
+        );
+    }
+    if (customerName != projectData.customerName) {
+        projectUpdate = await projectCollection.updateOne(
+            { _id: projectId },
+            { $set: { customerName: customerName } }
+        );
+    }
+    if (customerName != customerData.customerName) {
         customerUpdate = await customerCollection.updateOne(
-            {_id: customerId},
-            {$set: {customerAddress: customerAddress}}
-            );
-        }        
+            { _id: customerId },
+            { $set: { customerName: customerName } }
+        );
+    }
+    if (customerNumber != customerData.customerNumber) {
+        customerUpdate = await customerCollection.updateOne(
+            { _id: customerId },
+            { $set: { customerNumber: customerNumber } }
+        );
+    }
+    if (customerAddress != customerData.customerAddress) {
+        customerUpdate = await customerCollection.updateOne(
+            { _id: customerId },
+            { $set: { customerAddress: customerAddress } }
+        );
+    }
 
-
-    if (customerUpdate.modifiedCount == 0 || projectUpdate.modifiedCount==0) {
+    if (customerUpdate.modifiedCount == 0 || projectUpdate.modifiedCount == 0) {
         throw `No updates reflected`;
     }
 
     return "Project Details Updated";
 };
-
 
 module.exports = {
     createProject,
@@ -894,5 +894,5 @@ module.exports = {
     // NOTES
     getNotes,
     postNotes,
-    patchProject
+    patchProject,
 };

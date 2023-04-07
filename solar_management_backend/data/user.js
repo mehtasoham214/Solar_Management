@@ -38,53 +38,53 @@ const getUser = async (username) => {
 };
 
 const getAllSiteInspector = async () => {
-    const siteInspector = await user();
+    const siteInspector = await userCol();
     const siteInsperctorList = await siteInspector
         .find({
             position: "Site Inspector",
         })
         .toArray();
     if (siteInsperctorList.length == 0) {
-        throw `No Site Inspectors Found`;
+        return `No Site Inspectors Found`;
     }
     return siteInsperctorList;
 };
 
 const getAllTeamLeads = async () => {
-    const teamLeadCollection = await user();
+    const teamLeadCollection = await userCol();
     let teamLeadsList = await teamLeadCollection
         .find({
-            position: "Team Lead",
+            position: "Team Lead",
         })
         .toArray();
     if (teamLeadsList.length == 0) {
-        throw `No Team Leads Found`;
+        return `No Team Leads Found`;
     }
     return teamLeadsList;
 };
 
 const getAllOperationsEngineer = async () => {
-    const operationsEngineerCollection = await user();
+    const operationsEngineerCollection = await userCol();
     let operationsEngineerList = await operationsEngineerCollection
         .find({
             position: "Operations Engineer",
         })
         .toArray();
     if (operationsEngineerList.length == 0) {
-        throw `No Operations Engineers Found`;
+        return `No Operations Engineers Found`;
     }
     return operationsEngineerList;
 };
 
 const getAllSalesTeam = async () => {
-    const salesTeamCollection = await user();
+    const salesTeamCollection = await userCol();
     let salesTeamList = await salesTeamCollection
         .find({
             position: "Sales Team",
         })
         .toArray();
     if (salesTeamList.length == 0) {
-        throw `No Operations Engineers Found`;
+        return `No Operations Engineers Found`;
     }
     return salesTeamList;
 };
