@@ -1,5 +1,7 @@
 import * as React from "react";
 import { Box } from "@mui/system";
+import theme from "../theme";
+import { ThemeProvider } from "@mui/material/styles";
 
 import {
     Button,
@@ -13,8 +15,6 @@ import {
     Grid,
     Stack,
     FormGroup,
-    Checkbox,
-    FormHelperText
 } from "@mui/material";
 
   
@@ -45,13 +45,11 @@ export default function SiteInspectorForm() {
   };
     return (
       
+        <ThemeProvider theme={theme}>
       
         <Container sx={{ border: 3, borderRadius: 2, borderColor: "gray" }}>
             <Box
                 component="form"
-                sx={{
-                    "& > :not(style)": { m: 1, width: "25ch" },
-                }}
                 noValidate
                 autoComplete="off"
             >
@@ -382,16 +380,6 @@ export default function SiteInspectorForm() {
                         </FormControl>
                   
                 </Grid>
-
-           
-          
-         
-            
-           
-           
-          
-
-
            </FormGroup>
         
       </FormControl>
@@ -462,5 +450,6 @@ export default function SiteInspectorForm() {
                 </div>
             </Box>
         </Container>
+        </ThemeProvider>
     );
 }
