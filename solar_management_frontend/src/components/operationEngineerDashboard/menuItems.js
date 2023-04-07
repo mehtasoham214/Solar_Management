@@ -10,6 +10,8 @@ import theme from "../theme";
 import { ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import FactCheckIcon from "@mui/icons-material/FactCheck";
 
 const handleLogout = async (e) => {
     e.preventDefault();
@@ -27,7 +29,7 @@ const handleLogout = async (e) => {
 export const mainListItems = (
     <ThemeProvider theme={theme}>
         <React.Fragment>
-            <Link to="/" href="#" sx={{ mt: 3 }}>
+            <Link to="/ops-engineer" href="#" sx={{ mt: 3 }}>
                 <ListItemButton sx={{ color: "primary.main" }}>
                     <ListItemIcon>
                         <HomeIcon sx={{ color: "primary.main" }} />
@@ -41,6 +43,22 @@ export const mainListItems = (
                         <HardwareIcon sx={{ color: "primary.main" }} />
                     </ListItemIcon>
                     <ListItemText primary="Material" />
+                </ListItemButton>
+            </Link>
+            <Link to="/ops-engineer/ongoingprojects" href="#" sx={{ mt: 3 }}>
+                <ListItemButton sx={{ color: "primary.main" }}>
+                    <ListItemIcon>
+                        <InsertDriveFileIcon sx={{ color: "primary.main" }} />
+                    </ListItemIcon>
+                    <ListItemText primary="On-going Projects" />
+                </ListItemButton>
+            </Link>
+            <Link to="/ops-engineer/pastprojects" href="#" sx={{ mt: 3 }}>
+                <ListItemButton sx={{ color: "primary.main" }}>
+                    <ListItemIcon>
+                        <FactCheckIcon sx={{ color: "primary.main" }} />
+                    </ListItemIcon>
+                    <ListItemText primary="Past Projects" />
                 </ListItemButton>
             </Link>
         </React.Fragment>
