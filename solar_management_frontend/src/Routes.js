@@ -16,11 +16,25 @@ import AllOMOngoingProjects from "./components/operationManagerDashboard/onGoing
 import AllOMPastProjects from "./components/operationManagerDashboard/pastProjectComponent";
 import OMProjectDashboard from "./components/operationManagerDashboard/projectDetails";
 import OEMaterials from "./components/operationEngineerDashboard/materials";
+import OEProjectDetails from "./components/operationEngineerDashboard/projectDetails/projectDetailsDashboard";
+import OEALLOngoingProjects from "./components/operationEngineerDashboard/onGoingProjectsComponent";
+import OEALLPastProjects from "./components/operationEngineerDashboard/pastProjectsComponents";
+import TLALLOngoingProjects from "./components/teamLeadDashboard/onGoingProjectsComponent";
+import TLALLPastProjects from "./components/teamLeadDashboard/pastProjectsComponents";
+import TLProjectDetails from "./components/teamLeadDashboard/projectDetails/projectDetailsDashboard";
+import TLRequests from "./components/teamLeadDashboard/requests";
+
+
+import Requests from "./components/operationManagerDashboard/requests";
+import Equipments from "./components/operationManagerDashboard/equipments";
+import OpsEnginner from "./components/operationManagerDashboard/opsEngineer";
+import Sales from "./components/operationManagerDashboard/sales";
+import SiteInspector from "./components/operationManagerDashboard/siteInspector";
+import TeamLead from "./components/operationManagerDashboard/teamlead";
 
 function ProjectRouter(){
     return (
             <Routes>
-                
                 <Route exact path="/" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route exact path="/sales" element={<Dashboard />} />
@@ -33,16 +47,23 @@ function ProjectRouter(){
                     <Route path="/ops-manager/ongoingprojects" element={<AllOMOngoingProjects />} />
                     <Route path="/ops-manager/pastprojects" element={<AllOMPastProjects />} />
                     <Route path="/ops-manager/projectdetails" element={<OMProjectDashboard />} />
-                    <Route path="/ops-manager/requests" element={<OMDashboard />} />
-                    <Route path="/ops-manager/equipments" element={<OMDashboard />} />
-                    <Route path="/ops-manager/operationengineer" element={<OMDashboard />} />
-                    <Route path="/ops-manager/siteinspector" element={<OMDashboard />} />
-                    <Route path="/ops-manager/sales" element={<OMDashboard />} />
-                    <Route path="/ops-manager/teamlead" element={<OMDashboard />} />
+                    <Route path="/ops-manager/requests" element={<Requests />} />
+                    <Route path="/ops-manager/equipments" element={<Equipments />} />
+                    <Route path="/ops-manager/operationengineer" element={<OpsEnginner />} />
+                    <Route path="/ops-manager/siteinspector" element={<SiteInspector />} />
+                    <Route path="/ops-manager/sales" element={<Sales />} />
+                    <Route path="/ops-manager/teamlead" element={<TeamLead />} />
                 <Route path="/ops-engineer" element={<OEDashboard/>} />
                     <Route path="/ops-engineer/materials" element={<OEMaterials/>}></Route>
+                    <Route path="/ops-engineer/projectdetails" element={<OEProjectDetails/>}></Route>
+                    <Route path="/ops-engineer/ongoingprojects" element={<OEALLOngoingProjects/>}></Route>
+                    <Route path="/ops-engineer/pastprojects" element={<OEALLPastProjects/>}></Route>
                 <Route path="/site-inspector" element={<SIDashboard/>} />
                 <Route path="/team-lead" element={<TLDashboard/>} />
+                    <Route path="/team-lead/ongoingprojects" element={<TLALLOngoingProjects />} />
+                    <Route path="/team-lead/pastprojects" element={<TLALLPastProjects />} />
+                    <Route path="/team-lead/projectdetails" element={<TLProjectDetails />} />
+                    <Route path="/team-lead/requests" element={<TLRequests />} />
             </Routes>
     );
 }

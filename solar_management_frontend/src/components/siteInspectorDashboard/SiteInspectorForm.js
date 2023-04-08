@@ -1,7 +1,10 @@
 import * as React from "react";
 import { Box } from "@mui/system";
-
+import theme from "../theme";
+import { ThemeProvider } from "@mui/material/styles";
+import Title from "../salesDashboard/Title";
 import {
+
   Button,
   FormControl,
   FormLabel,
@@ -20,6 +23,10 @@ import {
 export default function SiteInspectorForm() {
   return (
     <Container sx={{ border: 3, borderRadius: 2, borderColor: "gray" }}>
+        
+         <Grid item md={8}>
+          <Title>Site Inspector Info</Title>
+        </Grid>
  
         <Grid item xs={12
         } md={8}>
@@ -316,6 +323,7 @@ export default function SiteInspectorForm() {
           <Button variant="contained">Upload Photos</Button>
         </Grid>
     
+        
     </Container>
   );
 }

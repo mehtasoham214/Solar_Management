@@ -7,7 +7,7 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Title from "../salesDashboard/Title";
+// import Title from "./Title";
 import theme from "../theme";
 import { ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
@@ -15,38 +15,20 @@ import { useNavigate } from "react-router-dom";
 
 // Generate Order Data
 
-export default function OMOngoingProject({ showMoreLink = true }) {
+export default function PastProject({ showMoreLink = true }) {
     const navigate = useNavigate();
 
     const handleSeeMoreClick = (event) => {
         event.preventDefault();
-        navigate("/ops-manager/ongoingprojects"); // replace with the desired path
+        navigate("/ops-engineer/pastprojects"); // replace with the desired path
     };
 
-    function ButtonArray() {
-        const buttonArray = ["Edit", "Done", "Delete"];
+    const [past, getpast] = useState();
 
-        return (
-            <div>
-                {/* <EditButton>buttonArray[0]</EditButton>
-                        <button >buttonArray[0]</button>
-                        <button >buttonArray[0]</button> */}
-
-                {buttonArray.map((buttonText, index) => (
-                    <button style={{ marginLeft: "10px" }} key={index}>
-                        {buttonText}
-                    </button>
-                ))}
-            </div>
-        );
-    }
-
-    const [ongoing, getongoing] = useState();
-
-    async function Getongoingproject() {
+    async function Getpastproject() {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-            `${process.env.REACT_APP_API_URL}inprogress`,
+            `${process.env.REACT_APP_API_URL}finished`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -54,38 +36,35 @@ export default function OMOngoingProject({ showMoreLink = true }) {
             }
         );
         const data = await response.data;
-        getongoing(data);
+        console.log(data);
+        getpast(data);
     }
     useEffect(() => {
-        Getongoingproject();
+        Getpastproject();
     }, []);
 
-    if (!ongoing) return <div>No Ongoin Projects</div>;
+    if (!past) return <div>No Finished Projects</div>;
 
-    const rows = ButtonArray();
     const handleProjectClick = (event, projectId) => {
         event.preventDefault();
         localStorage.setItem("projectId", projectId);
-        navigate("/ops-manager/projectdetails");
+        navigate("/ops-engineer/projectdetails");
     };
 
     return (
         <ThemeProvider theme={theme}>
             <React.Fragment>
-                <Title>On-Going Projects</Title>
+                <h1>Past Projects</h1>
                 <Table size="small">
                     <TableHead>
                         <TableRow>
                             <TableCell>Project Address</TableCell>
                             <TableCell>Customer Name</TableCell>
                             <TableCell>Date</TableCell>
-                            <TableCell>Cost</TableCell>
-                            <TableCell>Status</TableCell>
-                            <TableCell>Action</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {ongoing.map((row) => (
+                        {past.map((row) => (
                             <TableRow key={row.id}>
                                 <TableCell
                                     onClick={(event) =>
@@ -96,28 +75,6 @@ export default function OMOngoingProject({ showMoreLink = true }) {
                                 </TableCell>
                                 <TableCell>{row.customerName}</TableCell>
                                 <TableCell>{row.startDate}</TableCell>
-                                <TableCell>
-                                    {`${
-                                        row.totalCost === "Not Assigned"
-                                            ? 0
-                                            : row.totalCost
-                                    }`}
-                                </TableCell>
-
-                                <TableCell
-                                    style={{
-                                        color:
-                                            row.projectStatus === "Pending"
-                                                ? theme.palette.error.main
-                                                : row.projectStatus ===
-                                                  "In-Progress"
-                                                ? theme.palette.warning.main
-                                                : "",
-                                    }}
-                                >
-                                    {row.projectStatus}
-                                </TableCell>
-                                <TableCell>{rows}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

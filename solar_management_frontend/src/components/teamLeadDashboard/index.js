@@ -9,7 +9,11 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 
 import TeamLeadPermanentDrawerLeft from "./navBar";
-import { Typography } from "@mui/material";
+
+import OngoingProject from "./ongoingProjects";
+import PastProject from "./pastProjects";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
 
 function TLDashboard() {
   return (
@@ -28,7 +32,30 @@ function TLDashboard() {
                 >
                     <Toolbar />
                     <Container maxWidth="lg">
-                        <Typography>Some content here</Typography>
+                    <Grid container spacing={3}>
+                          <Grid item xs={12}>
+                                <Paper
+                                    sx={{
+                                        p: 2,
+                                        display: "flex",
+                                        flexDirection: "column",
+                                    }}
+                                >
+                                    <OngoingProject />
+                                </Paper>
+                          </Grid>
+                          <Grid item xs={12}>
+                                <Paper
+                                    sx={{
+                                        p: 2,
+                                        display: "flex",
+                                        flexDirection: "column",
+                                    }}
+                                >
+                                    <PastProject />
+                                </Paper>
+                          </Grid>
+                        </Grid>
                     </Container>
 
         </Box>

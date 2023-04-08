@@ -7,7 +7,7 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Title from "../salesDashboard/Title";
+// import Title from "./Title";
 import theme from "../theme";
 import { ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
@@ -15,31 +15,13 @@ import { useNavigate } from "react-router-dom";
 
 // Generate Order Data
 
-export default function OMPastProject({ showMoreLink = true }) {
+export default function PastProject({ showMoreLink = true }) {
     const navigate = useNavigate();
 
     const handleSeeMoreClick = (event) => {
         event.preventDefault();
-        navigate("/ops-manager/pastprojects"); // replace with the desired path
+        navigate("/ops-engineer/pastprojects"); // replace with the desired path
     };
-
-    function ButtonArray() {
-        const buttonArray = ["PDF"];
-
-        return (
-            <div>
-                {/* <EditButton>buttonArray[0]</EditButton>
-              <button >buttonArray[0]</button>
-              <button >buttonArray[0]</button> */}
-
-                {buttonArray.map((buttonText, index) => (
-                    <button style={{ marginLeft: "10px" }} key={index}>
-                        {buttonText}
-                    </button>
-                ))}
-            </div>
-        );
-    }
 
     const [past, getpast] = useState();
 
@@ -54,6 +36,7 @@ export default function OMPastProject({ showMoreLink = true }) {
             }
         );
         const data = await response.data;
+        console.log(data);
         getpast(data);
     }
     useEffect(() => {
@@ -62,27 +45,22 @@ export default function OMPastProject({ showMoreLink = true }) {
 
     if (!past) return <div>No Finished Projects</div>;
 
-    const rows = ButtonArray();
-
     const handleProjectClick = (event, projectId) => {
         event.preventDefault();
         localStorage.setItem("projectId", projectId);
-        navigate("/ops-manager/projectdetails");
+        navigate("/team-lead/projectdetails");
     };
 
     return (
         <ThemeProvider theme={theme}>
             <React.Fragment>
-                <Title>Past Projects</Title>
+                <h1>Past Projects</h1>
                 <Table size="small">
                     <TableHead>
                         <TableRow>
                             <TableCell>Project Address</TableCell>
-                            <TableCell>Customer Name</TableCell>
-                            <TableCell>Date</TableCell>
-                            <TableCell>Cost</TableCell>
-                            <TableCell>Status</TableCell>
-                            <TableCell>Action</TableCell>
+                            <TableCell>Crew</TableCell>
+                            <TableCell>End Date</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -97,28 +75,6 @@ export default function OMPastProject({ showMoreLink = true }) {
                                 </TableCell>
                                 <TableCell>{row.customerName}</TableCell>
                                 <TableCell>{row.startDate}</TableCell>
-                                <TableCell>
-                                    {`${
-                                        row.totalCost === "Not Assigned"
-                                            ? 0
-                                            : row.totalCost
-                                    }`}
-                                </TableCell>
-
-                                <TableCell
-                                    style={{
-                                        color:
-                                            row.projectStatus === "Cancelled"
-                                                ? theme.palette.error.main
-                                                : row.projectStatus ===
-                                                  "Finished"
-                                                ? theme.palette.success.light
-                                                : "",
-                                    }}
-                                >
-                                    {row.projectStatus}
-                                </TableCell>
-                                <TableCell>{rows}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

@@ -3,6 +3,8 @@ import * as React from "react";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import FactCheckIcon from "@mui/icons-material/FactCheck";
 import LogoutIcon from "@mui/icons-material/Logout";
 import HardwareIcon from "@mui/icons-material/Hardware";
 import MoreTimeIcon from "@mui/icons-material/MoreTime";
@@ -29,7 +31,7 @@ const handleLogout = async (e) => {
 export const mainListItems = (
     <ThemeProvider theme={theme}>
         <React.Fragment>
-            <Link to="/" href="#" sx={{ mt: 3 }}>
+            <Link to="/team-lead" href="#" sx={{ mt: 3 }}>
                 <ListItemButton sx={{ color: "primary.main" }}>
                     <ListItemIcon>
                         <HomeIcon sx={{ color: "primary.main" }} />
@@ -37,7 +39,7 @@ export const mainListItems = (
                     <ListItemText primary="Dashboard" />
                 </ListItemButton>
             </Link>
-            <Link>
+            <Link to="/team-lead/requests" href="#" sx={{ mt: 3 }}>
                 <ListItemButton sx={{ color: "primary.main" }}>
                     <ListItemIcon>
                         <MoreTimeIcon sx={{ color: "primary.main" }} />
@@ -51,6 +53,22 @@ export const mainListItems = (
                         <HardwareIcon sx={{ color: "primary.main" }} />
                     </ListItemIcon>
                     <ListItemText primary="Request Material" />
+                </ListItemButton>
+            </Link>
+            <Link to="/team-lead/ongoingprojects" href="#" sx={{ mt: 3 }}>
+                <ListItemButton sx={{ color: "primary.main" }}>
+                    <ListItemIcon>
+                        <InsertDriveFileIcon sx={{ color: "primary.main" }} />
+                    </ListItemIcon>
+                    <ListItemText primary="On-going Projects" />
+                </ListItemButton>
+            </Link>
+            <Link to="/team-lead/pastprojects" href="#" sx={{ mt: 3 }}>
+                <ListItemButton sx={{ color: "primary.main" }}>
+                    <ListItemIcon>
+                        <FactCheckIcon sx={{ color: "primary.main" }} />
+                    </ListItemIcon>
+                    <ListItemText primary="Past Projects" />
                 </ListItemButton>
             </Link>
         </React.Fragment>

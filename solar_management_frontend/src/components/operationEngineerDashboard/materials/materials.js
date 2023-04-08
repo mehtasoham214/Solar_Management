@@ -1,117 +1,65 @@
-import React from 'react';
-import {useState,  useEffect} from "react";
-import axios from 'axios';
-// import { makeStyles } from '@mui/styles';
-// import { makeStyles } from '@mui/material';
-// import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 
-// const useStyles = makeStyles({
-//   root: {
-//     display: 'flex',
-//     flexDirection: 'column',
-//     alignItems: 'center',
-//     padding: '20px',
-//   },
-//   horizontalStack: {
-//     display: 'flex',
-//     justifyContent: 'space-between',
-//     alignItems: 'center',
-//     width: '100%',
-//     padding: '12px',
-//     boxSizing: 'border-box',
-//     marginBottom: '12px',
-//   },
-//   dropdown: {
-//     width: '50%',
-//     marginRight: '20px',
-//   },
-//   search: {
-//     width: '50%',
-//   },
-// });
+import * as React from "react";
+import {useState, useEffect} from "react";
+import axios from 'axios'
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Title from "../../salesDashboard/Title";
+import theme from "../../theme";
+import { ThemeProvider } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
 
-// const dummyData = [
-//   { name: 'Product 1', code: 'ABC123', quantity: 10 },
-//   { name: 'Product 2', code: 'DEF456', quantity: 5 },
-//   { name: 'Product 3', code: 'GHI789', quantity: 2 },
-// ];
+export default function Materialstable() {
 
-// const DropdownAndSearch = () => {
-//   const classes = useStyles();
+  const materialsList = [{
+    productName: "Product A",
+    productCode: "PCABB",
+    productQuantity: 10
+  },{
+    productName: "Product B",
+    productCode: "PCABC",
+    productQuantity: 5
+  },{
+    productName: "Product C",
+    productCode: "PCABz",
+    productQuantity: 15
+  }]
 
-//   return (
-//     <div className={classes.horizontalStack}>
-//       <FormControl className={classes.dropdown}>
-//         <InputLabel id="demo-simple-select-label">Sort By</InputLabel>
-//         <Select
-//           labelId="demo-simple-select-label"
-//           id="demo-simple-select"
-//           value={''}
-//           label="Filter"
-//         >
-//           <MenuItem value={'name'}>Name</MenuItem>
-//           <MenuItem value={'code'}>Code</MenuItem>
-//           <MenuItem value={'quantity'}>Quantity</MenuItem>
-//         </Select>
-//       </FormControl>
-//       <TextField className={classes.search} label="Search" variant="outlined" />
-//     </div>
-//   );
-// };
+  
 
-const ProductTable = () => {
-  const [materiallist, setMaterialList] = useState([]);
-  async function getLeads() {
-      const token = localStorage.getItem("token");
-      const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}materials`,
-          {
-              headers: {
-                  Authorization: `Bearer ${token}`,
-              }
-          }
-      );
-      setMaterialList(response.data);
-  }
-  useEffect(() => {
-      getLeads();
-  }, []);
-  if (!materiallist) return (<div>No Leads Found</div>)
+  const handleProjectClick = (event) => {
+      // event.preventDefault();
+      // navigate("/sales/projectdetails"); // replace with the desired path
+  };
 
   return (
-    <TableContainer component={Paper}>
-      <Table aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Product Name</TableCell>
-            <TableCell align="right">Product Code</TableCell>
-            <TableCell align="right">Quantity</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {materiallist.map((material, index) => (
-            <TableRow key={index}>
-              <TableCell component="th" scope="row">
-                {material.type}
-              </TableCell>
-              <TableCell align="right">{material.product_code}</TableCell>
-              <TableCell align="right">{material.quantity}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+      <ThemeProvider theme={theme}>
+          <React.Fragment>
+              <Title>Materials List</Title>
+              <Table size="small">
+                  <TableHead>
+                      <TableRow>
+                          <TableCell>Product Name</TableCell>
+                          <TableCell>Product Code</TableCell>
+                          <TableCell>Quantity</TableCell>
+                          {/* <TableCell>Project Address</TableCell> */}
+                      </TableRow>
+                  </TableHead>
+                  <TableBody>
+                      {materialsList.map((material) => (
+                          <TableRow >
+                              <TableCell onClick={handleProjectClick}>{material.productName}</TableCell>
+                              <TableCell>{material.productCode}</TableCell>
+                              <TableCell>{material.productQuantity}</TableCell>
+                              {/* <TableCell>{customer.projectAddress}</TableCell> */}
+                          </TableRow>
+                      ))}
+                  </TableBody>
+              </Table>
+          </React.Fragment>
+       </ThemeProvider>
   );
-};
-
-const DropdownAndTable = () => {
-
-  return (
-    <div>
-      <ProductTable />
-    </div>
-  );
-};
-
-export default DropdownAndTable;
+}

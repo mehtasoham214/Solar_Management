@@ -109,10 +109,6 @@ export default function OngoingProject({ showMoreLink = true }) {
 
         return (
             <div>
-                {/* <EditButton>buttonArray[0]</EditButton>
-                        <button >buttonArray[0]</button>
-                        <button >buttonArray[0]</button> */}
-
                 {buttonArray.map((buttonText, index) => (
                     <button
                         style={{ marginLeft: "10px" }}

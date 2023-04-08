@@ -7,39 +7,24 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Title from "../salesDashboard/Title";
+// import Title from "./Title";
 import theme from "../theme";
 import { ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
+
+
 //import { Button } from "@mui/material";
 
 // Generate Order Data
 
-export default function OMOngoingProject({ showMoreLink = true }) {
+export default function OngoingProject({ showMoreLink = true }) {
     const navigate = useNavigate();
 
     const handleSeeMoreClick = (event) => {
         event.preventDefault();
-        navigate("/ops-manager/ongoingprojects"); // replace with the desired path
+        navigate("/ops-engineer/ongoingprojects"); // replace with the desired path
+        
     };
-
-    function ButtonArray() {
-        const buttonArray = ["Edit", "Done", "Delete"];
-
-        return (
-            <div>
-                {/* <EditButton>buttonArray[0]</EditButton>
-                        <button >buttonArray[0]</button>
-                        <button >buttonArray[0]</button> */}
-
-                {buttonArray.map((buttonText, index) => (
-                    <button style={{ marginLeft: "10px" }} key={index}>
-                        {buttonText}
-                    </button>
-                ))}
-            </div>
-        );
-    }
 
     const [ongoing, getongoing] = useState();
 
@@ -54,34 +39,36 @@ export default function OMOngoingProject({ showMoreLink = true }) {
             }
         );
         const data = await response.data;
+        console.log(data);
         getongoing(data);
     }
     useEffect(() => {
         Getongoingproject();
     }, []);
 
-    if (!ongoing) return <div>No Ongoin Projects</div>;
+    if (!ongoing) return <div>No Ongoing Projects</div>;
 
-    const rows = ButtonArray();
     const handleProjectClick = (event, projectId) => {
         event.preventDefault();
         localStorage.setItem("projectId", projectId);
-        navigate("/ops-manager/projectdetails");
+        // navigate("/sales/projectdetails");
+        navigate("/ops-engineer/projectdetails")
     };
 
     return (
         <ThemeProvider theme={theme}>
             <React.Fragment>
-                <Title>On-Going Projects</Title>
+                {/* <Title>On-Going Projects</Title> */}
+                <h1>On-Going Projects</h1>
                 <Table size="small">
                     <TableHead>
                         <TableRow>
                             <TableCell>Project Address</TableCell>
                             <TableCell>Customer Name</TableCell>
                             <TableCell>Date</TableCell>
-                            <TableCell>Cost</TableCell>
+                            {/* <TableCell>Cost</TableCell>
                             <TableCell>Status</TableCell>
-                            <TableCell>Action</TableCell>
+                            <TableCell>Action</TableCell> */}
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -96,15 +83,15 @@ export default function OMOngoingProject({ showMoreLink = true }) {
                                 </TableCell>
                                 <TableCell>{row.customerName}</TableCell>
                                 <TableCell>{row.startDate}</TableCell>
-                                <TableCell>
+                                {/* <TableCell>
                                     {`${
                                         row.totalCost === "Not Assigned"
                                             ? 0
                                             : row.totalCost
                                     }`}
-                                </TableCell>
+                                </TableCell> */}
 
-                                <TableCell
+                                {/* <TableCell
                                     style={{
                                         color:
                                             row.projectStatus === "Pending"
@@ -117,7 +104,8 @@ export default function OMOngoingProject({ showMoreLink = true }) {
                                 >
                                     {row.projectStatus}
                                 </TableCell>
-                                <TableCell>{rows}</TableCell>
+                                <TableCell>{ButtonArray(row._id)}</TableCell> */}
+                                
                             </TableRow>
                         ))}
                     </TableBody>
