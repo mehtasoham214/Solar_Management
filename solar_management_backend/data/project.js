@@ -448,15 +448,21 @@ const addEquipment = async (
     solarCount,
     wireType,
     wireCount,
+    batteryType,
     batteryCount,
-    batteryCapacity,
+    railsType,
     railsCount,
-    chargeControllertype,
+    chargeControllerType,
     chargeControllerCount,
     inverterType,
     inverterCount,
+    crewType,
     crewCount
 ) => {
+    if (typeof id == "string") {
+        id = new ObjectId(id);
+    }
+    try{
     const materialCollection = await material();
     const projectCollection = await project();
     const projects = await projectCollection.findOne({ _id: id });
@@ -468,28 +474,32 @@ const addEquipment = async (
         solarCount: solarCount,
         wireType: wireType,
         wireCount: wireCount,
+        batteryType: batteryType,
         batteryCount: batteryCount,
-        batteryCapacity: batteryCapacity,
+        railsType: railsType,
         railsCount: railsCount,
-        chargeControllertype: chargeControllertype,
+        chargeControllerType: chargeControllerType,
         chargeControllerCount: chargeControllerCount,
         inverterType: inverterType,
         inverterCount: inverterCount,
+        crewType: crewType,
         crewCount: crewCount,
     };
     let progressStatus = "At Sales Team";
-    let crewType = "Crew";
     const solarCost = await materialCollection.findOne({ type: solarType });
     const wireCost = await materialCollection.findOne({ type: wireType });
     const batteryCost = await materialCollection.findOne({ type: batteryType });
     const railsCost = await materialCollection.findOne({ type: railsType });
     const chargeControllerCost = await materialCollection.findOne({
-        type: chargeControllertype,
+        type: chargeControllerType,
     });
     const inverterCost = await materialCollection.findOne({
         type: inverterType,
     });
-    const crewCost = await materialCollection.findone({ type: crewType });
+
+        const crewCost = await materialCollection.findOne({ type: crewType });
+
+
     let totalCost =
         solarCost.cost * solarCount +
         wireCost.cost * wireCount +
@@ -498,7 +508,7 @@ const addEquipment = async (
         chargeControllerCost.cost * chargeControllerCount +
         inverterCost.cost * inverterCount +
         crewCost.cost * crewCount;
-    await project().update(
+    await projectCollection.updateOne(
         { _id: id },
         {
             $set: {
@@ -508,8 +518,12 @@ const addEquipment = async (
             },
         }
     );
+}
+catch(err){
+    console.log(err);
+}
 
-    if (updatedInfo.modifiedCount == 0) {
+    if (projectProgress.modifiedCount == 0) {
         throw `Couldn't add Equipment`;
     } else {
         return "Equipment added to Project";
@@ -682,7 +696,7 @@ const updateEquipment = async (
         chargeControllerCost.cost * chargeControllerCount +
         inverterCost.cost * inverterCount +
         crewCost.cost * crewCount;
-    await project().update(
+    await project().updateOne(
         { _id: id },
         {
             $set: {

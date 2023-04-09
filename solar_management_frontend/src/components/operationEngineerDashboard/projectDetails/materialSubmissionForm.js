@@ -79,6 +79,36 @@ function MaterialSubmissionForm() {
     setRows(newRows);
   };
 
+  // Menu Items Array
+  const menuItems = ["Solar","Wire","Battery","Rails","Charge Controller","Inverter","Crew"]
+
+// Post the data
+  const handleSubmit = async () => {
+    // Retrieve the data from the form
+    const formData = rows.map(row => ({
+      type: row.dropdownValue === "Solar" ? "solarType" : row.dropdownValue === "Wire" ? "wireType" : 
+      row.dropdownValue === "Battery" ? "batteryType" : row.dropdownValue === "Rails" ? "railsType" :
+      row.dropdownValue === "Charge Controller" ? "chargeControllerType" : row.dropdownValue === "Inverter" ?
+      "inverterType" : row.dropdownValue === "Crew" ? "crewType" : undefined ,
+      count: row.textInputValue
+    }));
+    console.log(formData);
+    try {
+      const token = localStorage.getItem('token');
+      const id = localStorage.getItem('projectId')
+      const response = await axios.patch(
+          `${process.env.REACT_APP_API_URL}projects/equipment/${id}`,
+          {formData}, 
+          { headers: { 'Authorization': `Bearer ${token}` } }
+      )
+      if (response.status === 200) {
+          window.location.reload();}
+  }
+  catch (error) {
+    console.error(error);
+}
+  
+  };
   return (
     <ThemeProvider theme={theme}>
     <Container sx={{ border: 3, borderRadius: 2, borderColor: "gray" }}>
@@ -101,9 +131,11 @@ function MaterialSubmissionForm() {
                 onChange={handleDropdownChange(index)}
                 label="Material"
              >
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
+              {menuItems.map((item) => (
+                <MenuItem value={item}>{item}</MenuItem>
+              ))
+                }
+                
               </Select>
           </FormControl>
           <TextField sx={{ m: 1, minWidth: 200 }}
@@ -138,7 +170,7 @@ function MaterialSubmissionForm() {
         justifyContent="flex-end"
         sx={{ marginBottom: 2 }}>
       <Button
-      onClick={handleAddRow}
+      onClick={handleSubmit}
       type="submit"
       fullWidth
       variant="contained"

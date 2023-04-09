@@ -283,18 +283,42 @@ router.patch(
     passport.authenticate("jwt", { session: false }),
     async (req, res, next) => {
         let id = req.params.id;
-        let solarType = req.body.solarType;
-        let solarCount = req.body.solarCount;
-        let wireType = req.body.wireType;
-        let wireCount = req.body.wireCount;
-        let batteryCount = req.body.batteryCount;
-        let batteryCapacity = req.body.batteryCapacity;
-        let railsCount = req.body.railsCount;
-        let chargeControllertype = req.body.chargeControllertype;
-        let chargeControllerCount = req.body.chargeControllerCount;
-        let inverterType = req.body.inverterType;
-        let inverterCount = req.body.inverterCount;
-        let crewCount = req.body.crewCount;
+    let solarType, solarCount, wireType, wireCount, batteryType, batteryCount, railsType, railsCount, chargeControllerType, chargeControllerCount, inverterType, inverterCount, crewType, crewCount;
+
+    for (let i = 0; i < req.body.formData.length; i++) {
+        let { type, count } = req.body.formData[i];
+        switch (type) {
+            case "solarType":
+                solarType = type;
+                solarCount = count;
+                break;
+            case "wireType":
+                wireType = type;
+                wireCount = count;
+                break;
+            case "batteryType":
+                batteryType = type;
+                batteryCount = count;
+                break;
+            case "railsType":
+                railsType = type;
+                railsCount = count;
+                break;
+            case "chargeControllerType":
+                chargeControllerType = type;
+                chargeControllerCount = count;
+                break;
+            case "inverterType":
+                inverterType = type;
+                inverterCount = count;
+                break;
+            case "crewType":
+                crewType = type;
+                crewCount = count;
+                break;
+        }
+    }
+
 
         try {
             const addEquipment = await projectData.addEquipment(
@@ -303,13 +327,15 @@ router.patch(
                 solarCount,
                 wireType,
                 wireCount,
+                batteryType,
                 batteryCount,
-                batteryCapacity,
+                railsType,
                 railsCount,
-                chargeControllertype,
+                chargeControllerType,
                 chargeControllerCount,
                 inverterType,
                 inverterCount,
+                crewType,
                 crewCount
             );
             res.status(200).json(addEquipment);
@@ -745,7 +771,7 @@ router.get(
             const materials = await materialData.getMaterials(username);
             res.json(materials);
         } catch (e) {
-            res.status(404).json({ error: `Failed to get users: ${e}` });
+            res.status(404).json({ error: `Failed to get materials: ${e}` });
         }
     }
 );

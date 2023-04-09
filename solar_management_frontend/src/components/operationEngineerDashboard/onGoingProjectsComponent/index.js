@@ -17,19 +17,6 @@ import { useNavigate } from "react-router-dom";
 import OEPermanentDrawerLeft from "../navBar";
 export default function OEALLOngoingProjects() {
     const navigate = useNavigate();
-    function ButtonArray() {
-        const buttonArray = ["Edit", "Done", "Delete"];
-
-        return (
-            <div>
-                {buttonArray.map((buttonText, index) => (
-                    <button style={{ marginLeft: "10px" }} key={index}>
-                        {buttonText}
-                    </button>
-                ))}
-            </div>
-        );
-    }
 
     const [ongoing, getongoing] = useState();
     async function Getongoingproject() {
@@ -51,7 +38,6 @@ export default function OEALLOngoingProjects() {
 
     if (!ongoing) return <div>No Ongoing Projects</div>;
 
-    const rows = ButtonArray();
 
     const handleProjectClick = (event, projectId) => {
         event.preventDefault();
