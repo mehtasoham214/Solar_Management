@@ -62,6 +62,8 @@ function MaterialSubmissionForm() {
 
   // if (!customer) return <div>No Customer Found</div>;
   const [rows, setRows] = useState([{ dropdownValue: '', textInputValue: '' }]);
+  // Set Checkbox value
+  let isChecked = false;
 
   const handleAddRow = () => {
     setRows([...rows, { dropdownValue: '', textInputValue: '' }]);
@@ -79,6 +81,11 @@ function MaterialSubmissionForm() {
     setRows(newRows);
   };
 
+  // Handling CheckBox Value
+  const handleCheckBox = (event) => {
+    isChecked = event.target.checked;
+  };
+
   // Menu Items Array
   const menuItems = ["Solar","Wire","Battery","Rails","Charge Controller","Inverter","Crew"]
 
@@ -92,6 +99,7 @@ function MaterialSubmissionForm() {
       "inverterType" : row.dropdownValue === "Crew" ? "crewType" : undefined ,
       count: row.textInputValue
     }));
+    formData.push({'type': 'oeFeasible', 'count' : isChecked})
     console.log(formData);
     try {
       const token = localStorage.getItem('token');
@@ -101,13 +109,11 @@ function MaterialSubmissionForm() {
           {formData}, 
           { headers: { 'Authorization': `Bearer ${token}` } }
       )
-      if (response.status === 200) {
-          window.location.reload();}
+      console.log(response.data);
   }
   catch (error) {
     console.error(error);
 }
-  
   };
   return (
     <ThemeProvider theme={theme}>
@@ -117,7 +123,9 @@ function MaterialSubmissionForm() {
           {/* <h1>Site Inspector Info</h1> */}
           <FormControlLabel
           value="end"
-          control={<Checkbox />}
+          control={<Checkbox 
+          onChange = {event => handleCheckBox(event)}
+          />}
           label="Feasible"
           labelPlacement="end"
         />
