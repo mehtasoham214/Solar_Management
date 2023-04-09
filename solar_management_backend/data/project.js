@@ -483,7 +483,7 @@ const addEquipment = async (
         type: inverterType,
     });
 
-        const crewObject = await materialCollection.findOne({ type: crewType });
+    const crewObject = await materialCollection.findOne({ type: crewType });
 
 
     let totalCost =
@@ -494,6 +494,8 @@ const addEquipment = async (
         chargeControllerObject.cost * chargeControllerCount +
         inverterObject.cost * inverterCount +
         crewObject.cost * crewCount;
+
+    
     const equipment = {
         solarType: solarObject.product_name,
         solarCount: solarCount,
@@ -521,7 +523,77 @@ const addEquipment = async (
             },
         }
     );
+// Update Counts
+    let solarCountUpdated = solarObject.quantity - solarCount;
+    let wireCountUpdated = wireObject.quantity - wireCount;
+    let batteryCountUpdated = batteryObject.quantity - batteryCount;
+    let railsCountUpdated = railsObject.quantity - railsCount;
+    let chargeControllerCountUpdated = chargeControllerObject.quantity - chargeControllerCount;
+    let inverterCountUpdated = inverterObject.quantity - inverterCount;
+    let crewCountUpdated = crewObject.quantity - crewCount;
 
+    await materialCollection.updateOne(
+        { type: solarType },
+        {
+            $set: {
+                quantity: solarCountUpdated
+            },
+        }
+    );
+
+    await materialCollection.updateOne(
+        { type: wireType },
+        {
+            $set: {
+                quantity: wireCountUpdated
+            },
+        }
+    );
+
+    await materialCollection.updateOne(
+        { type: batteryType },
+        {
+            $set: {
+                quantity: batteryCountUpdated
+            },
+        }
+    );
+
+    await materialCollection.updateOne(
+        { type: railsType },
+        {
+            $set: {
+                quantity: railsCountUpdated
+            },
+        }
+    );
+
+    await materialCollection.updateOne(
+        { type: chargeControllerType },
+        {
+            $set: {
+                quantity: chargeControllerCountUpdated
+            },
+        }
+    );
+
+    await materialCollection.updateOne(
+        { type: inverterType },
+        {
+            $set: {
+                quantity: inverterCountUpdated
+            },
+        }
+    );
+
+    await materialCollection.updateOne(
+        { type: crewType },
+        {
+            $set: {
+                quantity: crewCountUpdated
+            },
+        }
+    );
     if (equipment.modifiedCount == 0) {
         throw `Couldn't add Equipment`;
     } else {
