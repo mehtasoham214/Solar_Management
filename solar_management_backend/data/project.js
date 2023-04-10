@@ -500,42 +500,49 @@ const addEquipment = async (
             inverterObject.cost * inverterCount +
             crewObject.cost * crewCount;
 
-        const equipment = {
-            solarType: solarObject.product_name,
-            solarCount: solarCount,
-            wireType: wireObject.product_name,
-            wireCount: wireCount,
-            batteryType: batteryObject.product_name,
-            batteryCount: batteryCount,
-            railsType: railsObject.product_name,
-            railsCount: railsCount,
-            chargeControllerType: chargeControllerObject.product_name,
-            chargeControllerCount: chargeControllerCount,
-            inverterType: inverterObject.product_name,
-            inverterCount: inverterCount,
-            crewType: crewObject.product_name,
-            crewCount: crewCount,
-            oeFeasible: oeFeasible,
-        };
-        await projectCollection.updateOne(
-            { _id: id },
-            {
-                $set: {
-                    equipment: equipment,
-                    projectProgress: progressStatus,
-                    totalCost: totalCost,
-                },
-            }
-        );
-        // Update Counts
-        let solarCountUpdated = solarObject.quantity - solarCount;
-        let wireCountUpdated = wireObject.quantity - wireCount;
-        let batteryCountUpdated = batteryObject.quantity - batteryCount;
-        let railsCountUpdated = railsObject.quantity - railsCount;
-        let chargeControllerCountUpdated =
-            chargeControllerObject.quantity - chargeControllerCount;
-        let inverterCountUpdated = inverterObject.quantity - inverterCount;
-        let crewCountUpdated = crewObject.quantity - crewCount;
+    
+    const equipment = {
+        solarType: solarObject.product_name,
+        solarCount: solarCount,
+        solarCost: solarObject.cost,
+        wireType: wireObject.product_name,
+        wireCount: wireCount,
+        wireCost: wireObject.cost,
+        batteryType: batteryObject.product_name,
+        batteryCount: batteryCount,
+        batteryCost: batteryObject.cost,
+        railsType: railsObject.product_name,
+        railsCount: railsCount,
+        railsCost: railsObject.cost,
+        chargeControllerType: chargeControllerObject.product_name,
+        chargeControllerCount: chargeControllerCount,
+        chargeControllerCost: chargeControllerObject.cost,
+        inverterType: inverterObject.product_name,
+        inverterCount: inverterCount,
+        inverterCost: inverterObject.cost,
+        crewType: crewObject.product_name,
+        crewCount: crewCount,
+        crewCost: crewObject.cost,
+        oeFeasible: oeFeasible
+    };
+    await projectCollection.updateOne(
+        { _id: id },
+        {
+            $set: {
+                equipment: equipment,
+                projectProgress: progressStatus,
+                totalCost: totalCost,
+            },
+        }
+    );
+// Update Counts
+    let solarCountUpdated = solarObject.quantity - solarCount;
+    let wireCountUpdated = wireObject.quantity - wireCount;
+    let batteryCountUpdated = batteryObject.quantity - batteryCount;
+    let railsCountUpdated = railsObject.quantity - railsCount;
+    let chargeControllerCountUpdated = chargeControllerObject.quantity - chargeControllerCount;
+    let inverterCountUpdated = inverterObject.quantity - inverterCount;
+    let crewCountUpdated = crewObject.quantity - crewCount;
 
         await materialCollection.updateOne(
             { type: solarType },

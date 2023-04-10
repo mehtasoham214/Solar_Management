@@ -18,10 +18,6 @@
     "start": "nodemon App.js",
     "build": "node build",
     "test": "node test",
-    "eject": "node eject",
-    "cypress:open": "cypress open"
-  },
-  "devDependencies": {
-    "cypress": "^12.9.0"
+    "eject": "node eject"
   }
 }
