@@ -1,7 +1,5 @@
 
 import * as React from "react";
-import {useState, useEffect} from "react";
-import axios from 'axios'
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -10,7 +8,6 @@ import TableRow from "@mui/material/TableRow";
 import Title from "../../salesDashboard/Title";
 import theme from "../../theme";
 import { ThemeProvider } from "@mui/material/styles";
-import { useNavigate } from "react-router-dom";
 
 export default function Materialstable() {
 

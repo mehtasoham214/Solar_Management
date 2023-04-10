@@ -24,7 +24,6 @@ import TLALLPastProjects from "./components/teamLeadDashboard/pastProjectsCompon
 import TLProjectDetails from "./components/teamLeadDashboard/projectDetails/projectDetailsDashboard";
 import TLRequests from "./components/teamLeadDashboard/requests";
 
-
 import Requests from "./components/operationManagerDashboard/requests";
 import Equipments from "./components/operationManagerDashboard/equipments";
 import OpsEnginner from "./components/operationManagerDashboard/opsEngineer";

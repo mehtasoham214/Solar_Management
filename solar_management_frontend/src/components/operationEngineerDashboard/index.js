@@ -11,7 +11,6 @@ import OngoingProject from "./ongoingProjects";
 import PastProject from "./pastProjects";
 
 import OEPermanentDrawerLeft from "./navBar";
-import { Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import NotesTable from "../notes";
