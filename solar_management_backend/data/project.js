@@ -462,66 +462,66 @@ const addEquipment = async (
     if (typeof id == "string") {
         id = new ObjectId(id);
     }
-    try{
-    const materialCollection = await material();
-    const projectCollection = await project();
-    const projects = await projectCollection.findOne({ _id: id });
-    if (!projects) {
-        throw `No Project Found`;
-    }
-    const equipment = {
-        solarType: solarType,
-        solarCount: solarCount,
-        wireType: wireType,
-        wireCount: wireCount,
-        batteryType: batteryType,
-        batteryCount: batteryCount,
-        railsType: railsType,
-        railsCount: railsCount,
-        chargeControllerType: chargeControllerType,
-        chargeControllerCount: chargeControllerCount,
-        inverterType: inverterType,
-        inverterCount: inverterCount,
-        crewType: crewType,
-        crewCount: crewCount,
-    };
-    let progressStatus = "At Sales Team";
-    const solarCost = await materialCollection.findOne({ type: solarType });
-    const wireCost = await materialCollection.findOne({ type: wireType });
-    const batteryCost = await materialCollection.findOne({ type: batteryType });
-    const railsCost = await materialCollection.findOne({ type: railsType });
-    const chargeControllerCost = await materialCollection.findOne({
-        type: chargeControllerType,
-    });
-    const inverterCost = await materialCollection.findOne({
-        type: inverterType,
-    });
+    try {
+        const materialCollection = await material();
+        const projectCollection = await project();
+        const projects = await projectCollection.findOne({ _id: id });
+        if (!projects) {
+            throw `No Project Found`;
+        }
+        const equipment = {
+            solarType: solarType,
+            solarCount: solarCount,
+            wireType: wireType,
+            wireCount: wireCount,
+            batteryType: batteryType,
+            batteryCount: batteryCount,
+            railsType: railsType,
+            railsCount: railsCount,
+            chargeControllerType: chargeControllerType,
+            chargeControllerCount: chargeControllerCount,
+            inverterType: inverterType,
+            inverterCount: inverterCount,
+            crewType: crewType,
+            crewCount: crewCount,
+        };
+        let progressStatus = "At Sales Team";
+        const solarCost = await materialCollection.findOne({ type: solarType });
+        const wireCost = await materialCollection.findOne({ type: wireType });
+        const batteryCost = await materialCollection.findOne({
+            type: batteryType,
+        });
+        const railsCost = await materialCollection.findOne({ type: railsType });
+        const chargeControllerCost = await materialCollection.findOne({
+            type: chargeControllerType,
+        });
+        const inverterCost = await materialCollection.findOne({
+            type: inverterType,
+        });
 
         const crewCost = await materialCollection.findOne({ type: crewType });
 
-
-    let totalCost =
-        solarCost.cost * solarCount +
-        wireCost.cost * wireCount +
-        batteryCost.cost * batteryCount +
-        railsCost.cost * railsCount +
-        chargeControllerCost.cost * chargeControllerCount +
-        inverterCost.cost * inverterCount +
-        crewCost.cost * crewCount;
-    await projectCollection.updateOne(
-        { _id: id },
-        {
-            $set: {
-                equipment: equipment,
-                projectProgress: progressStatus,
-                totalCost: totalCost,
-            },
-        }
-    );
-}
-catch(err){
-    console.log(err);
-}
+        let totalCost =
+            solarCost.cost * solarCount +
+            wireCost.cost * wireCount +
+            batteryCost.cost * batteryCount +
+            railsCost.cost * railsCount +
+            chargeControllerCost.cost * chargeControllerCount +
+            inverterCost.cost * inverterCount +
+            crewCost.cost * crewCount;
+        await projectCollection.updateOne(
+            { _id: id },
+            {
+                $set: {
+                    equipment: equipment,
+                    projectProgress: progressStatus,
+                    totalCost: totalCost,
+                },
+            }
+        );
+    } catch (err) {
+        console.log(err);
+    }
 
     if (projectProgress.modifiedCount == 0) {
         throw `Couldn't add Equipment`;
@@ -834,7 +834,7 @@ const patchProject = async (
     }
     let projectUpdate = undefined;
     let customerUpdate = undefined;
-    const projectCollection = await projects();
+    const projectCollection = await project();
     let projectData = await projectCollection.findOne({ _id: projectId });
     let customerId = projectData.customerId;
     const customerCollection = await customer();
@@ -852,12 +852,14 @@ const patchProject = async (
             { $set: { appointmentDate: appointmentDate } }
         );
     }
+
     if (customerName != projectData.customerName) {
         projectUpdate = await projectCollection.updateOne(
             { _id: projectId },
             { $set: { customerName: customerName } }
         );
     }
+
     if (customerName != customerData.customerName) {
         customerUpdate = await customerCollection.updateOne(
             { _id: customerId },
@@ -882,6 +884,24 @@ const patchProject = async (
     }
 
     return "Project Details Updated";
+};
+
+const generateInvoice = async (id) => {
+    //This code is incomplete
+    const projectCollection = await project();
+    const products = project.equipment.map((equipment) => ({
+        //Figure out how to get the product name and product code
+        quantity: equipment.quantity,
+    }));
+    const materialCollection = await material();
+    const materials = project.material.map((material) => ({
+        type: material.type,
+        product_name: material.product_name,
+        product_code: material.product_code,
+        quantity: material.quantity,
+        cost: material.cost,
+    }));
+    //figure out how to get the total cost of the project
 };
 
 module.exports = {
@@ -909,4 +929,5 @@ module.exports = {
     getNotes,
     postNotes,
     patchProject,
+    generateInvoice,
 };

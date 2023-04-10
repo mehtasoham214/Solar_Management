@@ -23,10 +23,6 @@ function OMDropBox() {
     //Handling Submit Button adding staff to project
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(siteInspector);
-        console.log(operationEngineer);
-        console.log(teamLead);
-        debugger;
         try {
             const token = localStorage.getItem("token");
             const projectId = localStorage.getItem("projectId");

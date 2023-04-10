@@ -111,7 +111,6 @@ function SalesDashboardContent() {
     const [openDialog, setOpenDialog] = useState(false);
 
     const handleOpenDialog = () => {
-        console.log("handleOpenDialog called");
         setOpenDialog(true);
     };
 
@@ -129,6 +128,7 @@ function SalesDashboardContent() {
                 projectAddress: projectAddress,
                 date: date,
             };
+            debugger;
             const token = localStorage.getItem("token");
             const response = await axios.post(
                 `${process.env.REACT_APP_API_URL}projects/add`,
@@ -140,7 +140,8 @@ function SalesDashboardContent() {
                 }
             );
             if (response.status === 200) {
-                window.location.reload();}
+                window.location.reload();
+            }
         } catch (error) {
             console.error(error);
         }

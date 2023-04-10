@@ -283,42 +283,54 @@ router.patch(
     passport.authenticate("jwt", { session: false }),
     async (req, res, next) => {
         let id = req.params.id;
-    let solarType, solarCount, wireType, wireCount, batteryType, batteryCount, railsType, railsCount, chargeControllerType, chargeControllerCount, inverterType, inverterCount, crewType, crewCount;
+        let solarType,
+            solarCount,
+            wireType,
+            wireCount,
+            batteryType,
+            batteryCount,
+            railsType,
+            railsCount,
+            chargeControllerType,
+            chargeControllerCount,
+            inverterType,
+            inverterCount,
+            crewType,
+            crewCount;
 
-    for (let i = 0; i < req.body.formData.length; i++) {
-        let { type, count } = req.body.formData[i];
-        switch (type) {
-            case "solarType":
-                solarType = type;
-                solarCount = count;
-                break;
-            case "wireType":
-                wireType = type;
-                wireCount = count;
-                break;
-            case "batteryType":
-                batteryType = type;
-                batteryCount = count;
-                break;
-            case "railsType":
-                railsType = type;
-                railsCount = count;
-                break;
-            case "chargeControllerType":
-                chargeControllerType = type;
-                chargeControllerCount = count;
-                break;
-            case "inverterType":
-                inverterType = type;
-                inverterCount = count;
-                break;
-            case "crewType":
-                crewType = type;
-                crewCount = count;
-                break;
+        for (let i = 0; i < req.body.formData.length; i++) {
+            let { type, count } = req.body.formData[i];
+            switch (type) {
+                case "solarType":
+                    solarType = type;
+                    solarCount = count;
+                    break;
+                case "wireType":
+                    wireType = type;
+                    wireCount = count;
+                    break;
+                case "batteryType":
+                    batteryType = type;
+                    batteryCount = count;
+                    break;
+                case "railsType":
+                    railsType = type;
+                    railsCount = count;
+                    break;
+                case "chargeControllerType":
+                    chargeControllerType = type;
+                    chargeControllerCount = count;
+                    break;
+                case "inverterType":
+                    inverterType = type;
+                    inverterCount = count;
+                    break;
+                case "crewType":
+                    crewType = type;
+                    crewCount = count;
+                    break;
+            }
         }
-    }
-
 
         try {
             const addEquipment = await projectData.addEquipment(
@@ -454,42 +466,6 @@ router.get(
             res.status(404).json({
                 error: `Failed to get customer with id ${customerId}: ${e}`,
             });
-        }
-    }
-);
-
-// patch customer
-router.patch(
-    "/customer_patch",
-    passport.authenticate("jwt", { session: false }),
-    async (req, res, next) => {
-        let customerId = req.body.customerId;
-        let customerName = req.body.customerName;
-        let customerAddress = req.body.customerAddress;
-        let customerNumber = req.body.customerNumber;
-
-        try {
-            validator.validateId(customerId);
-            validator.validateCustomer(
-                customerName,
-                customerAddress,
-                customerNumber
-            );
-        } catch (e) {
-            res.status(400).json({ error: e });
-            return;
-        }
-
-        try {
-            const updateCustomer = await customerData.patchCustomer(
-                customerId,
-                customerName,
-                customerAddress,
-                customerNumber
-            );
-            res.status(200).json(updateCustomer);
-        } catch (e) {
-            res.status(400).json({ error: e });
         }
     }
 );
@@ -818,25 +794,13 @@ router.patch(
     "/customer_patch",
     passport.authenticate("jwt", { session: false }),
     async (req, res, next) => {
-        let projectId = req.body.proejectId;
-        let customerName = req.body.customerName;
-        let customerAddress = req.body.customerAddress;
-        let projectAddress = req.body.projectAddress;
-        let customerNumber = req.body.customerNumber;
-        let appointmentDate = req.body.appointmentDate;
-
-        try {
-            validator.validateId(customerId);
-            validator.validateId(projectId);
-            validator.validateCustomer(
-                customerName,
-                customerAddress,
-                customerNumber
-            );
-        } catch (e) {
-            res.status(400).json({ error: e });
-            return;
-        }
+        let data = req.body;
+        let projectId = data.projectId;
+        let customerName = data.customerName;
+        let customerAddress = data.customerAddress;
+        let projectAddress = data.projectAddress;
+        let customerNumber = data.customerNumber;
+        let appointmentDate = data.date;
 
         try {
             const updateProject = await projectData.patchProject(
