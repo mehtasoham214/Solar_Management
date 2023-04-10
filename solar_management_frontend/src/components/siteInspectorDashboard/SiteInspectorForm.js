@@ -320,7 +320,12 @@ export default function SiteInspectorForm() {
              
 
         <Grid item xs={12}>
-          <Button variant="contained">Upload Photos</Button>
+        <Button variant="contained" component="label">
+  Upload Photos
+  <input hidden accept="image/*" multiple type="file" />
+</Button>
+
+          
         </Grid>
     
         
