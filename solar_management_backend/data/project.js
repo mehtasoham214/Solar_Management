@@ -463,31 +463,46 @@ const addEquipment = async (
     if (typeof id == "string") {
         id = new ObjectId(id);
     }
-    try {
-        let oeFeasible = oeStatus;
-        const materialCollection = await material();
-        const projectCollection = await project();
-        const projects = await projectCollection.findOne({ _id: id });
-        if (!projects) {
-            throw `No Project Found`;
-        }
-        let progressStatus = "At Sales Team";
-        const solarObject = await materialCollection.findOne({
-            type: solarType,
-        });
-        const wireObject = await materialCollection.findOne({ type: wireType });
-        const batteryObject = await materialCollection.findOne({
-            type: batteryType,
-        });
-        const railsObject = await materialCollection.findOne({
-            type: railsType,
-        });
-        const chargeControllerObject = await materialCollection.findOne({
-            type: chargeControllerType,
-        });
-        const inverterObject = await materialCollection.findOne({
-            type: inverterType,
-        });
+    if(typeof solarCount == "string"){
+        solarCount = parseInt(solarCount);
+    }
+    if(typeof wireCount == "string"){
+        wireCount = parseInt(wireCount);
+    }
+    if(typeof batteryCount == "string"){
+        batteryCount = parseInt(batteryCount);
+    }
+    if(typeof railsCount == "string"){
+        railsCount = parseInt(railsCount);
+    }
+    if(typeof chargeControllerCount == "string"){
+        chargeControllerCount = parseInt(chargeControllerCount);
+    }
+    if(typeof inverterCount == "string"){
+        inverterCount = parseInt(inverterCount);
+    }
+    if(typeof crewCount == "string"){
+        crewCount = parseInt(crewCount);
+    }
+    try{
+    let oeFeasible = oeStatus;
+    const materialCollection = await material();
+    const projectCollection = await project();
+    const projects = await projectCollection.findOne({ _id: id });
+    if (!projects) {
+        throw `No Project Found`;
+    }
+    let progressStatus = "At Sales Team";
+    const solarObject = await materialCollection.findOne({ type: solarType });
+    const wireObject = await materialCollection.findOne({ type: wireType });
+    const batteryObject = await materialCollection.findOne({ type: batteryType });
+    const railsObject = await materialCollection.findOne({ type: railsType });
+    const chargeControllerObject = await materialCollection.findOne({
+        type: chargeControllerType,
+    });
+    const inverterObject = await materialCollection.findOne({
+        type: inverterType,
+    });
 
         const crewObject = await materialCollection.findOne({ type: crewType });
 
