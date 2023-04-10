@@ -457,58 +457,66 @@ const addEquipment = async (
     inverterType,
     inverterCount,
     crewType,
-    crewCount
+    crewCount,
+    oeStatus
 ) => {
     if (typeof id == "string") {
         id = new ObjectId(id);
     }
     try {
+        let oeFeasible = oeStatus;
         const materialCollection = await material();
         const projectCollection = await project();
         const projects = await projectCollection.findOne({ _id: id });
         if (!projects) {
             throw `No Project Found`;
         }
-        const equipment = {
-            solarType: solarType,
-            solarCount: solarCount,
-            wireType: wireType,
-            wireCount: wireCount,
-            batteryType: batteryType,
-            batteryCount: batteryCount,
-            railsType: railsType,
-            railsCount: railsCount,
-            chargeControllerType: chargeControllerType,
-            chargeControllerCount: chargeControllerCount,
-            inverterType: inverterType,
-            inverterCount: inverterCount,
-            crewType: crewType,
-            crewCount: crewCount,
-        };
         let progressStatus = "At Sales Team";
-        const solarCost = await materialCollection.findOne({ type: solarType });
-        const wireCost = await materialCollection.findOne({ type: wireType });
-        const batteryCost = await materialCollection.findOne({
+        const solarObject = await materialCollection.findOne({
+            type: solarType,
+        });
+        const wireObject = await materialCollection.findOne({ type: wireType });
+        const batteryObject = await materialCollection.findOne({
             type: batteryType,
         });
-        const railsCost = await materialCollection.findOne({ type: railsType });
-        const chargeControllerCost = await materialCollection.findOne({
+        const railsObject = await materialCollection.findOne({
+            type: railsType,
+        });
+        const chargeControllerObject = await materialCollection.findOne({
             type: chargeControllerType,
         });
-        const inverterCost = await materialCollection.findOne({
+        const inverterObject = await materialCollection.findOne({
             type: inverterType,
         });
 
-        const crewCost = await materialCollection.findOne({ type: crewType });
+        const crewObject = await materialCollection.findOne({ type: crewType });
 
         let totalCost =
-            solarCost.cost * solarCount +
-            wireCost.cost * wireCount +
-            batteryCost.cost * batteryCount +
-            railsCost.cost * railsCount +
-            chargeControllerCost.cost * chargeControllerCount +
-            inverterCost.cost * inverterCount +
-            crewCost.cost * crewCount;
+            solarObject.cost * solarCount +
+            wireObject.cost * wireCount +
+            batteryObject.cost * batteryCount +
+            railsObject.cost * railsCount +
+            chargeControllerObject.cost * chargeControllerCount +
+            inverterObject.cost * inverterCount +
+            crewObject.cost * crewCount;
+
+        const equipment = {
+            solarType: solarObject.product_name,
+            solarCount: solarCount,
+            wireType: wireObject.product_name,
+            wireCount: wireCount,
+            batteryType: batteryObject.product_name,
+            batteryCount: batteryCount,
+            railsType: railsObject.product_name,
+            railsCount: railsCount,
+            chargeControllerType: chargeControllerObject.product_name,
+            chargeControllerCount: chargeControllerCount,
+            inverterType: inverterObject.product_name,
+            inverterCount: inverterCount,
+            crewType: crewObject.product_name,
+            crewCount: crewCount,
+            oeFeasible: oeFeasible,
+        };
         await projectCollection.updateOne(
             { _id: id },
             {
@@ -519,14 +527,85 @@ const addEquipment = async (
                 },
             }
         );
+        // Update Counts
+        let solarCountUpdated = solarObject.quantity - solarCount;
+        let wireCountUpdated = wireObject.quantity - wireCount;
+        let batteryCountUpdated = batteryObject.quantity - batteryCount;
+        let railsCountUpdated = railsObject.quantity - railsCount;
+        let chargeControllerCountUpdated =
+            chargeControllerObject.quantity - chargeControllerCount;
+        let inverterCountUpdated = inverterObject.quantity - inverterCount;
+        let crewCountUpdated = crewObject.quantity - crewCount;
+
+        await materialCollection.updateOne(
+            { type: solarType },
+            {
+                $set: {
+                    quantity: solarCountUpdated,
+                },
+            }
+        );
+
+        await materialCollection.updateOne(
+            { type: wireType },
+            {
+                $set: {
+                    quantity: wireCountUpdated,
+                },
+            }
+        );
+
+        await materialCollection.updateOne(
+            { type: batteryType },
+            {
+                $set: {
+                    quantity: batteryCountUpdated,
+                },
+            }
+        );
+
+        await materialCollection.updateOne(
+            { type: railsType },
+            {
+                $set: {
+                    quantity: railsCountUpdated,
+                },
+            }
+        );
+
+        await materialCollection.updateOne(
+            { type: chargeControllerType },
+            {
+                $set: {
+                    quantity: chargeControllerCountUpdated,
+                },
+            }
+        );
+
+        await materialCollection.updateOne(
+            { type: inverterType },
+            {
+                $set: {
+                    quantity: inverterCountUpdated,
+                },
+            }
+        );
+
+        await materialCollection.updateOne(
+            { type: crewType },
+            {
+                $set: {
+                    quantity: crewCountUpdated,
+                },
+            }
+        );
+        if (equipment.modifiedCount == 0) {
+            throw `Couldn't add Equipment`;
+        } else {
+            return "Equipment added to Project";
+        }
     } catch (err) {
         console.log(err);
-    }
-
-    if (projectProgress.modifiedCount == 0) {
-        throw `Couldn't add Equipment`;
-    } else {
-        return "Equipment added to Project";
     }
 };
 

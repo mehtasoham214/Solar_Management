@@ -296,7 +296,9 @@ router.patch(
             inverterType,
             inverterCount,
             crewType,
-            crewCount;
+            crewCount,
+            oeFeasible,
+            oeStatus;
 
         for (let i = 0; i < req.body.formData.length; i++) {
             let { type, count } = req.body.formData[i];
@@ -329,6 +331,9 @@ router.patch(
                     crewType = type;
                     crewCount = count;
                     break;
+                case "oeFeasible":
+                    oeFeasible = type;
+                    oeStatus = count;
             }
         }
 
@@ -348,7 +353,8 @@ router.patch(
                 inverterType,
                 inverterCount,
                 crewType,
-                crewCount
+                crewCount,
+                oeStatus
             );
             res.status(200).json(addEquipment);
         } catch (e) {

@@ -30,24 +30,20 @@ export default function SiteInspectorForm() {
  
         <Grid item xs={12
         } md={8}>
-          <div>
             <TextField
               helperText="Sqft"
               id="outlined-basic"
               label="BackYard Info"
               variant="outlined"
             />
-          </div>
         </Grid>
         <Grid item xs={12} md={8}>
-          <div>
             <TextField
               helperText="Sqft"
               id="outlined-basic"
               label="Roof Info"
               variant="outlined"
             />
-          </div>
         </Grid>
        
         
@@ -73,14 +69,12 @@ export default function SiteInspectorForm() {
 
         <div>
           <Grid item xs={6} md={8}>
-            <div>
               <TextField
                 helperText="Watts/Sqft"
                 id="outlined-basic"
                 label="Irradiance"
                 variant="outlined"
               />
-            </div>
           </Grid>
           <Stack direction="row" spacing={2}>
                   <Grid item xs={12}>
@@ -320,7 +314,12 @@ export default function SiteInspectorForm() {
              
 
         <Grid item xs={12}>
-          <Button variant="contained">Upload Photos</Button>
+        <Button variant="contained" component="label">
+  Upload Photos
+  <input hidden accept="image/*" multiple type="file" />
+</Button>
+
+          
         </Grid>
     
         
