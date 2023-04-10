@@ -68,6 +68,11 @@ function CustomizedTables() {
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             if (response.status === 200) {
+                let tempType = type;
+                if (tempType === "Cancel") {
+                    tempType = "Cancell";
+                }
+                alert(`Project ${tempType}ed Successfully`);
                 window.location.reload();
             }
         } catch (error) {

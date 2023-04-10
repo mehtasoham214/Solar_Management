@@ -32,14 +32,6 @@ import FactCheckIcon from "@mui/icons-material/FactCheck";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
 
-// Navigation Imports
-// import { Route, Routes } from "react-router-dom";
-// import ALLOngoingProjects from "../onGoingProjects"
-// import ALLPastProjects from "../pastProjects";
-// import ProjectDashboard from "../projectDetails/projectDashboard";
-// import AllLeads from "../leads";
-// import AllCustomer from "../customers";
-
 function OMDashboard() {
     // Setting Ongoing Project Count
     const [ongoing, setOngoing] = useState();

@@ -70,7 +70,7 @@ export default function OngoingProject({ showMoreLink = true }) {
                 }
             );
             if (response.status === 200) {
-                alert("Project Details Edit Successfully");
+                alert("Project Details Edited Successfully");
                 window.location.reload();
                 Getongoingproject();
             }
@@ -97,7 +97,11 @@ export default function OngoingProject({ showMoreLink = true }) {
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
                 if (response.status === 200) {
-                    alert(`Project ${type} Successfully`);
+                    let tempType = type;
+                    if (tempType === "Cancel") {
+                        tempType = "Cancell";
+                    }
+                    alert(`Project ${tempType} Successfully`);
                     window.location.reload();
                 }
             } catch (error) {

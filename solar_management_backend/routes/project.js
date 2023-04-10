@@ -78,7 +78,7 @@ router.post("/login", async (req, res, next) => {
         const userinfo = await userData.getUser(username);
         // If user doesn't exist, return error response
         if (!userinfo) {
-            return res.status(401).json({ message: "Invalid credentials" });
+            return res.status(401).json({ error: "Invalid credentials" });
         }
         position = userinfo.position;
         // Compare provided password with hashed password from database
@@ -88,7 +88,7 @@ router.post("/login", async (req, res, next) => {
         );
         // If passwords don't match, return error response
         if (!passwordMatches) {
-            return res.status(401).json({ message: "Invalid credentials" });
+            return res.status(401).json({ error: "Invalid credentials" });
         }
         // Generate and sign JWT token
         const token = jwt.sign({ username }, process.env.JWT_SECRET);
@@ -245,19 +245,6 @@ router.patch(
         let feasible = req.body.feasible;
 
         try {
-            validator.validateId(id);
-            validator.validateAreaParameter(
-                roofInfo,
-                backyard,
-                grid,
-                meterCompatible
-            );
-        } catch (e) {
-            res.status(404).json({ error: e });
-            return;
-        }
-
-        try {
             const updateProject = await projectData.siteInspectorUpdate(
                 id,
                 roofInfo,
@@ -272,7 +259,9 @@ router.patch(
             );
             res.status(200).json(updateProject);
         } catch (e) {
-            res.status(404).json({ error: e });
+            res.status(404).json({
+                error: `Failed to update project with id ${id}: ${e}`,
+            });
         }
     }
 );
@@ -381,7 +370,7 @@ router.patch(
             );
             res.json(updatedProject);
         } catch (e) {
-            res.status(500).json({ error: e });
+            res.status(404).json({ error: e });
         }
     }
 );

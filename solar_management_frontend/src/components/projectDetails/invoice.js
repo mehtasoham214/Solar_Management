@@ -14,7 +14,6 @@ function Invoicetable() {
     const TAX_RATE = 0.0625;
     const [equipmentData, setEquipmentData] = useState([]);
     async function GetEquipmentData() {
-        debugger;
         const projectID = localStorage.getItem("projectId");
         const token = localStorage.getItem("token");
         const response = await axios.get(

@@ -13,12 +13,6 @@ import OngoingProject from "./onGoingProject";
 import PastProject from "./pastProjects";
 import PermanentDrawerLeft from "./navBar";
 
-//Date Picker Imports
-// import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-
 //Material UI Imports
 import {
     Dialog,
@@ -47,14 +41,6 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PhoneIcon from "@mui/icons-material/Phone";
 import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-
-// Navigation Imports
-// import { Route, Routes } from "react-router-dom";
-// import ALLOngoingProjects from "../onGoingProjects"
-// import ALLPastProjects from "../pastProjects";
-// import ProjectDashboard from "../projectDetails/projectDashboard";
-// import AllLeads from "../leads";
-// import AllCustomer from "../customers";
 
 function SalesDashboardContent() {
     // Setting Ongoing Project Count

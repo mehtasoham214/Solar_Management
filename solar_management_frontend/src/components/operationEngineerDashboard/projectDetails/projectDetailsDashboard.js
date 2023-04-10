@@ -9,18 +9,14 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 
 import OEPermanentDrawerLeft from "../navBar";
-// import DropdownAndTable from "./materials";
 import CustomerDetailsTables from "./customerDetailsTable";
 import MaterialSubmissionForm from "./materialSubmissionForm";
 import SiteInspectorInfo from "./siteInspectorInfo";
 
-
-
-
 function OEProjectDetails() {
-  return (
-    <ThemeProvider theme={theme}>
-        <Box sx={{ display: "flex", mt: 2 }}>
+    return (
+        <ThemeProvider theme={theme}>
+            <Box sx={{ display: "flex", mt: 2 }}>
                 <OEPermanentDrawerLeft />
 
                 <Box
@@ -42,11 +38,10 @@ function OEProjectDetails() {
                         <br></br>
                         <MaterialSubmissionForm />
                     </Container>
-
-        </Box>
-        </Box>
-    </ThemeProvider>
-  );
+                </Box>
+            </Box>
+        </ThemeProvider>
+    );
 }
 
 export default OEProjectDetails;

@@ -61,7 +61,7 @@ export default function OEALLPastProjects() {
         navigate("/ops-engineer/projectdetails");
     };
     return (
-         <ThemeProvider theme={theme}>
+        <ThemeProvider theme={theme}>
             <React.Fragment>
                 <Box sx={{ display: "flex", mt: 2 }}>
                     <OEPermanentDrawerLeft />
@@ -86,7 +86,7 @@ export default function OEALLPastProjects() {
                                     <br />
                                     <br />
                                     {/* <GetPastProjects /> */}
-                                     <ThemeProvider theme={theme}>
+                                    <ThemeProvider theme={theme}>
                                         <React.Fragment>
                                             <Title>Past Projects</Title>
                                             <Table size="small">
@@ -173,13 +173,13 @@ export default function OEALLPastProjects() {
                                                 </TableBody>
                                             </Table>
                                         </React.Fragment>
-                                     </ThemeProvider> 
+                                    </ThemeProvider>
                                 </Paper>
                             </Grid>
                         </Container>
                     </Box>
                 </Box>
             </React.Fragment>
-         </ThemeProvider> 
+        </ThemeProvider>
     );
 }

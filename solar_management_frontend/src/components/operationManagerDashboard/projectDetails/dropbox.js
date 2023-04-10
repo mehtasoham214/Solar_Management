@@ -26,6 +26,14 @@ function OMDropBox() {
         try {
             const token = localStorage.getItem("token");
             const projectId = localStorage.getItem("projectId");
+            if (
+                siteInspector === "" ||
+                operationEngineer === "" ||
+                teamLead === ""
+            ) {
+                alert("Please select all the fields");
+                return;
+            }
             const data = {
                 siteInspector: siteInspector,
                 operationEngineer: operationEngineer,
@@ -41,9 +49,13 @@ function OMDropBox() {
                 }
             );
             if (response.status === 200) {
+                alert("Staff added to project");
                 window.location.reload();
             }
         } catch (error) {
+            if (error.response.data.error) {
+                alert("Unable to add staff to project");
+            }
             console.error(error);
         }
     };

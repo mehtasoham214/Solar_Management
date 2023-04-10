@@ -70,6 +70,7 @@ export default function ALLOngoingProjects() {
                 }
             );
             if (response.status === 200) {
+                alert("Project Details Edited Successfully");
                 window.location.reload();
                 Getongoingproject();
             }
@@ -91,6 +92,11 @@ export default function ALLOngoingProjects() {
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
                 if (response.status === 200) {
+                    let tempType = type;
+                    if (tempType === "Cancel") {
+                        tempType = "Cancell";
+                    }
+                    alert(`Project ${tempType} Successfully`);
                     window.location.reload();
                 }
             } catch (error) {

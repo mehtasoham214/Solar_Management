@@ -22,6 +22,7 @@ const handleLogout = async (e) => {
         );
         localStorage.removeItem("token");
         if (response.status === 200) {
+            alert("You logged out successfully!");
             window.location.href = "/";
         }
     } catch (error) {

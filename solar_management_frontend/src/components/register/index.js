@@ -20,6 +20,16 @@ export default function Register() {
         e.preventDefault();
 
         try {
+            if (
+                position === "" ||
+                username === "" ||
+                password === "" ||
+                staffname === "" ||
+                contact === ""
+            ) {
+                alert("Please enter all details");
+                return;
+            }
             const response = await fetch(
                 `${process.env.REACT_APP_API_URL}register`,
                 {
