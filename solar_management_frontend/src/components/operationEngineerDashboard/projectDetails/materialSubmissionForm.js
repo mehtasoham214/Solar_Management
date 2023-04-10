@@ -80,7 +80,6 @@ function MaterialSubmissionForm() {
             count: row.textInputValue,
         }));
         formData.push({ type: "oeFeasible", count: isChecked });
-        console.log(formData);
         try {
             const token = localStorage.getItem("token");
             const id = localStorage.getItem("projectId");
@@ -89,7 +88,9 @@ function MaterialSubmissionForm() {
                 { formData },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
-            console.log(response.data);
+            if (response.status === 200) {
+                alert("Equipment Added Successfully");
+            }
         } catch (error) {
             console.error(error);
         }

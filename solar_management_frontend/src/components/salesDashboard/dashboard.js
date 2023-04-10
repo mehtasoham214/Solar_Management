@@ -88,6 +88,7 @@ function SalesDashboardContent() {
         const data = await response.data.counts;
         setPast(data);
     }
+    //Setting Total Cost
     const [totalcost, settotalcost] = useState();
     async function gettotalcostcount() {
         const token = localStorage.getItem("token");
@@ -128,7 +129,6 @@ function SalesDashboardContent() {
                 projectAddress: projectAddress,
                 date: date,
             };
-            debugger;
             const token = localStorage.getItem("token");
             const response = await axios.post(
                 `${process.env.REACT_APP_API_URL}projects/add`,
@@ -140,6 +140,7 @@ function SalesDashboardContent() {
                 }
             );
             if (response.status === 200) {
+                alert("Project Added Successfully");
                 window.location.reload();
             }
         } catch (error) {

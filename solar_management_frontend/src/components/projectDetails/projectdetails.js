@@ -41,8 +41,6 @@ function CustomizedTables() {
     async function GetcustomerDetails() {
         const token = localStorage.getItem("token");
         const projectId = localStorage.getItem("projectId");
-        console.log(projectId);
-        console.log(token);
         const response = await axios.get(
             `${process.env.REACT_APP_API_URL}customer/${projectId}`,
             {
@@ -61,33 +59,33 @@ function CustomizedTables() {
     if (!customer) return <div>No Customer Found</div>;
 
     //Button Action
-    const handleButton = async (type,id) => {
+    const handleButton = async (type, id) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem("token");
             const response = await axios.patch(
                 `${process.env.REACT_APP_API_URL}projectstatus`,
-                {type,id
-                }, 
-                { headers: { 'Authorization': `Bearer ${token}` } }
-            )
+                { type, id },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
             if (response.status === 200) {
-                window.location.reload();}
+                window.location.reload();
+            }
         } catch (error) {
             console.error(error);
         }
-    }
+    };
 
     return (
         <ThemeProvider theme={theme}>
-            <Container sx={{border:3, borderRadius:2, borderColor:'gray'}}>
+            <Container sx={{ border: 3, borderRadius: 2, borderColor: "gray" }}>
                 <Grid container spacing={3} marginBottom={3}>
-                    <Grid item md={4} >
+                    <Grid item md={4}>
                         <h1>Project Information</h1>
                     </Grid>
                     <Grid
                         item
-                            md={8}
-                            display="flex"
+                        md={8}
+                        display="flex"
                         alignItems={{
                             xs: "center",
                             md: "flex-end",
@@ -97,9 +95,30 @@ function CustomizedTables() {
                         sx={{ marginBottom: 2 }}
                     >
                         <ButtonGroup variant="outlined">
-                            <Button color="secondary" onClick={()=>handleButton('Start',customer.projectId)}>Start</Button>
-                            <Button color="success" onClick={()=>handleButton('Finish',customer.projectId)}>Finish</Button>
-                            <Button color="error" onClick={()=>handleButton('Cancel',customer.projectId)}>Cancel</Button>
+                            <Button
+                                color="secondary"
+                                onClick={() =>
+                                    handleButton("Start", customer.projectId)
+                                }
+                            >
+                                Start
+                            </Button>
+                            <Button
+                                color="success"
+                                onClick={() =>
+                                    handleButton("Finish", customer.projectId)
+                                }
+                            >
+                                Finish
+                            </Button>
+                            <Button
+                                color="error"
+                                onClick={() =>
+                                    handleButton("Cancel", customer.projectId)
+                                }
+                            >
+                                Cancel
+                            </Button>
                         </ButtonGroup>
                     </Grid>
                     <Grid item lg={6}>

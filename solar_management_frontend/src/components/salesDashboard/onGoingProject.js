@@ -70,6 +70,7 @@ export default function OngoingProject({ showMoreLink = true }) {
                 }
             );
             if (response.status === 200) {
+                alert("Project Details Edit Successfully");
                 window.location.reload();
                 Getongoingproject();
             }
@@ -96,6 +97,7 @@ export default function OngoingProject({ showMoreLink = true }) {
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
                 if (response.status === 200) {
+                    alert(`Project ${type} Successfully`);
                     window.location.reload();
                 }
             } catch (error) {

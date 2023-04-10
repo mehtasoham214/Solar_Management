@@ -37,8 +37,8 @@ export default function Register() {
                 }
             );
             const data = await response.json();
-            console.log(data);
             if (data.createdUserData === "User Created Successfully") {
+                alert("User Created Successfully");
                 window.location.href = "/";
             }
         } catch (error) {

@@ -824,4 +824,24 @@ router.patch(
     }
 );
 
+//Generating Invoice
+router.get(
+    "/generateInvoice/:projectid",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res, next) => {
+        try {
+            const { username } = req.user;
+            const token = req.headers.authorization.split(" ")[1];
+            const projectid = req.params.projectid;
+
+            const generatedInvoice = await projectData.generateInvoice(
+                projectid
+            );
+            res.status(200).json(generatedInvoice);
+        } catch (e) {
+            res.status(404).json({ error: `Failed to get users: ${e}` });
+        }
+    }
+);
+
 module.exports = router;
