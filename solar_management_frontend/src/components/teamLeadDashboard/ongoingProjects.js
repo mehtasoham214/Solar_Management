@@ -12,7 +12,6 @@ import theme from "../theme";
 import { ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 
-
 //import { Button } from "@mui/material";
 
 // Generate Order Data
@@ -23,7 +22,6 @@ export default function OngoingProject({ showMoreLink = true }) {
     const handleSeeMoreClick = (event) => {
         event.preventDefault();
         navigate("/team-lead/ongoingprojects"); // replace with the desired path
-        
     };
 
     function ButtonArray(id) {
@@ -32,10 +30,7 @@ export default function OngoingProject({ showMoreLink = true }) {
         return (
             <div>
                 {buttonArray.map((buttonText, index) => (
-                    <button
-                        style={{ marginLeft: "10px" }}
-                        key={index}
-                    >
+                    <button style={{ marginLeft: "10px" }} key={index}>
                         {buttonText}
                     </button>
                 ))}
@@ -56,7 +51,6 @@ export default function OngoingProject({ showMoreLink = true }) {
             }
         );
         const data = await response.data;
-        console.log(data);
         getongoing(data);
     }
     useEffect(() => {
@@ -69,7 +63,7 @@ export default function OngoingProject({ showMoreLink = true }) {
         event.preventDefault();
         localStorage.setItem("projectId", projectId);
         // navigate("/sales/projectdetails");
-        navigate("/team-lead/projectdetails")
+        navigate("/team-lead/projectdetails");
     };
 
     return (

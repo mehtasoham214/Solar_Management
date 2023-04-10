@@ -78,7 +78,7 @@ router.post("/login", async (req, res, next) => {
         const userinfo = await userData.getUser(username);
         // If user doesn't exist, return error response
         if (!userinfo) {
-            return res.status(401).json({ message: "Invalid credentials" });
+            return res.status(401).json({ error: "Invalid credentials" });
         }
         position = userinfo.position;
         // Compare provided password with hashed password from database
@@ -88,7 +88,7 @@ router.post("/login", async (req, res, next) => {
         );
         // If passwords don't match, return error response
         if (!passwordMatches) {
-            return res.status(401).json({ message: "Invalid credentials" });
+            return res.status(401).json({ error: "Invalid credentials" });
         }
         // Generate and sign JWT token
         const token = jwt.sign({ username }, process.env.JWT_SECRET);
@@ -245,19 +245,6 @@ router.patch(
         let feasible = req.body.feasible;
 
         try {
-            validator.validateId(id);
-            validator.validateAreaParameter(
-                roofInfo,
-                backyard,
-                grid,
-                meterCompatible
-            );
-        } catch (e) {
-            res.status(404).json({ error: e });
-            return;
-        }
-
-        try {
             const updateProject = await projectData.siteInspectorUpdate(
                 id,
                 roofInfo,
@@ -272,7 +259,9 @@ router.patch(
             );
             res.status(200).json(updateProject);
         } catch (e) {
-            res.status(404).json({ error: e });
+            res.status(404).json({
+                error: `Failed to update project with id ${id}: ${e}`,
+            });
         }
     }
 );
@@ -283,18 +272,59 @@ router.patch(
     passport.authenticate("jwt", { session: false }),
     async (req, res, next) => {
         let id = req.params.id;
-        let solarType = req.body.solarType;
-        let solarCount = req.body.solarCount;
-        let wireType = req.body.wireType;
-        let wireCount = req.body.wireCount;
-        let batteryCount = req.body.batteryCount;
-        let batteryCapacity = req.body.batteryCapacity;
-        let railsCount = req.body.railsCount;
-        let chargeControllertype = req.body.chargeControllertype;
-        let chargeControllerCount = req.body.chargeControllerCount;
-        let inverterType = req.body.inverterType;
-        let inverterCount = req.body.inverterCount;
-        let crewCount = req.body.crewCount;
+        let solarType,
+            solarCount,
+            wireType,
+            wireCount,
+            batteryType,
+            batteryCount,
+            railsType,
+            railsCount,
+            chargeControllerType,
+            chargeControllerCount,
+            inverterType,
+            inverterCount,
+            crewType,
+            crewCount,
+            oeFeasible,
+            oeStatus;
+
+        for (let i = 0; i < req.body.formData.length; i++) {
+            let { type, count } = req.body.formData[i];
+            switch (type) {
+                case "solarType":
+                    solarType = type;
+                    solarCount = count;
+                    break;
+                case "wireType":
+                    wireType = type;
+                    wireCount = count;
+                    break;
+                case "batteryType":
+                    batteryType = type;
+                    batteryCount = count;
+                    break;
+                case "railsType":
+                    railsType = type;
+                    railsCount = count;
+                    break;
+                case "chargeControllerType":
+                    chargeControllerType = type;
+                    chargeControllerCount = count;
+                    break;
+                case "inverterType":
+                    inverterType = type;
+                    inverterCount = count;
+                    break;
+                case "crewType":
+                    crewType = type;
+                    crewCount = count;
+                    break;
+                case "oeFeasible":
+                    oeFeasible = type;
+                    oeStatus = count;
+            }
+        }
 
         try {
             const addEquipment = await projectData.addEquipment(
@@ -303,14 +333,17 @@ router.patch(
                 solarCount,
                 wireType,
                 wireCount,
+                batteryType,
                 batteryCount,
-                batteryCapacity,
+                railsType,
                 railsCount,
-                chargeControllertype,
+                chargeControllerType,
                 chargeControllerCount,
                 inverterType,
                 inverterCount,
-                crewCount
+                crewType,
+                crewCount,
+                oeStatus
             );
             res.status(200).json(addEquipment);
         } catch (e) {
@@ -337,7 +370,7 @@ router.patch(
             );
             res.json(updatedProject);
         } catch (e) {
-            res.status(500).json({ error: e });
+            res.status(404).json({ error: e });
         }
     }
 );
@@ -428,42 +461,6 @@ router.get(
             res.status(404).json({
                 error: `Failed to get customer with id ${customerId}: ${e}`,
             });
-        }
-    }
-);
-
-// patch customer
-router.patch(
-    "/customer_patch",
-    passport.authenticate("jwt", { session: false }),
-    async (req, res, next) => {
-        let customerId = req.body.customerId;
-        let customerName = req.body.customerName;
-        let customerAddress = req.body.customerAddress;
-        let customerNumber = req.body.customerNumber;
-
-        try {
-            validator.validateId(customerId);
-            validator.validateCustomer(
-                customerName,
-                customerAddress,
-                customerNumber
-            );
-        } catch (e) {
-            res.status(400).json({ error: e });
-            return;
-        }
-
-        try {
-            const updateCustomer = await customerData.patchCustomer(
-                customerId,
-                customerName,
-                customerAddress,
-                customerNumber
-            );
-            res.status(200).json(updateCustomer);
-        } catch (e) {
-            res.status(400).json({ error: e });
         }
     }
 );
@@ -745,7 +742,7 @@ router.get(
             const materials = await materialData.getMaterials(username);
             res.json(materials);
         } catch (e) {
-            res.status(404).json({ error: `Failed to get users: ${e}` });
+            res.status(404).json({ error: `Failed to get materials: ${e}` });
         }
     }
 );
@@ -792,25 +789,13 @@ router.patch(
     "/customer_patch",
     passport.authenticate("jwt", { session: false }),
     async (req, res, next) => {
-        let projectId = req.body.proejectId;
-        let customerName = req.body.customerName;
-        let customerAddress = req.body.customerAddress;
-        let projectAddress = req.body.projectAddress;
-        let customerNumber = req.body.customerNumber;
-        let appointmentDate = req.body.appointmentDate;
-
-        try {
-            validator.validateId(customerId);
-            validator.validateId(projectId);
-            validator.validateCustomer(
-                customerName,
-                customerAddress,
-                customerNumber
-            );
-        } catch (e) {
-            res.status(400).json({ error: e });
-            return;
-        }
+        let data = req.body;
+        let projectId = data.projectId;
+        let customerName = data.customerName;
+        let customerAddress = data.customerAddress;
+        let projectAddress = data.projectAddress;
+        let customerNumber = data.customerNumber;
+        let appointmentDate = data.date;
 
         try {
             const updateProject = await projectData.patchProject(
@@ -824,6 +809,26 @@ router.patch(
             res.status(200).json(updateProject);
         } catch (e) {
             res.status(400).json({ error: e });
+        }
+    }
+);
+
+//Generating Invoice
+router.get(
+    "/generateInvoice/:projectid",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res, next) => {
+        try {
+            const { username } = req.user;
+            const token = req.headers.authorization.split(" ")[1];
+            const projectid = req.params.projectid;
+
+            const generatedInvoice = await projectData.generateInvoice(
+                projectid
+            );
+            res.status(200).json(generatedInvoice);
+        } catch (e) {
+            res.status(404).json({ error: `Failed to get users: ${e}` });
         }
     }
 );

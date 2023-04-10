@@ -18,6 +18,10 @@ export default function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            if (username === "" || password === "") {
+                alert("Please enter all details");
+                return;
+            }
             const response = await axios.post(
                 `${process.env.REACT_APP_API_URL}login`,
                 {
@@ -27,27 +31,35 @@ export default function Login() {
             );
             let token = response.data.token;
             localStorage.setItem("token", token);
-            switch (response.data.position) {
-                case "Sales Team":
-                    window.location.href = "/sales";
-                    break;
-                case "Operations Manager":
-                    window.location.href = "/ops-manager";
-                    break;
-                case "Operations Engineer":
-                    window.location.href = "/ops-engineer";
-                    break;
-                case "Site Inspector":
-                    window.location.href = "/site-inspector";
-                    break;
-                case "Team Lead":
-                    window.location.href = "/team-lead";
-                    break;
-                default:
-                // handle unknown role
+            if (response.status === 200) {
+                switch (response.data.position) {
+                    case "Sales Team":
+                        window.location.href = "/sales";
+                        break;
+                    case "Operations Manager":
+                        window.location.href = "/ops-manager";
+                        break;
+                    case "Operations Engineer":
+                        window.location.href = "/ops-engineer";
+                        break;
+                    case "Site Inspector":
+                        window.location.href = "/site-inspector";
+                        break;
+                    case "Team Lead":
+                        window.location.href = "/team-lead";
+                        break;
+                    default:
+                    // handle unknown role
+                }
             }
         } catch (error) {
-            console.error(error);
+            console.log(error);
+            if (
+                error.response.data.error === "Invalid credentials" ||
+                error.response.data.error === "Failed to : User Doesn't Exists"
+            ) {
+                alert("Invalid Credentials");
+            }
         }
     };
     const [username, setUserName] = useState("");

@@ -1,20 +1,24 @@
 import * as React from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+
+//Components
 import PermanentDrawerLeft from "../salesDashboard/navBar";
 import theme from "../theme";
+import Title from "../salesDashboard/Title";
+
+//Material UI
 import { ThemeProvider } from "@mui/material/styles";
 import { Box, Container } from "@mui/system";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-// import GetPastProjects from "../salesDashboard/pastProjects"
-import { useState, useEffect } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Title from "../salesDashboard/Title";
-import { useNavigate } from "react-router-dom";
+
 export default function ALLPastProjects() {
     const navigate = useNavigate();
     function ButtonArray() {
@@ -34,6 +38,7 @@ export default function ALLPastProjects() {
     const [past, getpast] = useState();
 
     async function Getpastproject() {
+        debugger;
         const token = localStorage.getItem("token");
         const response = await axios.get(
             `${process.env.REACT_APP_API_URL}allfinished`,
@@ -50,7 +55,9 @@ export default function ALLPastProjects() {
         Getpastproject();
     }, []);
 
-    if (!past) return <div>No Finished Projects</div>;
+    if (!past) {
+        return <div>No Finished Projects</div>;
+    }
 
     const rows = ButtonArray();
 

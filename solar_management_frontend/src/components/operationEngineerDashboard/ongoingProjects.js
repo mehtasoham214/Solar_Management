@@ -12,9 +12,6 @@ import theme from "../theme";
 import { ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 
-
-//import { Button } from "@mui/material";
-
 // Generate Order Data
 
 export default function OngoingProject({ showMoreLink = true }) {
@@ -23,7 +20,6 @@ export default function OngoingProject({ showMoreLink = true }) {
     const handleSeeMoreClick = (event) => {
         event.preventDefault();
         navigate("/ops-engineer/ongoingprojects"); // replace with the desired path
-        
     };
 
     const [ongoing, getongoing] = useState();
@@ -39,7 +35,6 @@ export default function OngoingProject({ showMoreLink = true }) {
             }
         );
         const data = await response.data;
-        console.log(data);
         getongoing(data);
     }
     useEffect(() => {
@@ -52,23 +47,19 @@ export default function OngoingProject({ showMoreLink = true }) {
         event.preventDefault();
         localStorage.setItem("projectId", projectId);
         // navigate("/sales/projectdetails");
-        navigate("/ops-engineer/projectdetails")
+        navigate("/ops-engineer/projectdetails");
     };
 
     return (
         <ThemeProvider theme={theme}>
             <React.Fragment>
-                {/* <Title>On-Going Projects</Title> */}
-                <h1>On-Going Projects</h1>
+                <h1> On-Going Projects</h1>
                 <Table size="small">
                     <TableHead>
                         <TableRow>
                             <TableCell>Project Address</TableCell>
                             <TableCell>Customer Name</TableCell>
                             <TableCell>Date</TableCell>
-                            {/* <TableCell>Cost</TableCell>
-                            <TableCell>Status</TableCell>
-                            <TableCell>Action</TableCell> */}
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -83,29 +74,6 @@ export default function OngoingProject({ showMoreLink = true }) {
                                 </TableCell>
                                 <TableCell>{row.customerName}</TableCell>
                                 <TableCell>{row.startDate}</TableCell>
-                                {/* <TableCell>
-                                    {`${
-                                        row.totalCost === "Not Assigned"
-                                            ? 0
-                                            : row.totalCost
-                                    }`}
-                                </TableCell> */}
-
-                                {/* <TableCell
-                                    style={{
-                                        color:
-                                            row.projectStatus === "Pending"
-                                                ? theme.palette.error.main
-                                                : row.projectStatus ===
-                                                  "In-Progress"
-                                                ? theme.palette.warning.main
-                                                : "",
-                                    }}
-                                >
-                                    {row.projectStatus}
-                                </TableCell>
-                                <TableCell>{ButtonArray(row._id)}</TableCell> */}
-                                
                             </TableRow>
                         ))}
                     </TableBody>

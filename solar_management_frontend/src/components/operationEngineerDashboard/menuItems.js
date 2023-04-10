@@ -19,9 +19,11 @@ const handleLogout = async (e) => {
         const response = await axios.post(
             `${process.env.REACT_APP_API_URL}logout`
         );
-        console.log(response);
         localStorage.removeItem("token");
-        window.location.href = "/";
+        if (response.status === 200) {
+            alert("You logged out successfully!");
+            window.location.href = "/";
+        }
     } catch (error) {
         console.error(error);
     }
@@ -68,7 +70,7 @@ export const mainListItems = (
 export const secondaryListItems = (
     <ThemeProvider theme={theme}>
         <React.Fragment>
-            <ListItemButton sx={{ mt: 30 }} onClick={handleLogout}>
+            <ListItemButton sx={{ mt: 15 }} onClick={handleLogout}>
                 <ListItemIcon>
                     <LogoutIcon sx={{ color: "primary.main" }} />
                 </ListItemIcon>

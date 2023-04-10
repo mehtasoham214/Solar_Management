@@ -20,6 +20,16 @@ export default function Register() {
         e.preventDefault();
 
         try {
+            if (
+                position === "" ||
+                username === "" ||
+                password === "" ||
+                staffname === "" ||
+                contact === ""
+            ) {
+                alert("Please enter all details");
+                return;
+            }
             const response = await fetch(
                 `${process.env.REACT_APP_API_URL}register`,
                 {
@@ -37,8 +47,8 @@ export default function Register() {
                 }
             );
             const data = await response.json();
-            console.log(data);
             if (data.createdUserData === "User Created Successfully") {
+                alert("User Created Successfully");
                 window.location.href = "/";
             }
         } catch (error) {

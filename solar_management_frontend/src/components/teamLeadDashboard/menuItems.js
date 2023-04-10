@@ -20,9 +20,13 @@ const handleLogout = async (e) => {
         const response = await axios.post(
             `${process.env.REACT_APP_API_URL}logout`
         );
-        console.log(response);
+
         localStorage.removeItem("token");
-        window.location.href = "/";
+
+        if (response.status === 200) {
+            alert("You logged out successfully!");
+            window.location.href = "/";
+        }
     } catch (error) {
         console.error(error);
     }

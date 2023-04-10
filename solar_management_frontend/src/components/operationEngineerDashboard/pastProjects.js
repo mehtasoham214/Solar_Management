@@ -36,7 +36,6 @@ export default function PastProject({ showMoreLink = true }) {
             }
         );
         const data = await response.data;
-        console.log(data);
         getpast(data);
     }
     useEffect(() => {

@@ -27,22 +27,20 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Button from "@mui/material/Button";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
-
-//import { Button } from "@mui/material";
-
 // Generate Order Data
 
 export default function OngoingProject({ showMoreLink = true }) {
     const navigate = useNavigate();
     const [openDialog, setOpenDialog] = useState(false);
     const [customerName, setCustomerName] = useState("");
-    const [customerNumber, setCustomerNumber] = useState("");
+    const [customerNumber, setCustomerNumber] = useState(0);
     const [customerAddress, setCustomerAddress] = useState("");
     const [projectAddress, setProjectAddress] = useState("");
-    const [date, setDate] = useState("");
+    const [date, setDate] = useState(new Date());
+    const [editprojectID, setEditprojectID] = useState("");
 
-    const handleOpenDialog = () => {
-        console.log("handleOpenDialog called");
+    const handleOpenDialog = async () => {
+        await GetEditCustomer(editprojectID);
         setOpenDialog(true);
     };
 
@@ -50,10 +48,11 @@ export default function OngoingProject({ showMoreLink = true }) {
         setOpenDialog(false);
     };
 
-    const handleSubmit = async (e) => {
+    const handleAddSubmit = async (e) => {
         e.preventDefault();
         try {
-            const data = {
+            const updateddata = {
+                projectId: editprojectID,
                 customerName: customerName,
                 customerNumber: customerNumber,
                 customerAddress: customerAddress,
@@ -61,9 +60,9 @@ export default function OngoingProject({ showMoreLink = true }) {
                 date: date,
             };
             const token = localStorage.getItem("token");
-            const response = await axios.post(
-                `${process.env.REACT_APP_API_URL}projects/add`,
-                data,
+            const response = await axios.patch(
+                `${process.env.REACT_APP_API_URL}customer_patch`,
+                updateddata,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -71,7 +70,10 @@ export default function OngoingProject({ showMoreLink = true }) {
                 }
             );
             if (response.status === 200) {
-                window.location.reload();}
+                alert("Project Details Edited Successfully");
+                window.location.reload();
+                Getongoingproject();
+            }
         } catch (error) {
             console.error(error);
         }
@@ -82,31 +84,34 @@ export default function OngoingProject({ showMoreLink = true }) {
         navigate("/sales/ongoingprojects"); // replace with the desired path
     };
 
-    const handleButton = async (type,id) => {
-        debugger;
-        if(type === "Edit"){
+    const handleButton = async (type, id) => {
+        if (type === "Edit") {
+            setEditprojectID(id);
             handleOpenDialog();
-            console.log("Add route to edit here");
-        }else{ 
+        } else {
             try {
-                const token = localStorage.getItem('token');
+                const token = localStorage.getItem("token");
                 const response = await axios.patch(
                     `${process.env.REACT_APP_API_URL}projectstatus`,
-                    {type,id
-                    }, 
-                    { headers: { 'Authorization': `Bearer ${token}` } }
-                )
+                    { type, id },
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
                 if (response.status === 200) {
-                    window.location.reload();}
+                    let tempType = type;
+                    if (tempType === "Cancel") {
+                        tempType = "Cancell";
+                    }
+                    alert(`Project ${tempType} Successfully`);
+                    window.location.reload();
+                }
             } catch (error) {
                 console.error(error);
             }
         }
-    }
+    };
 
     function ButtonArray(id) {
         const buttonArray = ["Edit", "Finish", "Cancel"];
-
         return (
             <div>
                 {buttonArray.map((buttonText, index) => (
@@ -126,18 +131,40 @@ export default function OngoingProject({ showMoreLink = true }) {
 
     async function Getongoingproject() {
         const token = localStorage.getItem("token");
-        const response = await axios.get(
-            `${process.env.REACT_APP_API_URL}inprogress`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
-        const data = await response.data;
-        console.log(data);
-        getongoing(data);
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_API_URL}inprogress`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            const data = await response.data;
+            getongoing(data);
+        } catch (error) {
+            console.log(error);
+        }
     }
+
+    const [editCustomer, setEditCustomer] = useState([]);
+    async function GetEditCustomer(Id) {
+        const token = localStorage.getItem("token");
+        let path = `${process.env.REACT_APP_API_URL}customer/${Id}`;
+        const response = await axios.get(`${path}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        const data = await response.data;
+        setEditCustomer(data);
+        setCustomerName(data.customerName);
+        setCustomerNumber(data.customerNumber);
+        setCustomerAddress(data.customerAddress);
+        setProjectAddress(data.projectAddress);
+        setDate(data.projectAppointmentDate);
+    }
+
     useEffect(() => {
         Getongoingproject();
     }, []);
@@ -203,157 +230,163 @@ export default function OngoingProject({ showMoreLink = true }) {
                         ))}
                     </TableBody>
                 </Table>
-            <Dialog
-                                    open={openDialog}
-                                    onClose={handleCloseDialog}
-                                >
-                                    <DialogTitle
-                                        style={{ textAlign: "center" }}
-                                    >
-                                        Edit Customer
-                                    </DialogTitle>
-                                    <DialogContent>
-                                        <Box
-                                            sx={{
-                                                display: "flex",
-                                                flexDirection: "column",
-                                                gap: "16px",
-                                                mt: "20px",
-                                            }}
-                                        >
-                                            <TextField
-                                                id="customer-name"
-                                                label="Customer Name"
-                                                variant="outlined"
-                                                onChange={(e) =>
-                                                    setCustomerName(
-                                                        e.target.value
-                                                    )
-                                                }
-                                                InputProps={{
-                                                    startAdornment: (
-                                                        <InputAdornment position="start">
-                                                            <AccountCircle
-                                                                sx={{
-                                                                    color: "action.active",
-                                                                    m: 0.5,
-                                                                }}
-                                                            />
-                                                        </InputAdornment>
-                                                    ),
+                {/* Dialog Box Starts from here */}
+                <Dialog open={openDialog} onClose={handleCloseDialog}>
+                    <DialogTitle style={{ textAlign: "center" }}>
+                        Edit Customer
+                    </DialogTitle>
+                    <DialogContent>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: "16px",
+                                mt: "20px",
+                            }}
+                        >
+                            <TextField
+                                id="customer-name"
+                                label="Customer Name"
+                                variant="outlined"
+                                defaultValue={editCustomer.customerName}
+                                onChange={(e) =>
+                                    setCustomerName(
+                                        e.target.value ||
+                                            editCustomer.customerName
+                                    )
+                                }
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <AccountCircle
+                                                sx={{
+                                                    color: "action.active",
+                                                    m: 0.5,
                                                 }}
                                             />
-                                            <TextField
-                                                id="customer-number"
-                                                label="Customer Number"
-                                                variant="outlined"
-                                                onChange={(e) =>
-                                                    setCustomerNumber(
-                                                        e.target.value
-                                                    )
-                                                }
-                                                InputProps={{
-                                                    startAdornment: (
-                                                        <InputAdornment position="start">
-                                                            <PhoneIcon
-                                                                sx={{
-                                                                    color: "action.active",
-                                                                    m: 0.5,
-                                                                }}
-                                                            />
-                                                        </InputAdornment>
-                                                    ),
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
+                            <TextField
+                                id="customer-number"
+                                label="Customer Number"
+                                variant="outlined"
+                                defaultValue={editCustomer.customerNumber}
+                                onChange={(e) =>
+                                    setCustomerName(
+                                        e.target.value ||
+                                            editCustomer.customerNumber
+                                    )
+                                }
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <PhoneIcon
+                                                sx={{
+                                                    color: "action.active",
+                                                    m: 0.5,
                                                 }}
                                             />
-                                            <TextField
-                                                id="customer-address"
-                                                label="Customer Address"
-                                                variant="outlined"
-                                                onChange={(e) =>
-                                                    setCustomerAddress(
-                                                        e.target.value
-                                                    )
-                                                }
-                                                InputProps={{
-                                                    startAdornment: (
-                                                        <InputAdornment position="start">
-                                                            <AddHomeIcon
-                                                                sx={{
-                                                                    color: "action.active",
-                                                                    m: 0.5,
-                                                                }}
-                                                            />
-                                                        </InputAdornment>
-                                                    ),
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
+                            <TextField
+                                id="customer-address"
+                                label="Customer Address"
+                                variant="outlined"
+                                defaultValue={editCustomer.customerAddress}
+                                onChange={(e) =>
+                                    setCustomerAddress(
+                                        e.target.value ||
+                                            editCustomer.customerAddress
+                                    )
+                                }
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <AddHomeIcon
+                                                sx={{
+                                                    color: "action.active",
+                                                    m: 0.5,
                                                 }}
                                             />
-                                            <TextField
-                                                id="project-address"
-                                                label="Project Address"
-                                                variant="outlined"
-                                                onChange={(e) =>
-                                                    setProjectAddress(
-                                                        e.target.value
-                                                    )
-                                                }
-                                                InputProps={{
-                                                    startAdornment: (
-                                                        <InputAdornment position="start">
-                                                            <LocationOnIcon
-                                                                sx={{
-                                                                    color: "action.active",
-                                                                    m: 0.5,
-                                                                }}
-                                                            />
-                                                        </InputAdornment>
-                                                    ),
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
+                            <TextField
+                                id="project-address"
+                                label="Project Address"
+                                variant="outlined"
+                                defaultValue={editCustomer.projectAddress}
+                                onChange={(e) =>
+                                    setProjectAddress(
+                                        e.target.value ||
+                                            editCustomer.projectAddress
+                                    )
+                                }
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <LocationOnIcon
+                                                sx={{
+                                                    color: "action.active",
+                                                    m: 0.5,
                                                 }}
                                             />
-                                            <TextField
-                                                id="appointment-date"
-                                                label="Appointment Date"
-                                                variant="outlined"
-                                                type="datetime-local"
-                                                onChange={(e) =>
-                                                    setDate(e.target.value)
-                                                }
-                                                InputProps={{
-                                                    startAdornment: (
-                                                        <InputAdornment position="start">
-                                                            <CalendarMonthIcon
-                                                                sx={{
-                                                                    color: "action.active",
-                                                                    m: 0.5,
-                                                                }}
-                                                            />
-                                                        </InputAdornment>
-                                                    ),
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
+                            <TextField
+                                id="appointment-date"
+                                label="Appointment Date"
+                                variant="outlined"
+                                defaultValue={
+                                    editCustomer.projectAppointmentDate
+                                }
+                                type="datetime-local"
+                                onChange={(e) =>
+                                    setDate(
+                                        e.target.value ||
+                                            editCustomer.projectAppointmentDate
+                                    )
+                                }
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <CalendarMonthIcon
+                                                sx={{
+                                                    color: "action.active",
+                                                    m: 0.5,
                                                 }}
                                             />
-                                            {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                <DemoContainer components={['DatePicker']}>
-                                                <DatePicker label="Basic date picker" />
-                                                </DemoContainer>
-                                            </LocalizationProvider> */}
-                                        </Box>
-                                    </DialogContent>
-                                    <DialogActions>
-                                        <Button
-                                            variant="outlined"
-                                            onClick={handleCloseDialog}
-                                            color="primary"
-                                        >
-                                            Cancel
-                                        </Button>
-                                        <Button
-                                            variant="outlined"
-                                            onClick={handleSubmit}
-                                            color="secondary"
-                                        >
-                                            Submit
-                                        </Button>
-                                    </DialogActions>
-                                </Dialog>
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
+                        </Box>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            variant="outlined"
+                            onClick={handleCloseDialog}
+                            color="primary"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            onClick={handleAddSubmit}
+                            color="secondary"
+                        >
+                            Submit
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                {/* Dialog Box Ends here */}
                 {showMoreLink && (
                     <Link
                         color="primary"
