@@ -147,7 +147,7 @@ router.get(
             const { username } = req.user;
             const token = req.headers.authorization.split(" ")[1]; // get JWT token from Authorization header
             const projects = await projectData.getAllProjects(username);
-            res.json(projects);
+            res.status(200).json(projects);
         } catch (e) {
             res.status(404).json({ error: `Failed to get projects: ${e}` });
         }
@@ -243,6 +243,8 @@ router.patch(
         let meterCompatible = req.body.meterCompatible;
         let irradiance = req.body.irradiance;
         let feasible = req.body.feasible;
+        let coordinates = req.body.coordinates;
+        let { username } = req.user;
 
         try {
             const updateProject = await projectData.siteInspectorUpdate(
@@ -254,7 +256,8 @@ router.patch(
                 meterCompatible,
                 coordinates,
                 photos,
-                feasible
+                feasible,
+                username
             );
             res.status(200).json(updateProject);
         } catch (e) {
@@ -271,6 +274,7 @@ router.patch(
     passport.authenticate("jwt", { session: false }),
     async (req, res, next) => {
         let id = req.params.id;
+        let { username } = req.user;
         let solarType,
             solarCount,
             wireType,
@@ -342,7 +346,8 @@ router.patch(
                 inverterCount,
                 crewType,
                 crewCount,
-                oeStatus
+                oeStatus,
+                username
             );
             res.status(200).json(addEquipment);
         } catch (e) {
@@ -360,12 +365,14 @@ router.patch(
             const projectId = req.params.id;
             const siteInspector = req.body.siteInspector;
             const operationEngineer = req.body.operationEngineer;
+            let { username } = req.user;
             const teamLead = req.body.teamLead;
             const updatedProject = await projectData.addStaff(
                 projectId,
                 siteInspector,
                 operationEngineer,
-                teamLead
+                teamLead,
+                username
             );
             res.json(updatedProject);
         } catch (e) {
@@ -716,13 +723,25 @@ router.patch(
             const projectId = req.body.id;
             if (type == "Edit") {
             } else if (type == "Finish") {
-                const project = await projectData.buttonClick(projectId, type);
+                const project = await projectData.buttonClick(
+                    projectId,
+                    type,
+                    username
+                );
                 res.json(project);
             } else if (type == "Cancel") {
-                const project = await projectData.buttonClick(projectId, type);
+                const project = await projectData.buttonClick(
+                    projectId,
+                    type,
+                    username
+                );
                 res.json(project);
             } else if (type == "Start") {
-                const project = await projectData.buttonClick(projectId, type);
+                const project = await projectData.buttonClick(
+                    projectId,
+                    type,
+                    username
+                );
                 res.json(project);
             }
         } catch (e) {
@@ -739,7 +758,7 @@ router.get(
             const { username } = req.user;
             const token = req.headers.authorization.split(" ")[1];
             const materials = await materialData.getMaterials(username);
-            res.json(materials);
+            res.status(200).json(materials);
         } catch (e) {
             res.status(404).json({ error: `Failed to get materials: ${e}` });
         }
@@ -755,7 +774,7 @@ router.get(
             let projectid = req.params.projectid;
             const token = req.headers.authorization.split(" ")[1];
             const notesData = await projectData.getNotes(projectid);
-            res.json(notesData);
+            res.status(200).json(notesData);
         } catch (e) {
             res.status(404).json({ error: `Failed to get users: ${e}` });
         }
@@ -777,7 +796,7 @@ router.post(
                 incomingNote,
                 username
             );
-            res.json(NoteData);
+            res.status(200).json(NoteData);
         } catch (e) {
             res.status(404).json({ error: `Failed to get users: ${e}` });
         }
@@ -796,6 +815,7 @@ router.patch(
         let projectAddress = data.projectAddress;
         let customerNumber = data.customerNumber;
         let appointmentDate = data.date;
+        let { username } = req.user;
 
         try {
             const updateProject = await projectData.patchProject(
@@ -804,7 +824,8 @@ router.patch(
                 customerAddress,
                 projectAddress,
                 customerNumber,
-                appointmentDate
+                appointmentDate,
+                username
             );
             res.status(200).json(updateProject);
         } catch (e) {

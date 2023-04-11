@@ -92,6 +92,25 @@ const createProject = async (data) => {
         const newInfo = await projectCollection.insertOne(projectdata);
         const projectId = newInfo.insertedId;
 
+        //Inserting First Note
+        let note = `Project Created`;
+        let postedby = sales;
+        const notesCollection = await notes();
+        //Created Note Object for NoteData
+        let noteInfo = {
+            _id: new ObjectId(),
+            note: note,
+            postedby: postedby,
+            date: new Date().toLocaleDateString(),
+        };
+        //Inserting Note Object for Project
+        let newNote = {
+            projectid: projectId,
+            noteData: [noteInfo],
+        };
+
+        const newNoteInfo = await notesCollection.insertOne(newNote);
+
         if (newInfo.insertedCount == 0 || newCustInfo.insertedCount == 0) {
             throw `Error In Creating Project`;
         } else {
@@ -261,7 +280,7 @@ const getProjectByid = async (id) => {
 };
 
 //Update project stats by button click
-const buttonClick = async (id, type) => {
+const buttonClick = async (id, type, username) => {
     let updatedInfo = undefined;
     const projectCollection = await project();
     const projectStatus = await getProjectByid(id);
@@ -314,6 +333,18 @@ const buttonClick = async (id, type) => {
             }
         );
     }
+    let note = "Project Status Changed to " + status;
+    let noteInfo = {
+        _id: new ObjectId(),
+        note: note,
+        postedby: username,
+        date: new Date().toLocaleDateString(),
+    };
+    const notesCollection = await notes();
+    const newInsertInformation = await notesCollection.updateOne(
+        { projectid: id },
+        { $push: { noteData: noteInfo } }
+    );
     if (updatedInfo.modifiedCount == 0) {
         throw `Couldn't update Status of Project`;
     } else {
@@ -332,7 +363,8 @@ const siteInspectorUpdate = async (
     coordinates,
     permits,
     photos,
-    feasible
+    feasible,
+    username
 ) => {
     const project = await projectCollection.findOne({ _id: id });
     const siteInspector = {
@@ -359,6 +391,19 @@ const siteInspectorUpdate = async (
             },
         }
     );
+    //Added site Inspector Info to notes
+    let note = "Site Inspector Information Updated";
+    let noteInfo = {
+        _id: new ObjectId(),
+        note: note,
+        postedby: username,
+        date: new Date().toLocaleDateString(),
+    };
+    const notesCollection = await notes();
+    const newInsertInformation = await notesCollection.updateOne(
+        { projectid: id },
+        { $push: { noteData: noteInfo } }
+    );
     if (updatedInfo.modifiedCount == 0) {
         throw `Couldn't update Site Inspector Information`;
     } else {
@@ -369,7 +414,6 @@ const siteInspectorUpdate = async (
 // Getting all the site inspector information about specific project
 // For Operations Engineer
 const getSiteInspectorUpdate = async (id) => {
-    validator.validateId(id);
     if (typeof id == "string") {
         id = new ObjectId(id);
     }
@@ -394,7 +438,7 @@ const getImages = async (id) => {
     return projectinfo.images;
 };
 //For Operations Engineer
-const addStaff = async (id, si, oe, tl) => {
+const addStaff = async (id, si, oe, tl, username) => {
     let progressStatus = "With Site Inspector";
     const projectCollection = await project();
     if (typeof id == "string") {
@@ -410,6 +454,18 @@ const addStaff = async (id, si, oe, tl) => {
                 projectProgress: progressStatus,
             },
         }
+    );
+    let note = "Staff Information Updated";
+    let noteInfo = {
+        _id: new ObjectId(),
+        note: note,
+        postedby: username,
+        date: new Date().toLocaleDateString(),
+    };
+    const notesCollection = await notes();
+    const newInsertInformation = await notesCollection.updateOne(
+        { projectid: id },
+        { $push: { noteData: noteInfo } }
     );
     if (updatedInfo.modifiedCount == 0) {
         throw `Couldn't add Staff Information`;
@@ -435,7 +491,8 @@ const addEquipment = async (
     inverterCount,
     crewType,
     crewCount,
-    oeStatus
+    oeStatus,
+    username
 ) => {
     if (typeof id == "string") {
         id = new ObjectId(id);
@@ -604,6 +661,20 @@ const addEquipment = async (
                 },
             }
         );
+
+        //Adding Note
+        let note = "OE added Equipment to Project";
+        let noteInfo = {
+            _id: new ObjectId(),
+            note: note,
+            postedby: username,
+            date: new Date().toLocaleDateString(),
+        };
+        const notesCollection = await notes();
+        const newInsertInformation = await notesCollection.updateOne(
+            { projectid: id },
+            { $push: { noteData: noteInfo } }
+        );
         if (equipment.modifiedCount == 0) {
             throw `Couldn't add Equipment`;
         } else {
@@ -706,7 +777,8 @@ const updateEquipment = async (
     chargeControllerCount,
     inverterType,
     inverterCount,
-    crewCount
+    crewCount,
+    username
 ) => {
     const projectCollection = await project();
     const project = await projectCollection.findOne({ _id: id });
@@ -837,6 +909,18 @@ const updateEquipment = async (
             materialCollection.updateOne(update.filter, update.update)
         )
     );
+    let note = "Equipment Updated by OM";
+    let noteInfo = {
+        _id: new ObjectId(),
+        note: note,
+        postedby: username,
+        date: new Date().toLocaleDateString(),
+    };
+    const notesCollection = await notes();
+    const newInsertInformation = await notesCollection.updateOne(
+        { projectid: id },
+        { $push: { noteData: noteInfo } }
+    );
     if (updatedInfo.modifiedCount == 0) {
         throw `Couldn't add Equipment`;
     } else {
@@ -870,6 +954,17 @@ const addRequest = async (id, projectRequest, postedby) => {
         date: new Date().toLocaleDateString(),
     };
     const newInsertInformation = await requestCollection.insertOne(newRequest);
+    let noteInfo = {
+        _id: new ObjectId(),
+        note: note,
+        postedby: postedby,
+        date: new Date().toLocaleDateString(),
+    };
+    const notesCollection = await notes();
+    const newNoteInformation = await notesCollection.updateOne(
+        { projectid: id },
+        { $push: { noteData: noteInfo } }
+    );
     if (newInsertInformation.insertedCount == 0) {
         throw `Could not add request`;
     } else {
@@ -888,13 +983,16 @@ const updateRequest = async (id, status) => {
     });
     if ((status = "Approved")) {
         let newnote = requestDetails.projectRequest + " -" + status;
-        const newNoteDetails = {
-            projectid: projectDetails._id,
+        let noteInfo = {
+            _id: new ObjectId(),
             note: newnote,
             postedby: requestDetails.postedby,
             date: new Date().toLocaleDateString(),
         };
-        const newInsertNote = await notesCollection.insertOne(newNoteDetails);
+        const newInsertInformation = await notesCollection.updateOne(
+            { projectid: projectDetails._id },
+            { $push: { noteData: noteInfo } }
+        );
         const deletedInfo = await requestCollection.deleteOne({ _id: id });
         if (deletedInfo.deletedCount == 0 || newInsertNote.insertedCount == 0) {
             throw `Could not delete request`;
@@ -904,13 +1002,16 @@ const updateRequest = async (id, status) => {
     }
     if ((status = "Denied")) {
         let newnote = requestDetails.projectRequest + " -" + status;
-        const newNoteDetails = {
-            projectid: projectDetails._id,
+        let noteInfo = {
+            _id: new ObjectId(),
             note: newnote,
             postedby: requestDetails.postedby,
             date: new Date().toLocaleDateString(),
         };
-        const newInsertNote = await notesCollection.insertOne(newNoteDetails);
+        const newInsertInformation = await notesCollection.updateOne(
+            { projectid: projectDetails._id },
+            { $push: { noteData: noteInfo } }
+        );
         const deletedInfo = await requestCollection.deleteOne({ _id: id });
         if (deletedInfo.deletedCount == 0 || newInsertNote.insertedCount == 0) {
             throw `Could not delete request`;
@@ -926,17 +1027,29 @@ const addNote = async (id, note, postedby) => {
         id = new ObjectId(id);
     }
     const notesCollection = await notes();
+    let newInsertInformation = undefined;
     let noteInfo = {
+        _id: new ObjectId(),
         note: note,
         postedby: postedby,
         date: new Date().toLocaleDateString(),
     };
-    let newNote = {
-        projectid: id,
-        noteData: noteInfo,
-    };
-    const newInsertInformation = await notesCollection.insertOne(newNote);
-    if (newInsertInformation.insertedCount == 0) {
+    const noteData = await notesCollection.findOne({ projectid: id });
+    if (!noteData) {
+        newInsertInformation = await notesCollection.insertOne({
+            projectid: id,
+            noteData: [noteInfo],
+        });
+    } else {
+        newInsertInformation = await notesCollection.updateOne(
+            { projectid: id },
+            { $push: { noteData: noteInfo } }
+        );
+    }
+    if (
+        newInsertInformation.insertedCount == 0 ||
+        newInsertInformation.modifiedCount == 0
+    ) {
         throw `Could not add note`;
     } else {
         return "Note added";
@@ -946,15 +1059,11 @@ const addNote = async (id, note, postedby) => {
 // GET ALL THE NOTES
 const getNotes = async (id) => {
     if (typeof id === "string") {
-        id = ObjectId(id);
+        id = new ObjectId(id);
     }
     const notesCollection = await notes();
-    let notesList = await materialCollection.find({ projectid: id }).toArray();
-    let noteData = notesList.noteData;
-    if (noteData.length == 0) {
-        throw `No Customers Found`;
-    }
-    return noteData;
+    let notesList = await notesCollection.findOne({ projectid: id });
+    return notesList.noteData;
 };
 
 // Patch the project
@@ -965,7 +1074,8 @@ const patchProject = async (
     customerAddress,
     projectAddress,
     customerNumber,
-    appointmentDate
+    appointmentDate,
+    username
 ) => {
     if (typeof projectId == "string") {
         projectId = new ObjectId(projectId);
@@ -1016,16 +1126,26 @@ const patchProject = async (
             { $set: { customerAddress: customerAddress } }
         );
     }
-
+    let newNote = "Project Details Updated";
+    let noteInfo = {
+        _id: new ObjectId(),
+        note: newNote,
+        postedby: username,
+        date: new Date().toLocaleDateString(),
+    };
+    const notesCollection = await notes();
+    const newInsertInformation = await notesCollection.updateOne(
+        { projectid: projectId },
+        { $push: { noteData: noteInfo } }
+    );
     if (customerUpdate.modifiedCount == 0 || projectUpdate.modifiedCount == 0) {
         throw `No updates reflected`;
     }
 
-    return "Project Details Updated";
+    return newNote;
 };
 
 const generateInvoice = async (id) => {
-    //This code is incomplete
     if (typeof id == "string") {
         id = new ObjectId(id);
     }
@@ -1037,8 +1157,6 @@ const generateInvoice = async (id) => {
     } else {
         return equipmentData;
     }
-
-    //figure out how to get the total cost of the project
 };
 
 module.exports = {
