@@ -18,20 +18,6 @@ import Title from "../../salesDashboard/Title";
 import { useNavigate } from "react-router-dom";
 export default function OEALLPastProjects() {
     const navigate = useNavigate();
-    function ButtonArray() {
-        const buttonArray = ["PDF"];
-
-        return (
-            <div>
-                {buttonArray.map((buttonText, index) => (
-                    <button style={{ marginLeft: "10px" }} key={index}>
-                        {buttonText}
-                    </button>
-                ))}
-            </div>
-        );
-    }
-
     const [past, getpast] = useState();
 
     async function Getpastproject() {
@@ -53,7 +39,6 @@ export default function OEALLPastProjects() {
 
     if (!past) return <div>No Finished Projects</div>;
 
-    const rows = ButtonArray();
 
     const handleProjectClick = (event, projectId) => {
         event.preventDefault();
