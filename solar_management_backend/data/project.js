@@ -355,8 +355,6 @@ const siteInspectorUpdate = async (
     photos,
     feasible
 ) => {
-    validator.validateId(id);
-    validator.validateAreaParameter(roofInfo, backyard, grid, meterCompatible);
     const project = await projectCollection.findOne({ _id: id });
     const siteInspector = {
         roofInfo: roofInfo,
@@ -860,11 +858,26 @@ const updateEquipment = async (
             materialCollection.updateOne(update.filter, update.update)
         )
     );
-    console.log(materialUpdate);
     if (updatedInfo.modifiedCount == 0) {
         throw `Couldn't add Equipment`;
     } else {
         return "Equipment added to Project";
+    }
+};
+
+//Get Equipment
+const getEquipment = async (id) => {
+    if (typeof id === "string") {
+        id = new ObjectId(id);
+    }
+    let equipmentData = undefined;
+    const projectCollection = await project();
+    const projectData = await projectCollection.findOne({ _id: id });
+    equipmentData = projectData.equipment;
+    if (equipmentData != undefined) {
+        return equipmentData;
+    } else {
+        return "No Equipment Added";
     }
 };
 
@@ -1071,6 +1084,7 @@ module.exports = {
     getImages,
     addStaff,
     addEquipment,
+    getEquipment,
     getFinishedProjects,
     getOngoingProjects,
     getOngoingCount,

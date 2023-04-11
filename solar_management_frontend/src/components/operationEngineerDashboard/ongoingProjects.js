@@ -9,6 +9,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 // import Title from "./Title";
 import theme from "../theme";
+import Title from "../salesDashboard/Title";
 import { ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 
@@ -46,14 +47,13 @@ export default function OngoingProject({ showMoreLink = true }) {
     const handleProjectClick = (event, projectId) => {
         event.preventDefault();
         localStorage.setItem("projectId", projectId);
-        // navigate("/sales/projectdetails");
         navigate("/ops-engineer/projectdetails");
     };
 
     return (
         <ThemeProvider theme={theme}>
             <React.Fragment>
-                <h1> On-Going Projects</h1>
+                <Title> On-Going Projects</Title>
                 <Table size="small">
                     <TableHead>
                         <TableRow>

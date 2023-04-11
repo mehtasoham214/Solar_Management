@@ -14,9 +14,10 @@ import {
 } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import AddIcon from "@mui/icons-material/Add";
-//Theme Imports
-import theme from "../../theme";
 import { ThemeProvider } from "@mui/material/styles";
+
+import theme from "../../theme";
+import EquipmentTable from "./equipmentTable";
 
 function MaterialSubmissionForm() {
     const [rows, setRows] = useState([
@@ -90,84 +91,105 @@ function MaterialSubmissionForm() {
             );
             if (response.status === 200) {
                 alert("Equipment Added Successfully");
+                window.location.reload();
             }
         } catch (error) {
             console.error(error);
         }
     };
+
     return (
         <ThemeProvider theme={theme}>
             <Container sx={{ border: 3, borderRadius: 2, borderColor: "gray" }}>
                 <Grid container spacing={3} marginBottom={3}>
-                    <Grid item md={8}>
-                        {/* <h1>Site Inspector Info</h1> */}
-                        <FormControlLabel
-                            value="end"
-                            control={
-                                <Checkbox
-                                    onChange={(event) => handleCheckBox(event)}
-                                />
-                            }
-                            label="Feasible"
-                            labelPlacement="end"
-                        />
+                    <Grid item md={12} mt={5}>
+                        <EquipmentTable />
                     </Grid>
-                    {rows.map((row, index) => (
-                        <Grid item lg={8}>
-                            <FormControl sx={{ m: 1, minWidth: 200 }}>
-                                <InputLabel>Material</InputLabel>
-                                <Select
-                                    value={row.dropdownValue}
-                                    onChange={handleDropdownChange(index)}
-                                    label="Material"
-                                >
-                                    {menuItems.map((item) => (
-                                        <MenuItem value={item}>{item}</MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                            <TextField
-                                sx={{ m: 1, minWidth: 200 }}
-                                style={{ flex: 1 }}
-                                label="Quantity"
-                                type="number"
-                                variant="outlined"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                value={row.textInputValue}
-                                onChange={handleTextInputChange(index)}
+                    <Container
+                        sx={{
+                            border: 3,
+                            borderRadius: 2,
+                            borderColor: "gray",
+                            margin: 3,
+                            marginRight: 0,
+                        }}
+                    >
+                        <Grid item md={8}>
+                            <FormControlLabel
+                                value="end"
+                                control={
+                                    <Checkbox
+                                        onChange={(event) =>
+                                            handleCheckBox(event)
+                                        }
+                                    />
+                                }
+                                label="Feasible"
+                                labelPlacement="end"
                             />
                         </Grid>
-                    ))}
-                </Grid>
-                <Grid item md={8}>
-                    <Button onClick={handleAddRow} startIcon={<AddIcon />}>
-                        Add
-                    </Button>
-                </Grid>
-                <Grid item md={8}></Grid>
-                <Grid
-                    item
-                    md={4}
-                    display="flex"
-                    alignItems={{
-                        xs: "center",
-                        md: "flex-end",
-                        lg: "flex-end",
-                    }}
-                    justifyContent="flex-end"
-                    sx={{ marginBottom: 2 }}
-                >
-                    <Button
-                        onClick={handleSubmit}
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
-                    >
-                        Submit
-                    </Button>
+                        {rows.map((row, index) => (
+                            <Grid item lg={8}>
+                                <FormControl sx={{ m: 1, minWidth: 200 }}>
+                                    <InputLabel>Material</InputLabel>
+                                    <Select
+                                        value={row.dropdownValue}
+                                        onChange={handleDropdownChange(index)}
+                                        label="Material"
+                                    >
+                                        {menuItems.map((item) => (
+                                            <MenuItem value={item}>
+                                                {item}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                                <TextField
+                                    sx={{ m: 1, minWidth: 200 }}
+                                    style={{ flex: 1 }}
+                                    label="Quantity"
+                                    type="number"
+                                    variant="outlined"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    value={row.textInputValue}
+                                    onChange={handleTextInputChange(index)}
+                                />
+                            </Grid>
+                        ))}
+                        <Grid item md={8}>
+                            <Button
+                                onClick={handleAddRow}
+                                startIcon={<AddIcon />}
+                            >
+                                Add
+                            </Button>
+                        </Grid>
+                        <Grid item md={8}></Grid>
+                        <Grid
+                            item
+                            md={4}
+                            display="flex"
+                            alignItems={{
+                                xs: "center",
+                                md: "flex-end",
+                                lg: "flex-end",
+                            }}
+                            justifyContent="flex-end"
+                            sx={{ marginBottom: 2 }}
+                        >
+                            <Button
+                                onClick={handleSubmit}
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{ mt: 3, mb: 2 }}
+                            >
+                                Submit
+                            </Button>
+                        </Grid>
+                    </Container>
                 </Grid>
             </Container>
         </ThemeProvider>

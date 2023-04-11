@@ -254,7 +254,6 @@ router.patch(
                 meterCompatible,
                 coordinates,
                 photos,
-                notes,
                 feasible
             );
             res.status(200).json(updateProject);
@@ -770,8 +769,8 @@ router.post(
         try {
             const { username } = req.user;
             const token = req.headers.authorization.split(" ")[1];
-            const incomingNote = req.body.incomingNote;
-            const projectid = req.body.projectid;
+            const incomingNote = req.body.postedNote;
+            const projectid = req.body.projectId;
             const materials = await projectData.postNotes(
                 incomingNote,
                 projectid,
@@ -832,5 +831,16 @@ router.get(
         }
     }
 );
+
+router.get("/getequipment/:projectid", async (req, res, next) => {
+    try {
+        const token = req.headers.authorization.split(" ")[1];
+        const projectid = req.params.projectid;
+        const equipmentData = await projectData.getEquipment(projectid);
+        res.status(200).json({ equipmentData });
+    } catch (e) {
+        res.status(404).json({ error: `Failed to get equipment: ${e}` });
+    }
+});
 
 module.exports = router;

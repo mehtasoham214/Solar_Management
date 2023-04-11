@@ -7,11 +7,10 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-// import Title from "./Title";
 import theme from "../theme";
+import Title from "../salesDashboard/Title";
 import { ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
-//import { Button } from "@mui/material";
 
 // Generate Order Data
 
@@ -53,7 +52,7 @@ export default function PastProject({ showMoreLink = true }) {
     return (
         <ThemeProvider theme={theme}>
             <React.Fragment>
-                <h1>Past Projects</h1>
+                <Title>Past Projects</Title>
                 <Table size="small">
                     <TableHead>
                         <TableRow>
