@@ -13,6 +13,7 @@ import CustomizedTables from "./projectdetails";
 import PermanentDrawerLeft from "../salesDashboard/navBar";
 import Invoicetable from "./invoice";
 import ProjectImage from "./projectImages";
+import NotesTable from "../notes"
 
 function ProjectDashboard() {
   return (
@@ -38,6 +39,9 @@ function ProjectDashboard() {
                         <br></br>
                         <br></br>
                         <ProjectImage />
+                        <br></br>
+                        <br></br>
+                        <NotesTable />
                     </Container>
 
         </Box>

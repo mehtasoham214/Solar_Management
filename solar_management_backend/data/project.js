@@ -944,9 +944,12 @@ const addNote = async (id, note, postedby) => {
 };
 
 // GET ALL THE NOTES
-const getNotes = async () => {
+const getNotes = async (id) => {
+    if (typeof id === "string") {
+        id = ObjectId(id);
+    }
     const notesCollection = await notes();
-    let notesList = await materialCollection.find({}).toArray();
+    let notesList = await materialCollection.find({ projectid: id }).toArray();
     let noteData = notesList.noteData;
     if (noteData.length == 0) {
         throw `No Customers Found`;
@@ -1062,7 +1065,6 @@ module.exports = {
     addNote,
     // NOTES
     getNotes,
-    postNotes,
     patchProject,
     generateInvoice,
 };

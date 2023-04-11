@@ -12,6 +12,7 @@ import OEPermanentDrawerLeft from "../navBar";
 import CustomerDetailsTables from "./customerDetailsTable";
 import MaterialSubmissionForm from "./materialSubmissionForm";
 import SiteInspectorInfo from "./siteInspectorInfo";
+import NotesTable from "../../notes";
 
 function OEProjectDetails() {
     return (
@@ -37,6 +38,9 @@ function OEProjectDetails() {
                         <br></br>
                         <br></br>
                         <MaterialSubmissionForm />
+                        <br></br>
+                        <br></br>
+                        <NotesTable />
                     </Container>
                 </Box>
             </Box>

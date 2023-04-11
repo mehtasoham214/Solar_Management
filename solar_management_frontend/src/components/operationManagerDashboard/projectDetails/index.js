@@ -8,13 +8,16 @@ import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import OMCustomizedTables from "./projectdetails";
+import Invoicetable from "../../projectDetails/invoice";
+import ProjectImage from "../../projectDetails/projectImages";
 
 import OMPermanentDrawerLeft from "../navBar";
+import NotesTable from "../../notes";
 
 function OMProjectDashboard() {
-  return (
-    <ThemeProvider theme={theme}>
-    <Box sx={{ display: "flex", mt: 2 }}>
+    return (
+        <ThemeProvider theme={theme}>
+            <Box sx={{ display: "flex", mt: 2 }}>
                 <OMPermanentDrawerLeft />
                 <Box
                     component="main"
@@ -27,20 +30,21 @@ function OMProjectDashboard() {
                 >
                     <Toolbar />
                     <Container maxWidth="lg">
-                        {/* <CustomizedTables />
+                        <OMCustomizedTables />
                         <br></br>
                         <br></br>
                         <Invoicetable />
                         <br></br>
                         <br></br>
-                        <ProjectImage /> */}
-                        <OMCustomizedTables />
+                        <ProjectImage />
+                        <br></br>
+                        <br></br>
+                        <NotesTable />
                     </Container>
-
-        </Box>
-        </Box>
-    </ThemeProvider>
-  );
+                </Box>
+            </Box>
+        </ThemeProvider>
+    );
 }
 
 export default OMProjectDashboard;

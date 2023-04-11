@@ -12,12 +12,12 @@ import OEPermanentDrawerLeft from "../navBar";
 
 import TLOpsEngineerInfo from "./opsEngineerInfo";
 import TLProjectDetailsTable from "./projectDetailsTable";
-
+import NotesTable from "../../notes";
 
 function TLProjectDetails() {
-  return (
-    <ThemeProvider theme={theme}>
-        <Box sx={{ display: "flex", mt: 2 }}>
+    return (
+        <ThemeProvider theme={theme}>
+            <Box sx={{ display: "flex", mt: 2 }}>
                 <OEPermanentDrawerLeft />
 
                 <Box
@@ -35,12 +35,14 @@ function TLProjectDetails() {
                         <br></br>
                         <br></br>
                         <TLOpsEngineerInfo />
+                        <br></br>
+                        <br></br>
+                        <NotesTable />
                     </Container>
-
-        </Box>
-        </Box>
-    </ThemeProvider>
-  );
+                </Box>
+            </Box>
+        </ThemeProvider>
+    );
 }
 
 export default TLProjectDetails;

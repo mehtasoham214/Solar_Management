@@ -748,13 +748,14 @@ router.get(
 
 // REMOVE THESE INTO A NEW ROUTER FILE
 router.get(
-    "/notes",
+    "/notes/:projectid",
     passport.authenticate("jwt", { session: false }),
     async (req, res, next) => {
         try {
+            let projectid = req.params.projectid;
             const token = req.headers.authorization.split(" ")[1];
-            const NoteData = await projectData.getNotes();
-            res.json(NoteData);
+            const notesData = await projectData.getNotes(projectid);
+            res.json(notesData);
         } catch (e) {
             res.status(404).json({ error: `Failed to get users: ${e}` });
         }
