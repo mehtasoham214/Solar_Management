@@ -1,4 +1,5 @@
 import * as React from "react";
+import { jsPDF } from "jspdf";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -31,12 +32,6 @@ function Invoicetable() {
         GetEquipmentData();
     }, []);
 
-    // const rows = [
-    //     createRow("Solar Panels", 125, 1.15),
-    //     createRow("Batteries", 10, 45.99),
-    //     createRow("Wiring", 2, 17.99),
-    // ];
-
     const rows = Object.entries(equipmentData)
         .filter(([key]) => key.endsWith("Count")) // only consider keys that end with "Count"
         .map(([key, value]) => {
@@ -68,6 +63,36 @@ function Invoicetable() {
         return items.map(({ price }) => price).reduce((sum, i) => sum + i, 0);
     }
 
+    function handleDownloadClick() {
+        const doc = new jsPDF();
+        debugger;
+        doc.text("Invoice", 14, 16);
+
+        let yOffset = 40;
+        rows.forEach((row) => {
+            const { desc, qty, unit, price } = row;
+            doc.text(desc, 14, yOffset);
+            doc.text(qty.toString(), 100, yOffset);
+            doc.text(unit.toString(), 140, yOffset);
+            doc.text(price.toFixed(2), 170, yOffset);
+            yOffset += 10;
+        });
+
+        doc.text("Subtotal", 14, yOffset);
+        doc.text(ccyFormat(invoiceSubtotal), 170, yOffset);
+        yOffset += 10;
+
+        doc.text("Tax", 14, yOffset);
+        doc.text(`${(TAX_RATE * 100).toFixed(0)} %`, 100, yOffset);
+        doc.text(ccyFormat(invoiceTaxes), 170, yOffset);
+        yOffset += 10;
+
+        doc.text("Total", 14, yOffset);
+        doc.text(ccyFormat(invoiceTotal), 170, yOffset);
+
+        doc.save("invoice.pdf");
+    }
+
     return (
         <Container sx={{ border: 3, borderRadius: 2, borderColor: "gray" }}>
             <Grid container spacing={3} marginBottom={3}>
@@ -87,7 +112,9 @@ function Invoicetable() {
                     sx={{ marginBottom: 2 }}
                 >
                     <ButtonGroup variant="outlined">
-                        <Button color="secondary">Download</Button>
+                        <Button color="secondary" onClick={handleDownloadClick}>
+                            Download
+                        </Button>
                     </ButtonGroup>
                 </Grid>
                 <Grid item xs={12} lg={12}>
