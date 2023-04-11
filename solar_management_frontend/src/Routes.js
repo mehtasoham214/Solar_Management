@@ -25,7 +25,6 @@ import TLProjectDetails from "./components/teamLeadDashboard/projectDetails/proj
 import TLRequests from "./components/teamLeadDashboard/requests";
 
 import Requests from "./components/operationManagerDashboard/requests";
-import Equipments from "./components/operationManagerDashboard/equipments";
 import OpsEnginner from "./components/operationManagerDashboard/opsEngineer";
 import Sales from "./components/operationManagerDashboard/sales";
 import SiteInspector from "./components/operationManagerDashboard/siteInspector";
@@ -62,7 +61,6 @@ function ProjectRouter() {
                 element={<OMProjectDashboard />}
             />
             <Route path="/ops-manager/requests" element={<Requests />} />
-            <Route path="/ops-manager/equipments" element={<Equipments />} />
             <Route
                 path="/ops-manager/operationengineer"
                 element={<OpsEnginner />}

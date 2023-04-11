@@ -70,6 +70,8 @@ import TableRow from "@mui/material/TableRow";
 import Title from "../../salesDashboard/Title";
 import theme from "../../theme";
 import { ThemeProvider } from "@mui/material/styles";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function Materialstable() {
 

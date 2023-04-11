@@ -7,7 +7,6 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import FactCheckIcon from "@mui/icons-material/FactCheck";
 import HomeIcon from "@mui/icons-material/Home";
-import HardwareIcon from "@mui/icons-material/Hardware";
 import ThumbsUpDownIcon from "@mui/icons-material/ThumbsUpDown";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
@@ -67,14 +66,6 @@ export const mainListItems = (
                         <ThumbsUpDownIcon sx={{ color: "primary.main" }} />
                     </ListItemIcon>
                     <ListItemText primary="Requests" />
-                </ListItemButton>
-            </Link>
-            <Link to="/ops-manager/equipments" href="#" sx={{ mt: 3 }}>
-                <ListItemButton sx={{ color: "primary.main" }}>
-                    <ListItemIcon>
-                        <HardwareIcon sx={{ color: "primary.main" }} />
-                    </ListItemIcon>
-                    <ListItemText primary="Equipments" />
                 </ListItemButton>
             </Link>
             <Link to="/ops-manager/operationengineer" href="#" sx={{ mt: 3 }}>
