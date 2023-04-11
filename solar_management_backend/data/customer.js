@@ -109,7 +109,7 @@ const getCustomerByid = async (id) => {
         customerAddress: customerinformation.customerAddress,
         projectID: projectinfo._id,
         projectAddress: projectinfo.projectAddress,
-        projectId:projectinfo._id,
+        projectId: projectinfo._id,
         salesIncharge: salesIncharge,
         siteInspector: siteInspector,
         operationEngineer: operationEngineer,
@@ -120,7 +120,6 @@ const getCustomerByid = async (id) => {
         projectStartDate: projectinfo.startDate,
         projectEndDate: projectinfo.endDate,
         totalCost: projectinfo.totalCost,
-
     };
     if (!finalInfo.projectStartDate) {
         finalInfo.projectStartDate = "Not Assigned";
@@ -188,6 +187,7 @@ const getCustomers = async (username) => {
                     customerNumber: "$customerNumber",
                     customerAddress: "$customerAddress",
                     projectAddress: "$projects.projectAddress",
+                    projectId: "$projects._id",
                 },
             },
         ])
@@ -196,6 +196,15 @@ const getCustomers = async (username) => {
     if (customerList.length == 0) {
         throw `No Customers Found`;
     }
+    for (let i = 0; i < customerList.length; i++) {
+        customerList[i].projectId = customerList[i].projectId[0].toString();
+    }
+    for (let i = 0; i < customerList.length; i++) {
+        if (typeof customerList[i].projectId == "string") {
+            console.log(typeof customerList[i].projectId);
+        }
+    }
+    // customerList.projectId = customerList.projectId.toString();
     return customerList;
 };
 module.exports = {
