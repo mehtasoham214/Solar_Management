@@ -40,16 +40,7 @@ const createProject = async (data) => {
     let equipment = [];
     let totalCost = "Not Assigned";
     let projectStatus = "Pending";
-    let addedNotes = undefined;
-    let whoAdded = undefined;
 
-    let addedDate = undefined;
-    validator.validateCustomerandProject(
-        customerName,
-        customerAddress,
-        customerNumber,
-        projectAddress
-    );
     customerNumber = parseInt(customerNumber);
 
     // Insert customer information into the customers collection
@@ -100,20 +91,8 @@ const createProject = async (data) => {
         };
         const newInfo = await projectCollection.insertOne(projectdata);
         const projectId = newInfo.insertedId;
-        let notesData = {
-            projectId: projectId,
-            notes: addedNotes,
-            whoAdded: whoAdded,
-            addedDate: addedDate,
-        };
-        const notesCollection = await notes();
-        const newNotesInfo = await notesCollection.insertOne(notesData);
 
-        if (
-            newInfo.insertedCount == 0 ||
-            newCustInfo.insertedCount == 0 ||
-            newNotesInfo.insertedCount == 0
-        ) {
+        if (newInfo.insertedCount == 0 || newCustInfo.insertedCount == 0) {
             throw `Error In Creating Project`;
         } else {
             return "Created Project";
@@ -899,6 +878,7 @@ const addRequest = async (id, projectRequest, postedby) => {
 };
 
 const updateRequest = async (id, status) => {
+    //Change the code for notes add posted By and date
     const requestCollection = await requests();
     const notesCollection = await notes();
     const projectCollection = await project();
@@ -940,13 +920,20 @@ const updateRequest = async (id, status) => {
     }
 };
 
+//Adding Notes to Note Collection
 const addNote = async (id, note, postedby) => {
+    if (typeof id === "string") {
+        id = new ObjectId(id);
+    }
     const notesCollection = await notes();
-    let newNote = {
-        projectid: id,
+    let noteInfo = {
         note: note,
         postedby: postedby,
         date: new Date().toLocaleDateString(),
+    };
+    let newNote = {
+        projectid: id,
+        noteData: noteInfo,
     };
     const newInsertInformation = await notesCollection.insertOne(newNote);
     if (newInsertInformation.insertedCount == 0) {
@@ -956,37 +943,16 @@ const addNote = async (id, note, postedby) => {
     }
 };
 
-// PUT THE BELOW IN A NEW FILE
 // GET ALL THE NOTES
 const getNotes = async () => {
     const notesCollection = await notes();
     let notesList = await materialCollection.find({}).toArray();
-    if (notesList.length == 0) {
+    let noteData = notesList.noteData;
+    if (noteData.length == 0) {
         throw `No Customers Found`;
     }
-    return notesList;
+    return noteData;
 };
-
-// POST NOTES BY PROJECT
-const postNotes = async (incomingnote, projectid, username) => {
-    const notesCollection = await notes();
-    if (incomingnote.length == 0) {
-        throw `Note Cannnot Be Empty`;
-    }
-    const notesData = {
-        projectId: projectid,
-        note: incomingnote,
-        postedBy: username,
-        postedDate: new Date().toLocaleDateString(),
-    };
-    const newNotesInfo = await notesCollection.insertOne(notesData);
-    if (newNotesInfo.insertedCount == 0) {
-        throw `Error In Posting Note`;
-    } else {
-        return "Created Note";
-    }
-};
-// TILL HERE
 
 // Patch the project
 // update customer details

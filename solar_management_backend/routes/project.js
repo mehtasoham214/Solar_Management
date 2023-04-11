@@ -753,8 +753,8 @@ router.get(
     async (req, res, next) => {
         try {
             const token = req.headers.authorization.split(" ")[1];
-            const materials = await projectData.getNotes();
-            res.json(materials);
+            const NoteData = await projectData.getNotes();
+            res.json(NoteData);
         } catch (e) {
             res.status(404).json({ error: `Failed to get users: ${e}` });
         }
@@ -771,12 +771,12 @@ router.post(
             const token = req.headers.authorization.split(" ")[1];
             const incomingNote = req.body.postedNote;
             const projectid = req.body.projectId;
-            const materials = await projectData.postNotes(
-                incomingNote,
+            const NoteData = await projectData.addNote(
                 projectid,
+                incomingNote,
                 username
             );
-            res.json(materials);
+            res.json(NoteData);
         } catch (e) {
             res.status(404).json({ error: `Failed to get users: ${e}` });
         }
