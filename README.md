@@ -1,5 +1,6 @@
-#Solar Project Management Tool
-###By Team 21: Agile Inc.
+# Solar Project Management Tool
+
+### By Team 21: Agile Inc.
 =========================================================
 ## CS 555 Project
 ### (Agile Methods for Software Development)
