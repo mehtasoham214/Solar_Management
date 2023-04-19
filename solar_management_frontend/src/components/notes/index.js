@@ -66,16 +66,13 @@ export default function NotesTable() {
         try {
             const projectId = localStorage.getItem("projectId");
             const token = localStorage.getItem("token");
-            const response = await axios.get(
-                `${process.env.REACT_APP_API_URL}notes/${projectId}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
+            const path = `${process.env.REACT_APP_API_URL}notes/${projectId}`;
+            const response = await axios.get(`${path}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
             if (response.status === 200) {
-                console.log(response.data);
                 setNotesList(response.data);
             }
         } catch (error) {
@@ -86,7 +83,6 @@ export default function NotesTable() {
     useEffect(() => {
         getNotes();
     }, []);
-
     return (
         <ThemeProvider theme={theme}>
             <Container sx={{ border: 3, borderRadius: 2, borderColor: "gray" }}>
@@ -176,23 +172,33 @@ export default function NotesTable() {
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>Note</TableCell>
-                                    <TableCell
-                                        sx={{
-                                            maxWidth: "200px",
-                                            minWidth: "150px",
-                                        }}
-                                    >
-                                        Posted By
+                                    <TableCell>
+                                        <b>Notes</b>
                                     </TableCell>
-                                    <TableCell>Date</TableCell>
+                                    <TableCell sx={{ width: "12%" }}>
+                                        <b>Posted By</b>
+                                    </TableCell>
+                                    <TableCell sx={{ width: "10%" }}>
+                                        <b>Date</b>
+                                    </TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 {notesList.map((note) => (
                                     <TableRow>
-                                        <TableCell>{note.note}</TableCell>
-                                        <TableCell>{note.poster}</TableCell>
+                                        <TableCell
+                                            sx={{
+                                                maxWidth: "60px",
+                                                minWidth: "5px",
+                                                overflow: "hidden",
+                                                textOverflow: "ellipsis",
+                                                whiteSpace: "normal",
+                                                wordWrap: "break-word",
+                                            }}
+                                        >
+                                            {note.note}
+                                        </TableCell>
+                                        <TableCell>{note.postedby}</TableCell>
                                         <TableCell>{note.date}</TableCell>
                                     </TableRow>
                                 ))}

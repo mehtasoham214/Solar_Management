@@ -1,41 +1,53 @@
-# team21
+# Solar Project Management Tool
 
-CS 555 Project
+### By Team 21: Agile Inc.
+=========================================================
+## CS 555 Project
+### (Agile Methods for Software Development)
+=========================================================
+## Overview
 
-Project Title: Solar Project Management tool
+The Solar Project Management Tool is a comprehensive platform designed to connect sales teams, construction crews, operations  managers, operations engineer, site inspector, and end-customers. Our tool aims to streamline project management, from initial consultations to final installations, by providing all stakeholders with the necessary tools and information to keep projects on track.
 
-Purpose: Connecting Sales, Construction crews, Operations managers and end-customers
+## Current Sprint 
 
-Current Sprint : 1
+Sprint 3 - (End 11th April)
 
-Members:
+## Team Members
 
 - Aditya Gupta
 - Dhriti Shah
 - Prudhvi Paruchuri
 - Shreyak Godala
-- Soham Mehta
+- Soham Mehta (Scrum Master)
 
-Technology Used:
+## Technologies Used
 
-1. Development -> MERN Stack (MongoDB, Express.js, React.js, Node.js)
-2. VCS -> Git/GitHub
+- Development: MERN Stack (MongoDB, Express.js, React.js, Node.js)
+- Version Control: Git/GitHub
 
-Steps:
+## Installation
 
-1. Install node.js LTS
-2. Open the terminal
-3. cd solar_management_frontend > npm i
-4. npm start
-5. open a new terminal
-6. cd ../solar_management_backend > npm i
-7. npm start
+To install this project on your local machine, follow these steps:
+1. Install Node.js LTS
+2. Open your terminal and navigate to the `solar_management_frontend` directory.
+3. Run `npm i` to install the necessary dependencies.
+4. Run `npm start` to launch the frontend server.
+5. Open a new terminal window and navigate to the `solar_management_backend` directory.
+6. Run `npm i` to install the necessary dependencies.
+7. Run `npm start` to launch the backend server.
 
-Tasks todo by Final Sprint(4):
+## Tasks for Final Sprint (4)
 
-1. Frontend
-2. Backend
-3. Sessions
-4. Testing
-5. Server Logging
-6. Crash Handling => Server Down / 404 / Unauthorized access
+Our team is committed to delivering a high-quality Solar Project Management Tool. To achieve this goal, we have identified the 
+following tasks to be completed by the final sprint:
+
+1. Frontend development
+2. Backend development
+3. Session management
+4. Testing 
+5. Crash Handling (including server downtime, 404 errors, and unauthorized access)
+
+## Feedback
+
+We value your feedback and would appreciate any suggestions for improving the Solar Project Management Tool. Please don't  hesitate to contact us with any questions or comments.
