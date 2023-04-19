@@ -15,7 +15,7 @@ import Select from "@mui/material/Select";
 import theme from "../theme";
 import FormControl from "@mui/material/FormControl";
 
-export default function Register() {
+export default function AddEmployee() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -23,16 +23,15 @@ export default function Register() {
             if (
                 position === "" ||
                 username === "" ||
-                password === "" ||
+                email === "" ||
                 staffname === "" ||
-                contact === "" ||
-                email === ""
+                contact === ""
             ) {
                 alert("Please enter all details");
                 return;
             }
             const response = await fetch(
-                `${process.env.REACT_APP_API_URL}register`,
+                `${process.env.REACT_APP_API_URL}addNewStaff`,
                 {
                     method: "POST",
                     headers: {
@@ -42,7 +41,6 @@ export default function Register() {
                         position,
                         username,
                         email,
-                        password,
                         staffname,
                         contact,
                     }),
@@ -51,7 +49,17 @@ export default function Register() {
             const data = await response.json();
             if (data.createdUserData === "User Created Successfully") {
                 alert("User Created Successfully");
-                window.location.href = "/";
+                if (position === "Site Inspector") {
+                    window.location.href = "/ops-manager/siteInspector";
+                } else if (position === "Sales Team") {
+                    window.location.href = "/ops-manager/sales";
+                } else if (position === "Team Lead") {
+                    window.location.href = "/ops-manager/teamlead";
+                } else if (position === "Operations Engineer") {
+                    window.location.href = "/ops-manager/opsEngineer";
+                } else {
+                    window.location.href = "/ops-manager";
+                }
             }
         } catch (error) {
             console.error(error);
@@ -60,10 +68,9 @@ export default function Register() {
 
     const [position, setPosition] = useState("");
     const [username, setUserName] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("");
     const [staffname, setStaffName] = useState("");
     const [contact, setContactNumber] = useState("");
-    const [email, setEmail] = useState("");
 
     return (
         <ThemeProvider theme={theme}>
@@ -106,20 +113,6 @@ export default function Register() {
                                 <TextField
                                     required
                                     fullWidth
-                                    id="email"
-                                    label="Email"
-                                    name="email"
-                                    autoComplete="email"
-                                    placeholder="e.g. johnDoe123@email.com"
-                                    onChange={(e) =>
-                                        setUserName(e.target.value)
-                                    }
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
                                     id="username"
                                     label="Username"
                                     name="username"
@@ -134,14 +127,11 @@ export default function Register() {
                                 <TextField
                                     required
                                     fullWidth
-                                    name="password"
-                                    label="Password"
-                                    type="password"
-                                    id="password"
-                                    autoComplete="new-password"
-                                    onChange={(e) =>
-                                        setPassword(e.target.value)
-                                    }
+                                    name="email"
+                                    type="Email"
+                                    id="email"
+                                    autoComplete="email"
+                                    onChange={(e) => setEmail(e.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -169,9 +159,6 @@ export default function Register() {
                                         </MenuItem>
                                         <MenuItem value={"Operations Engineer"}>
                                             Operations Engineer
-                                        </MenuItem>
-                                        <MenuItem value={"Operations Manager"}>
-                                            Operations Manager
                                         </MenuItem>
                                         <MenuItem value={"Team Lead"}>
                                             Team Lead
@@ -203,13 +190,6 @@ export default function Register() {
                         >
                             Register
                         </Button>
-                        <Grid container>
-                            <Grid item>
-                                <Link href="/" variant="body2">
-                                    Already have an account? Sign in
-                                </Link>
-                            </Grid>
-                        </Grid>
                     </Box>
                 </Box>
             </Container>

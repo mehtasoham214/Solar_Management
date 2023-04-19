@@ -106,12 +106,12 @@ router.post("/logout", async (req, res) => {
     res.clearCookie("jwt");
     res.status(200).send({ message: "Logged out successfully" });
 });
-
 //Register User
 router.post("/register", async (req, res, next) => {
     const username = req.body.username;
     const name = req.body.staffname;
     const password = req.body.password;
+    const email = req.body.email;
     const position = req.body.position;
     const contact = req.body.contact;
 
@@ -164,6 +164,34 @@ router.get(
             res.json(userInformation);
         } catch (e) {
             res.status(404).json({ error: `Failed to get projects: ${e}` });
+        }
+    }
+);
+
+//Todo: Test if this works
+// For OM to register new staff
+router.post(
+    "/addNewStaff",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res, next) => {
+        try {
+            const { username } = req.user;
+            const staffusername = req.body.username;
+            const name = req.body.staffname;
+            const email = req.body.email;
+            const position = req.body.position;
+            const contact = req.body.contact;
+            const token = req.headers.authorization.split(" ")[1]; // get JWT token from Authorization header
+            const userInformation = await userData.createNewStaff(
+                name,
+                staffusername,
+                email,
+                position,
+                contact
+            );
+            res.status(200).json(userInformation);
+        } catch (e) {
+            res.status(404).json({ error: `Failed to add new User: ${e}` });
         }
     }
 );

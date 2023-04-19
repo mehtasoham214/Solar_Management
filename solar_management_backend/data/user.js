@@ -4,13 +4,41 @@ const customer = mongoCollections.customer;
 const { ObjectId } = require("mongodb");
 const validator = require("../validator");
 
-const createUser = async (name, username, password, position, contact) => {
+const createNewStaff = async (name, username, email, position, contact) => {
+    const usercollection = await userCol();
+    const userInfo = {
+        name: name,
+        username: username,
+        email: email,
+        password: undefined,
+        position: position,
+        contact: contact,
+        createdAt: new Date().toLocaleDateString(),
+        updatedAt: new Date().toLocaleDateString(),
+    };
+    const userInserted = await usercollection.insertOne(userInfo);
+    if (userInserted.insertedCount == 0) {
+        throw `User was not created`;
+    } else {
+        return "User Created Successfully";
+    }
+};
+
+const createUser = async (
+    name,
+    username,
+    email,
+    password,
+    position,
+    contact
+) => {
     const usercollection = await userCol();
     validator.validateUser(username.trim());
     const userInfo = {
         name: name,
         username: username,
         password: password,
+        email: email,
         position: position,
         contact: contact,
         createdAt: new Date().toLocaleDateString(),
@@ -90,6 +118,7 @@ const getAllSalesTeam = async () => {
 };
 
 module.exports = {
+    createNewStaff,
     createUser,
     getUser,
     getAllSiteInspector,
