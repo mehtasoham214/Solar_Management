@@ -194,7 +194,12 @@ const getInProgressFiveProjects = async (username) => {
             .toArray();
     }    
     else {
-        throw `Cannot Find ${username}'s Projects`
+        inProgressProjects = await projectCollection
+        .find({
+            projectStatus: { $in: ["In-Progress", "Pending"] },
+        })
+        .limit(5)
+        .toArray();
     }
     if (inProgressProjects.length == 0) {
         throw `No Projects Found`;
