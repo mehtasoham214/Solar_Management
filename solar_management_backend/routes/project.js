@@ -124,6 +124,7 @@ router.post("/register", async (req, res, next) => {
             name,
             username,
             hashedPassword,
+            email,
             position,
             contact
         );
