@@ -172,13 +172,29 @@ const getInProgressFiveProjects = async (username) => {
             })
             .limit(5)
             .toArray();
-    } else {
+    } 
+    // CHECK IF USER IS A OPS ENGINEER
+    else if(staffUser.position == "Operations Engineer"){
         inProgressProjects = await projectCollection
             .find({
                 projectStatus: { $in: ["In-Progress", "Pending"] },
+                operationEngineer: username,
             })
             .limit(5)
             .toArray();
+    }
+    // CHECK IF USER IS A OPS ENGINEER
+    else if(staffUser.position == "Site Inspector"){
+        inProgressProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["In-Progress", "Pending"] },
+                siteInspector: username,
+            })
+            .limit(5)
+            .toArray();
+    }    
+    else {
+        throw `Cannot Find ${username}'s Projects`
     }
     if (inProgressProjects.length == 0) {
         throw `No Projects Found`;
@@ -199,12 +215,9 @@ const getOngoingProjects = async (username) => {
                 salesIncharge: username,
             })
             .toArray();
-    } else {
-        onGoingProjects = await projectCollection
-            .find({
-                projectStatus: { $in: ["In-Progress", "Pending"] },
-            })
-            .toArray();
+    } 
+    else {
+        throw `Cannot find ${username}'s Projects` 
     }
     if (onGoingProjects.length == 0) {
         throw `No Projects Found`;
@@ -225,7 +238,24 @@ const getFinishedFiveProjects = async (username) => {
             })
             .limit(5)
             .toArray();
-    } else {
+    } 
+    else if(staffUser.position== "Operations Engineer"){
+        finishedProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["Cancelled", "Finished"] },
+                operationEngineer: username,
+            })
+            .toArray();
+    }
+    else if(staffUser.position== "Site Inspector"){
+        finishedProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["Cancelled", "Finished"] },
+                siteInspector: username,
+            })
+            .toArray();
+    }
+    else {
         finishedProjects = await projectCollection
             .find({
                 projectStatus: { $in: ["Cancelled", "Finished"] },
