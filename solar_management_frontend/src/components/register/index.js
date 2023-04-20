@@ -111,9 +111,7 @@ export default function Register() {
                                     name="email"
                                     autoComplete="email"
                                     placeholder="e.g. johnDoe123@email.com"
-                                    onChange={(e) =>
-                                        setUserName(e.target.value)
-                                    }
+                                    onChange={(e) => setEmail(e.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12}>

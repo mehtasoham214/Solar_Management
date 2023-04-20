@@ -27,13 +27,12 @@ const createNewStaff = async (name, username, email, position, contact) => {
 const createUser = async (
     name,
     username,
-    email,
     password,
+    email,
     position,
     contact
 ) => {
     const usercollection = await userCol();
-    validator.validateUser(username.trim());
     const userInfo = {
         name: name,
         username: username,
