@@ -20,7 +20,7 @@ export default function OngoingProject({ showMoreLink = true }) {
 
     const handleSeeMoreClick = (event) => {
         event.preventDefault();
-        navigate("/ops-engineer/ongoingprojects"); // replace with the desired path
+        navigate("/site-inspector/ongoingprojects"); // replace with the desired path
     };
 
     const [ongoing, getongoing] = useState();

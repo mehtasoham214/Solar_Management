@@ -19,7 +19,7 @@ export default function PastProject({ showMoreLink = true }) {
 
     const handleSeeMoreClick = (event) => {
         event.preventDefault();
-        navigate("/ops-engineer/pastprojects"); // replace with the desired path
+        navigate("/site-inspector/pastprojects"); // replace with the desired path
     };
 
     const [past, getpast] = useState();
@@ -46,7 +46,7 @@ export default function PastProject({ showMoreLink = true }) {
     const handleProjectClick = (event, projectId) => {
         event.preventDefault();
         localStorage.setItem("projectId", projectId);
-        navigate("/ops-engineer/projectdetails");
+        navigate("/site-inspector/projectdetails");
     };
 
     return (

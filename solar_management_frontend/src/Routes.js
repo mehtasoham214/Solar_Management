@@ -32,6 +32,9 @@ import TeamLead from "./components/operationManagerDashboard/teamlead";
 
 import SIForm from "./components/siteInspectorDashboard/SIFormComponent";
 
+import SIALLPastProjects from "./components/siteInspectorDashboard/pastProjectComponent";
+import SIALLOngoingProjects from "./components/siteInspectorDashboard/ongoingProjectComponent";
+
 function ProjectRouter() {
     return (
         <Routes>
@@ -94,6 +97,14 @@ function ProjectRouter() {
             <Route
                 path="/site-inspector/projectdetails"
                 element={< SIForm/>}
+            ></Route>
+            <Route
+                path="/site-inspector/pastprojects"
+                element={<SIALLPastProjects />}
+            ></Route>
+            <Route
+                path="/site-inspector/ongoingprojects"
+                element={<SIALLOngoingProjects />} 
             ></Route>
             <Route path="/team-lead" element={<TLDashboard />} />
             <Route
