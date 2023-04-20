@@ -7,20 +7,18 @@ import { ThemeProvider } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import OngoingProject from "./onGoingProjectsComponent";
-import PastProject from "./pastProjectsComponents";
+import OngoingProject from "./ongoingProjects";
+import PastProject from "./pastProjects";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import SiPermanentDrawerLeft from "./navBar";
 import SiteInspectorForm from "./SiteInspectorForm";
 
 function SIDashboard() {
-
-  
   return (
     <ThemeProvider theme={theme}>
     <Box sx={{ display: "flex", mt: 2 }}>
-                {/* <SiPermanentDrawerLeft /> */}
+                <SiPermanentDrawerLeft />
 
                 <Box
                     component="main"
@@ -64,7 +62,6 @@ function SIDashboard() {
         </Box>
     </ThemeProvider>
   );
-  
 }
 
 export default SIDashboard;
