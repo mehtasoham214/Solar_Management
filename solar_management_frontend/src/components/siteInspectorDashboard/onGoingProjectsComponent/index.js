@@ -1,47 +1,28 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-//Components
-import PermanentDrawerLeft from "../salesDashboard/navBar";
-import theme from "../theme";
-import Title from "../salesDashboard/Title";
-
-//Material UI
+import theme from "../../theme";
 import { ThemeProvider } from "@mui/material/styles";
 import { Box, Container } from "@mui/system";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
+import { useState, useEffect } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-
-export default function ALLPastProjects() {
+import Title from "../../salesDashboard/Title";
+import { useNavigate } from "react-router-dom";
+import OEPermanentDrawerLeft from "../navBar";
+export default function OEALLOngoingProjects() {
     const navigate = useNavigate();
-    function ButtonArray() {
-        const buttonArray = ["PDF"];
 
-        return (
-            <div>
-                {buttonArray.map((buttonText, index) => (
-                    <button style={{ marginLeft: "10px" }} key={index}>
-                        {buttonText}
-                    </button>
-                ))}
-            </div>
-        );
-    }
-
-    const [past, getpast] = useState();
-
-    async function Getpastproject() {
-        debugger;
+    const [ongoing, getongoing] = useState();
+    async function Getongoingproject() {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-            `${process.env.REACT_APP_API_URL}allfinished`,
+            `${process.env.REACT_APP_API_URL}allinprogress`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -49,28 +30,25 @@ export default function ALLPastProjects() {
             }
         );
         const data = await response.data;
-        getpast(data);
+        getongoing(data);
     }
     useEffect(() => {
-        Getpastproject();
+        Getongoingproject();
     }, []);
 
-    if (!past) {
-        return <div>No Finished Projects</div>;
-    }
+    if (!ongoing) return <div>No Ongoing Projects</div>;
 
-    const rows = ButtonArray();
 
     const handleProjectClick = (event, projectId) => {
         event.preventDefault();
         localStorage.setItem("projectId", projectId);
-        navigate("/sales/projectdetails");
+        navigate("/ops-engineer/projectdetails");
     };
     return (
-        <ThemeProvider theme={theme}>
+         <ThemeProvider theme={theme}>
             <React.Fragment>
                 <Box sx={{ display: "flex", mt: 2 }}>
-                    <PermanentDrawerLeft />
+                    <OEPermanentDrawerLeft />
                     <Box
                         component="main"
                         sx={{
@@ -81,6 +59,7 @@ export default function ALLPastProjects() {
                         }}
                     >
                         <Container maxWidth="lg" sx={{ mt: 2 }}>
+                            {/* On going projects */}
                             <Grid item xs={12}>
                                 <Paper
                                     sx={{
@@ -89,17 +68,14 @@ export default function ALLPastProjects() {
                                         flexDirection: "column",
                                     }}
                                 >
-                                    <br />
-                                    <br />
-                                    {/* <GetPastProjects /> */}
                                     <ThemeProvider theme={theme}>
                                         <React.Fragment>
-                                            <Title>Past Projects</Title>
+                                            <Title>On-Going Projects</Title>
                                             <Table size="small">
                                                 <TableHead>
                                                     <TableRow>
                                                         <TableCell>
-                                                            Product Address
+                                                            Project Address
                                                         </TableCell>
                                                         <TableCell>
                                                             Customer Name
@@ -107,7 +83,7 @@ export default function ALLPastProjects() {
                                                         <TableCell>
                                                             Date
                                                         </TableCell>
-                                                        <TableCell>
+                                                        {/* <TableCell>
                                                             Cost
                                                         </TableCell>
                                                         <TableCell>
@@ -115,11 +91,11 @@ export default function ALLPastProjects() {
                                                         </TableCell>
                                                         <TableCell>
                                                             Action
-                                                        </TableCell>
+                                                        </TableCell> */}
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
-                                                    {past.map((row) => (
+                                                    {ongoing.map((row) => (
                                                         <TableRow key={row.id}>
                                                             <TableCell
                                                                 onClick={(
@@ -143,49 +119,50 @@ export default function ALLPastProjects() {
                                                             <TableCell>
                                                                 {row.startDate}
                                                             </TableCell>
-                                                            <TableCell>{`${
+                                                            {/* <TableCell>{`${
                                                                 row.totalCost ===
                                                                 "Not Assigned"
                                                                     ? 0
                                                                     : row.totalCost
-                                                            }`}</TableCell>
-                                                            <TableCell
+                                                            }`}</TableCell> */}
+
+                                                            {/* <TableCell
                                                                 style={{
                                                                     color:
                                                                         row.projectStatus ===
-                                                                        "Cancelled"
+                                                                        "Pending"
                                                                             ? theme
                                                                                   .palette
                                                                                   .error
                                                                                   .main
                                                                             : row.projectStatus ===
-                                                                              "Finished"
+                                                                              "In-Progress"
                                                                             ? theme
                                                                                   .palette
-                                                                                  .success
-                                                                                  .light
+                                                                                  .warning
+                                                                                  .main
                                                                             : "",
                                                                 }}
                                                             >
                                                                 {
                                                                     row.projectStatus
                                                                 }
-                                                            </TableCell>
-                                                            <TableCell>
+                                                            </TableCell> */}
+                                                            {/* <TableCell>
                                                                 {rows}
-                                                            </TableCell>
+                                                            </TableCell> */}
                                                         </TableRow>
                                                     ))}
                                                 </TableBody>
                                             </Table>
                                         </React.Fragment>
-                                    </ThemeProvider>
+                                    </ThemeProvider> 
                                 </Paper>
                             </Grid>
                         </Container>
                     </Box>
                 </Box>
             </React.Fragment>
-        </ThemeProvider>
+         </ThemeProvider>
     );
 }

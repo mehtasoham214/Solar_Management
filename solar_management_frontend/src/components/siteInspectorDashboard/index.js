@@ -7,15 +7,20 @@ import { ThemeProvider } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-
+import OngoingProject from "./onGoingProjectsComponent";
+import PastProject from "./pastProjectsComponents";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
 import SiPermanentDrawerLeft from "./navBar";
 import SiteInspectorForm from "./SiteInspectorForm";
 
 function SIDashboard() {
+
+  
   return (
     <ThemeProvider theme={theme}>
     <Box sx={{ display: "flex", mt: 2 }}>
-                <SiPermanentDrawerLeft />
+                {/* <SiPermanentDrawerLeft /> */}
 
                 <Box
                     component="main"
@@ -28,13 +33,38 @@ function SIDashboard() {
                 >
                     <Toolbar />
                     <Container maxWidth="lg">
-                      <SiteInspectorForm/>
+                        {/* <Typography>Some content here</Typography> */}
+                        <Grid container spacing={3}>
+                          <Grid item xs={12}>
+                                <Paper
+                                    sx={{
+                                        p: 2,
+                                        display: "flex",
+                                        flexDirection: "column",
+                                    }}
+                                >
+                                    <OngoingProject />
+                                </Paper>
+                          </Grid>
+                          <Grid item xs={12}>
+                                <Paper
+                                    sx={{
+                                        p: 2,
+                                        display: "flex",
+                                        flexDirection: "column",
+                                    }}
+                                >
+                                    <PastProject />
+                                </Paper>
+                          </Grid>
+                        </Grid>
                     </Container>
 
         </Box>
         </Box>
     </ThemeProvider>
   );
+  
 }
 
 export default SIDashboard;
