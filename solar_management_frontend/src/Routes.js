@@ -30,6 +30,8 @@ import Sales from "./components/operationManagerDashboard/sales";
 import SiteInspector from "./components/operationManagerDashboard/siteInspector";
 import TeamLead from "./components/operationManagerDashboard/teamlead";
 
+import SIForm from "./components/siteInspectorDashboard/SIFormComponent";
+
 function ProjectRouter() {
     return (
         <Routes>
@@ -89,6 +91,10 @@ function ProjectRouter() {
                 element={<OEALLPastProjects />}
             ></Route>
             <Route path="/site-inspector" element={<SIDashboard />} />
+            <Route
+                path="/site-inspector/projectdetails"
+                element={< SIForm/>}
+            ></Route>
             <Route path="/team-lead" element={<TLDashboard />} />
             <Route
                 path="/team-lead/ongoingprojects"
