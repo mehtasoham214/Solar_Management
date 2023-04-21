@@ -192,7 +192,17 @@ const getInProgressFiveProjects = async (username) => {
             })
             .limit(5)
             .toArray();
-    }    
+    }
+    // CHECK IF USER IS A Team Lead
+    else if(staffUser.position == "Team Lead"){
+        inProgressProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["In-Progress", "Pending"] },
+                teamLead: username,
+            })
+            .limit(5)
+            .toArray();
+    }        
     else {
         inProgressProjects = await projectCollection
         .find({
@@ -220,9 +230,39 @@ const getOngoingProjects = async (username) => {
                 salesIncharge: username,
             })
             .toArray();
-    } 
+    }
+    else if(staffUser.position == "Operations Engineer"){
+        onGoingProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["In-Progress", "Pending"] },
+                operationEngineer: username,
+            })
+            .toArray();
+    }
+    // CHECK IF USER IS A OPS ENGINEER
+    else if(staffUser.position == "Site Inspector"){
+        onGoingProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["In-Progress", "Pending"] },
+                siteInspector: username,
+            })
+            .toArray();
+    }
+        // CHECK IF USER IS A Team Lead
+        else if(staffUser.position == "Team Lead"){
+            inProgressProjects = await projectCollection
+                .find({
+                    projectStatus: { $in: ["In-Progress", "Pending"] },
+                    teamLead: username,
+                })
+                .toArray();
+        }     
     else {
-        throw `Cannot find ${username}'s Projects` 
+        onGoingProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["In-Progress", "Pending"] },
+            })
+            .toArray();
     }
     if (onGoingProjects.length == 0) {
         throw `No Projects Found`;
@@ -250,6 +290,7 @@ const getFinishedFiveProjects = async (username) => {
                 projectStatus: { $in: ["Cancelled", "Finished"] },
                 operationEngineer: username,
             })
+            .limit(5)
             .toArray();
     }
     else if(staffUser.position== "Site Inspector"){
@@ -258,8 +299,19 @@ const getFinishedFiveProjects = async (username) => {
                 projectStatus: { $in: ["Cancelled", "Finished"] },
                 siteInspector: username,
             })
+            .limit(5)
             .toArray();
     }
+    // CHECK IF USER IS A Team Lead
+    else if(staffUser.position == "Team Lead"){
+        finishedProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["In-Progress", "Pending"] },
+                teamLead: username,
+            })
+            .limit(5)
+            .toArray();
+    } 
     else {
         finishedProjects = await projectCollection
             .find({
@@ -287,7 +339,34 @@ const getFinishedProjects = async (username) => {
                 salesIncharge: username,
             })
             .toArray();
-    } else {
+    } 
+    else if(staffUser.position == "Operations Engineer"){
+        finishedProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["Cancelled", "Finished"] },
+                operationEngineer: username,
+            })
+            .toArray();
+    }
+    // CHECK IF USER IS A OPS ENGINEER
+    else if(staffUser.position == "Site Inspector"){
+        finishedProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["Cancelled", "Finished"] },
+                siteInspector: username,
+            })
+            .toArray();
+    }
+    // CHECK IF USER IS A Team Lead
+    else if(staffUser.position == "Team Lead"){
+        finishedProjects = await projectCollection
+            .find({
+                projectStatus: { $in: ["In-Progress", "Pending"] },
+                teamLead: username,
+            })
+            .toArray();
+    }    
+    else {
         finishedProjects = await projectCollection
             .find({
                 projectStatus: { $in: ["Cancelled", "Finished"] },
@@ -390,33 +469,56 @@ const buttonClick = async (id, type, username) => {
 //Adding all site inspector info to project
 const siteInspectorUpdate = async (
     id,
+    backyardInfo,
     roofInfo,
-    backyard,
     grid,
     irradiance,
-    meterCompatible,
+    meterCompatibility,
     coordinates,
-    permits,
+    environment,
+    building,
+    electrical,
+    zone,
+    landUse,
+    interconnection,
+    netMetering,
+    propertyEasement,
+    hoa,
+    feasibility,
+    structuralFeasibility,
     photos,
-    feasible,
     username
 ) => {
-    const project = await projectCollection.findOne({ _id: id });
+    const projectCollection = await project();
+    //const project = await projectCollection.findOne({ _id: id });
+    if (typeof id == "string") {
+        id = new ObjectId(id);
+    }
     const siteInspector = {
-        roofInfo: roofInfo,
-        backyard: backyard,
-        grid: grid,
-        irradiance: irradiance,
-        meterCompatible: meterCompatible,
-        coordinates: coordinates,
-        permits: permits,
-        feasible: feasible,
+        id,
+        backyardInfo:backyardInfo,
+        roofInfo:roofInfo,
+        grid:grid,
+        irradiance:irradiance,
+        meterCompatibility:meterCompatibility,
+        coordinates:coordinates,
+        environment:environment,
+        building:building,
+        electrical:electrical,
+        zone:zone,
+        landUse:landUse,
+        interconnection:interconnection,
+        netMetering:netMetering,
+        propertyEasement:propertyEasement,
+        hoa:hoa,
+        feasibility:feasibility,
+        structuralFeasibility:structuralFeasibility
     };
     let progressStatus = "At Operations Engineer";
     const pictures = {
         photos: photos,
     };
-    await project().updateOne(
+    const updatedInfo = await projectCollection.updateOne(
         { _id: id },
         {
             $set: {

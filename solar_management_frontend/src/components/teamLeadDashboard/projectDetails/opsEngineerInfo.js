@@ -37,13 +37,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function TLOpsEngineerInfo() {
-    const [customer, getcustomer] = useState();
+    const [equipment, getEquipment] = useState([]);
 
-    async function GetcustomerDetails() {
+    async function GetEquipmentDetails() {
         const token = localStorage.getItem("token");
         const projectId = localStorage.getItem("projectId");
         const response = await axios.get(
-            `${process.env.REACT_APP_API_URL}customer/${projectId}`,
+            `${process.env.REACT_APP_API_URL}projects/${projectId}`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -51,13 +51,13 @@ function TLOpsEngineerInfo() {
             }
         );
         const data = await response.data;
-        getcustomer(data);
+        getEquipment(data.equipment);
     }
     useEffect(() => {
-        GetcustomerDetails();
+        GetEquipmentDetails();
     }, []);
 
-    if (!customer) return <div>No Customer Found</div>;
+    if (!equipment) return <div>Operations Enginner hasn't allocated materials!</div>;
 
     return (
         <ThemeProvider theme={theme}>
@@ -86,10 +86,76 @@ function TLOpsEngineerInfo() {
                                             component="th"
                                             scope="row"
                                         >
-                                            Roof Area
+                                            {equipment.solarType}
                                         </StyledTableCell>
                                         <StyledTableCell align="right">
-                                            500
+                                            {equipment.solarCount}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            {equipment.wireType}
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {equipment.wireCount}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            {equipment.batteryType}
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {equipment.batteryCount}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            {equipment.railsType}
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {equipment.railsCount}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            {equipment.chargeControllerType}
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {equipment.chargeControllerCount}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            {equipment.inverterType}
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {equipment.inverterCount}
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell
+                                            component="th"
+                                            scope="row"
+                                        >
+                                            Crew Teams
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            {equipment.crewCount}
                                         </StyledTableCell>
                                     </StyledTableRow>
                                     <StyledTableRow>
@@ -100,18 +166,7 @@ function TLOpsEngineerInfo() {
                                             Feasability
                                         </StyledTableCell>
                                         <StyledTableCell align="right">
-                                            YES
-                                        </StyledTableCell>
-                                    </StyledTableRow>
-                                    <StyledTableRow>
-                                        <StyledTableCell
-                                            component="th"
-                                            scope="row"
-                                        >
-                                            Sunlight Access
-                                        </StyledTableCell>
-                                        <StyledTableCell align="right">
-                                            Partially
+                                            {equipment.oeFeasible ? "Yes": "No"}
                                         </StyledTableCell>
                                     </StyledTableRow>
                                 </TableBody>

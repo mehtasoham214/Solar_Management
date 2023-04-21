@@ -262,31 +262,53 @@ router.get(
 
 //Adding Site Inspector information
 router.patch(
-    "/projects/:id",
+    "/projects/areainfo/:id",
     passport.authenticate("jwt", { session: false }),
     async (req, res, next) => {
         let id = req.params.id;
-        let roofInfo = req.body.roofInfo;
-        let backyard = req.body.backyard;
-        let grid = req.body.grid;
-        let meterCompatible = req.body.meterCompatible;
-        let irradiance = req.body.irradiance;
-        let feasible = req.body.feasible;
-        let coordinates = req.body.coordinates;
+        let backyardInfo = req.body.formData.backyardInfo;
+        let roofInfo = req.body.formData.roofInfo;
+        let grid = req.body.formData.grid;
+        let irradiance = req.body.formData.irradiance;
+        let meterCompatibility = req.body.formData.meterCompatibility;
+        let coordinates = req.body.formData.coordinates;
+        let environment = req.body.formData.environment;
+        let building = req.body.formData.building;
+        let electrical = req.body.formData.electrical;
+        let zone = req.body.formData.zone;
+        let landUse = req.body.formData.landUse;
+        let interconnection = req.body.formData.interconnection;
+        let netMetering = req.body.formData.netMetering;
+        let propertyEasement = req.body.formData.propertyEasement;
+        let hoa = req.body.formData.hoa;
+        let feasibility = req.body.formData.feasibility;
+        let structuralFeasibility = req.body.formData.structuralFeasibility;
+        let photos = [];
         let { username } = req.user;
 
         try {
             const updateProject = await projectData.siteInspectorUpdate(
                 id,
+                backyardInfo,
                 roofInfo,
-                backyard,
                 grid,
                 irradiance,
-                meterCompatible,
+                meterCompatibility,
                 coordinates,
+                environment,
+                building,
+                electrical,
+                zone,
+                landUse,
+                interconnection,
+                netMetering,
+                propertyEasement,
+                hoa,
+                feasibility,
+                structuralFeasibility,
                 photos,
-                feasible,
                 username
+
             );
             res.status(200).json(updateProject);
         } catch (e) {
