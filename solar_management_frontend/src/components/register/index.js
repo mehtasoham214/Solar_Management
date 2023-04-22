@@ -171,8 +171,8 @@ export default function Register() {
                                         <MenuItem value={"Operations Manager"}>
                                             Operations Manager
                                         </MenuItem>
-                                        <MenuItem value={"Team Lead"}>
-                                            Team Lead
+                                        <MenuItem value={"Team Lead"}>
+                                            Team Lead
                                         </MenuItem>
                                     </Select>
                                 </FormControl>

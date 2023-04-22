@@ -20,7 +20,7 @@ export default function TLAllCurrentRequests() {
     async function Getongoingproject() {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-            `${process.env.REACT_APP_API_URL}allinprogress`,
+            `${process.env.REACT_APP_API_URL}request/allpending`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -34,7 +34,7 @@ export default function TLAllCurrentRequests() {
         Getongoingproject();
     }, []);
 
-    if (!ongoing) return <div>No Ongoing Projects</div>;
+    if (!ongoing) return <div>No Ongoing Requests</div>;
     return (
         <ThemeProvider theme={theme}>
             <React.Fragment>
@@ -68,32 +68,19 @@ export default function TLAllCurrentRequests() {
                                                         <TableRow key={row.id}>
                                                             <TableCell>
                                                                 {
-                                                                    row.projectAddress
+                                                                    row.projectRequest
                                                                 }
                                                             </TableCell>
                                                             <TableCell>
-                                                                {row.startDate}
+                                                                {row.date}
                                                             </TableCell>
                                                             <TableCell
-                                                                style={{
-                                                                    color:
-                                                                        row.projectStatus ===
-                                                                        "Pending"
-                                                                            ? theme
-                                                                                  .palette
-                                                                                  .error
-                                                                                  .main
-                                                                            : row.projectStatus ===
-                                                                              "In-Progress"
-                                                                            ? theme
-                                                                                  .palette
-                                                                                  .warning
-                                                                                  .main
-                                                                            : "",
-                                                                }}
+                                                            style={{
+                                                                color: theme.palette.warning.main,
+                                                            }}
                                                             >
                                                                 {
-                                                                    row.projectStatus
+                                                                    row.status
                                                                 }
                                                             </TableCell>
                                                         </TableRow>

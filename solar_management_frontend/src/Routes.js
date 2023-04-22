@@ -32,8 +32,8 @@ import TeamLead from "./components/operationManagerDashboard/teamlead";
 
 import SIForm from "./components/siteInspectorDashboard/SIFormComponent";
 
-import SIALLPastProjects from "./components/siteInspectorDashboard/pastProjectComponent";
-import SIALLOngoingProjects from "./components/siteInspectorDashboard/ongoingProjectComponent";
+//import SIALLPastProjects from "./components/siteInspectorDashboard/pastProjectComponent";
+//import SIALLOngoingProjects from "./components/siteInspectorDashboard/ongoingProjectComponent";
 
 function ProjectRouter() {
     return (
@@ -100,11 +100,11 @@ function ProjectRouter() {
             ></Route>
             <Route
                 path="/site-inspector/pastprojects"
-                element={<SIALLPastProjects />}
+                //element={<SIALLPastProjects />}
             ></Route>
             <Route
                 path="/site-inspector/ongoingprojects"
-                element={<SIALLOngoingProjects />} 
+                //element={<SIALLOngoingProjects />} 
             ></Route>
             <Route path="/team-lead" element={<TLDashboard />} />
             <Route
@@ -125,3 +125,4 @@ function ProjectRouter() {
 }
 
 export default ProjectRouter;
+// Error in line 35,36, 103,107 in Routes.js

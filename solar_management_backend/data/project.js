@@ -1081,16 +1081,21 @@ const getEquipment = async (id) => {
     }
 };
 
-const addRequest = async (id, projectRequest, postedby) => {
-    const projectDetails = getProjectByid(id);
+const addRequest = async (id, projectRequest, projectAddress, postedby) => {
     const requestCollection = await requests();
+    if (typeof id == "string") {
+        id = new ObjectId(id);
+    }
+    let status = 'Pending';
     const newRequest = {
         projectRequest: projectRequest,
         postedby: postedby,
-        project: projectDetails.projectAddress,
+        project: projectAddress,
         date: new Date().toLocaleDateString(),
+        status: status
     };
     const newInsertInformation = await requestCollection.insertOne(newRequest);
+    let note = `New Request Added`
     let noteInfo = {
         _id: new ObjectId(),
         note: note,
@@ -1296,6 +1301,58 @@ const generateInvoice = async (id) => {
     }
 };
 
+// Get all Pending Requests
+const getPendingRequests = async (username) => {
+    const requestCollection = await requests();
+    let staffUser = await user.getUser(username);
+    let pendingProjects = undefined;
+    if (staffUser.position == "Operations Manager") {
+        pendingProjects = await requestCollection
+            .find({
+                status: "Pending",
+            })
+            .toArray();
+    } 
+    else if(staffUser.position == "Team Lead"){
+        pendingProjects = await requestCollection
+            .find({
+                status: "Pending",
+                postedby: username
+            })
+            .toArray();
+    }
+    if (pendingProjects.length == 0) {
+        throw `No Requests Found`;
+    }
+    return pendingProjects;
+};
+
+// Get all Finished Requests
+const getFinishedRequests = async (username) => {
+    const requestCollection = await requests();
+    let staffUser = await user.getUser(username);
+    let finishedProjects = undefined;
+    if (staffUser.position == "Operations Manager") {
+        pendingProjects = await requestCollection
+            .find({
+                status: "Finished",
+            })
+            .toArray();
+    } 
+    else if(staffUser.position == "Team Lead"){
+        finishedProjects = await requestCollection
+            .find({
+                status: "Finished",
+                postedby: username
+            })
+            .toArray();
+    }
+    if (finishedProjects.length == 0) {
+        throw `No Requests Found`;
+    }
+    return finishedProjects;
+};
+
 module.exports = {
     createProject,
     getAllProjects,
@@ -1322,4 +1379,7 @@ module.exports = {
     getNotes,
     patchProject,
     generateInvoice,
+    // Requests
+    getPendingRequests,
+    getFinishedRequests,
 };

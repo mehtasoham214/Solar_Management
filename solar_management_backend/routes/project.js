@@ -916,4 +916,62 @@ router.get("/getequipment/:projectid", async (req, res, next) => {
     }
 });
 
+router.post(
+    "/request/add",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res, next) => {
+        try {
+            const { username } = req.user;
+            const id = req.body.id;
+            const projectAddress = req.body.projectAddress;
+            const request = req.body.request;
+            const token = req.headers.authorization.split(" ")[1]; // get JWT token from Authorization header
+            const userInformation = await projectData.addRequest(
+                id,
+                request,
+                projectAddress,
+                username
+            );
+            res.status(200).json(userInformation);
+        } catch (e) {
+            res.status(404).json({ error: `Failed to add new User: ${e}` });
+        }
+    }
+);
+
+// Fetch all Pending Requests
+router.get(
+    "/request/allpending",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res, next) => {
+        try {
+            const { username } = req.user;
+            const token = req.headers.authorization.split(" ")[1];
+            const pendingRequests = await projectData.getPendingRequests(
+                username
+            );
+            res.json(pendingRequests);
+        } catch (e) {
+            res.status(404).json({ error: `Failed to get requests: ${e}` });
+        }
+    }
+);
+
+// Fetch all Finished Requests
+router.get(
+    "/request/allfinished",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res, next) => {
+        try {
+            const { username } = req.user;
+            const token = req.headers.authorization.split(" ")[1];
+            const finishedRequests = await projectData.getFinishedRequests(
+                username
+            );
+            res.json(finishedRequests);
+        } catch (e) {
+            res.status(404).json({ error: `Failed to get requests: ${e}` });
+        }
+    }
+);
 module.exports = router;

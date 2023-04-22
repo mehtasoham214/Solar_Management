@@ -81,7 +81,7 @@ const getAllTeamLeads = async () => {
     const teamLeadCollection = await userCol();
     let teamLeadsList = await teamLeadCollection
         .find({
-            position: "Team Lead",
+            position: "Team Lead",
         })
         .toArray();
     if (teamLeadsList.length == 0) {
