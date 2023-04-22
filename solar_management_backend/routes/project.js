@@ -974,4 +974,25 @@ router.get(
         }
     }
 );
+
+// Patch Request
+router.patch(
+    "/request/patch",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res, next) => {
+        try {
+            let { username } = req.user;
+            const token = req.headers.authorization.split(" ")[1];
+            const status = req.body.status;
+            const id = req.body.id;
+            const updatedRequest = await projectData.updateRequest(
+                id,
+                status
+            );
+            res.json(updatedRequest);
+        } catch (e) {
+            res.status(404).json({ error: e });
+        }
+    }
+);
 module.exports = router;

@@ -33,7 +33,7 @@ export default function AllPastRequests() {
     async function Getongoingproject() {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-            `${process.env.REACT_APP_API_URL}allinprogress`,
+            `${process.env.REACT_APP_API_URL}request/allfinished`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -89,46 +89,28 @@ export default function AllPastRequests() {
                                                         <TableRow key={row.id}>
                                                             <TableCell>
                                                                 {
-                                                                    row.projectAddress
+                                                                    row.projectRequest
                                                                 }
                                                             </TableCell>
                                                             <TableCell>
                                                                 {
-                                                                    row.customerName
+                                                                    row.project
                                                                 }
                                                             </TableCell>
                                                             <TableCell>
-                                                                {row.startDate}
+                                                                {row.postedby}
                                                             </TableCell>
                                                             <TableCell>
-                                                                {`${
-                                                                    row.totalCost ===
-                                                                    "Not Assigned"
-                                                                        ? 0
-                                                                        : row.totalCost
-                                                                }`}{" "}
+                                                                {row.date}
                                                             </TableCell>
 
                                                             <TableCell
                                                                 style={{
-                                                                    color:
-                                                                        row.projectStatus ===
-                                                                        "Pending"
-                                                                            ? theme
-                                                                                  .palette
-                                                                                  .error
-                                                                                  .main
-                                                                            : row.projectStatus ===
-                                                                              "In-Progress"
-                                                                            ? theme
-                                                                                  .palette
-                                                                                  .warning
-                                                                                  .main
-                                                                            : "",
+                                                                    color:theme.palette.error.main
                                                                 }}
                                                             >
                                                                 {
-                                                                    row.projectStatus
+                                                                    row.status
                                                                 }
                                                             </TableCell>
                                                             <TableCell>

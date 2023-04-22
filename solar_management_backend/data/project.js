@@ -1067,7 +1067,7 @@ const updateEquipment = async (
 
 //Get Equipment
 const getEquipment = async (id) => {
-    if (typeof id === "string") {
+    if (typeof id == "string") {
         id = new ObjectId(id);
     }
     let equipmentData = undefined;
@@ -1115,15 +1115,17 @@ const addRequest = async (id, projectRequest, projectAddress, postedby) => {
 };
 
 const updateRequest = async (id, status) => {
-    //Change the code for notes add posted By and date
     const requestCollection = await requests();
     const notesCollection = await notes();
     const projectCollection = await project();
+    if (typeof id == "string") {
+        id = new ObjectId(id);
+    }
     const requestDetails = await requestCollection.findOne({ _id: id });
     const projectDetails = await projectCollection.findOne({
-        projectAddress: requestDetails.projectAddress,
+        projectAddress: requestDetails.project,
     });
-    if ((status = "Approved")) {
+    if ((status = "Approve")) {
         let newnote = requestDetails.projectRequest + " -" + status;
         let noteInfo = {
             _id: new ObjectId(),
@@ -1142,7 +1144,7 @@ const updateRequest = async (id, status) => {
             return `Request ${status}`;
         }
     }
-    if ((status = "Denied")) {
+    if ((status = "Deny")) {
         let newnote = requestDetails.projectRequest + " -" + status;
         let noteInfo = {
             _id: new ObjectId(),
@@ -1333,7 +1335,7 @@ const getFinishedRequests = async (username) => {
     let staffUser = await user.getUser(username);
     let finishedProjects = undefined;
     if (staffUser.position == "Operations Manager") {
-        pendingProjects = await requestCollection
+        finishedProjects = await requestCollection
             .find({
                 status: "Finished",
             })

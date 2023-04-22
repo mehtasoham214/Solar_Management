@@ -15,13 +15,15 @@ import Title from "../../salesDashboard/Title";
 
 
 export default function AllCurrentRequests() {
-    function ButtonArray() {
+    function ButtonArray(id) {
         const buttonArray = ["Approve", "Deny"];
 
         return (
             <div>
                 {buttonArray.map((buttonText, index) => (
-                    <button style={{ marginLeft: "10px" }} key={index}>
+                    <button style={{ marginLeft: "10px" }} key={index}
+                    onClick={() => handleButton(buttonArray[index], id)}
+                    >
                         {buttonText}
                     </button>
                 ))}
@@ -33,7 +35,7 @@ export default function AllCurrentRequests() {
     async function Getongoingproject() {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-            `${process.env.REACT_APP_API_URL}allinprogress`,
+            `${process.env.REACT_APP_API_URL}request/allpending`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -47,9 +49,30 @@ export default function AllCurrentRequests() {
         Getongoingproject();
     }, []);
 
+    const handleButton = async (status, id) => {
+
+            try {
+                const token = localStorage.getItem("token");
+                const response = await axios.patch(
+                    `${process.env.REACT_APP_API_URL}request/patch`,
+                    { status, id },
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+                if (response.status === 200) {
+                    let tempStatus = status;
+                    if (tempStatus === "Deny") {
+                        tempStatus = "Denie";
+                    }
+                    alert(`Project ${tempStatus}d Successfully`);
+                    window.location.reload();
+                }
+            } catch (error) {
+                console.error(error);
+            }
+    };
+
     if (!ongoing) return <div>No Ongoing Projects</div>;
 
-    const rows = ButtonArray();
     return (
         <ThemeProvider theme={theme}>
             <React.Fragment>
@@ -89,50 +112,33 @@ export default function AllCurrentRequests() {
                                                         <TableRow key={row.id}>
                                                             <TableCell>
                                                                 {
-                                                                    row.projectAddress
+                                                                    row.projectRequest
                                                                 }
                                                             </TableCell>
                                                             <TableCell>
                                                                 {
-                                                                    row.customerName
+                                                                    row.project
                                                                 }
                                                             </TableCell>
                                                             <TableCell>
-                                                                {row.startDate}
+                                                                {row.postedby}
                                                             </TableCell>
                                                             <TableCell>
-                                                                {`${
-                                                                    row.totalCost ===
-                                                                    "Not Assigned"
-                                                                        ? 0
-                                                                        : row.totalCost
-                                                                }`}{" "}
+                                                                {
+                                                                row.date
+                                                                }
                                                             </TableCell>
-
                                                             <TableCell
                                                                 style={{
-                                                                    color:
-                                                                        row.projectStatus ===
-                                                                        "Pending"
-                                                                            ? theme
-                                                                                  .palette
-                                                                                  .error
-                                                                                  .main
-                                                                            : row.projectStatus ===
-                                                                              "In-Progress"
-                                                                            ? theme
-                                                                                  .palette
-                                                                                  .warning
-                                                                                  .main
-                                                                            : "",
+                                                                    color:theme.palette.warning.main
                                                                 }}
                                                             >
                                                                 {
-                                                                    row.projectStatus
+                                                                    row.status
                                                                 }
                                                             </TableCell>
                                                             <TableCell>
-                                                                {rows}
+                                                                {ButtonArray(row._id)}
                                                             </TableCell>
                                                         </TableRow>
                                                     ))}
