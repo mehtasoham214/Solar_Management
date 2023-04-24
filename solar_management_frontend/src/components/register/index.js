@@ -53,6 +53,11 @@ export default function Register() {
                 alert("User Created Successfully");
                 window.location.href = "/";
             }
+            // Send login details to user
+            const subject = `Congratualtions on your new role as ${position}`;
+            const body = `Dear ${staffname},\n\nHere is your username:${username} \n Here is you password: ${password} \n\n Best Regards,\n Operations Manager`;
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
         } catch (error) {
             console.error(error);
         }
@@ -83,7 +88,8 @@ export default function Register() {
                     <Box
                         component="form"
                         noValidate
-                        onSubmit={handleSubmit}
+                        onSubmit={(e) => {handleSubmit(e);}}
+                            // sendEmail(username, email, password, staffname,position);}}
                         sx={{ mt: 3 }}
                     >
                         <Grid container spacing={2}>

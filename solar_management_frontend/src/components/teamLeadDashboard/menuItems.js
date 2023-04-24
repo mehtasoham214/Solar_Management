@@ -51,14 +51,6 @@ export const mainListItems = (
                     <ListItemText primary="Request Delay" />
                 </ListItemButton>
             </Link>
-            <Link>
-                <ListItemButton sx={{ color: "primary.main" }}>
-                    <ListItemIcon>
-                        <HardwareIcon sx={{ color: "primary.main" }} />
-                    </ListItemIcon>
-                    <ListItemText primary="Request Material" />
-                </ListItemButton>
-            </Link>
             <Link to="/team-lead/ongoingprojects" href="#" sx={{ mt: 3 }}>
                 <ListItemButton sx={{ color: "primary.main" }}>
                     <ListItemIcon>
