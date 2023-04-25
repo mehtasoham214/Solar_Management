@@ -1,4 +1,6 @@
 const data = require("../data");
+const { compressImage } = require("../data/compressImage");
+
 const projectData = data.project;
 const customerData = data.customer;
 const userData = data.user;
@@ -51,24 +53,29 @@ const storage = multer.diskStorage({
 });
 
 // Initialize upload
+
+// const upload = multer({
+//     storage: storage,
+//     limits: {
+//         fileSize: 10000000, // 1MB file size limit
+//     },
+//     fileFilter: (req, file, cb) => {
+//         const filetypes = /jpeg|jpg|png/;
+//         const extname = filetypes.test(
+//             path.extname(file.originalname).toLowerCase()
+//         );
+//         const mimetype = filetypes.test(file.mimetype);
+//         if (mimetype && extname) {
+//             return cb(null, true);
+//         } else {
+//             cb("Error: Images Only!");
+//         }
+//     },
+// }).array("photos", 10);
 const upload = multer({
-    storage: storage,
-    limits: {
-        fileSize: 1000000, // 1MB file size limit
-    },
-    fileFilter: (req, file, cb) => {
-        const filetypes = /jpeg|jpg|png/;
-        const extname = filetypes.test(
-            path.extname(file.originalname).toLowerCase()
-        );
-        const mimetype = filetypes.test(file.mimetype);
-        if (mimetype && extname) {
-            return cb(null, true);
-        } else {
-            cb("Error: Images Only!");
-        }
-    },
-}).array("photos", 10);
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 100000000 },
+}).single("photo");
 
 router.post("/login", async (req, res, next) => {
     const username = req.body.username;
@@ -308,7 +315,6 @@ router.patch(
                 structuralFeasibility,
                 photos,
                 username
-
             );
             res.status(200).json(updateProject);
         } catch (e) {
@@ -676,19 +682,46 @@ router.get("/image/:projectid/:imagename", (req, res) => {
     });
 });
 
-// Add Images
-router.post("/submit/:projectid/:imagename", (req, res) => {
-    upload(req, res, (err) => {
+router.post("/submit/:projectid/:imagename", async (req, res) => {
+    upload(req, res, async (err) => {
         if (err) {
             console.log(err);
             res.status(400).send(err);
-        } else {
-            // Save form data to database
-            const photos = req.files.map((file) => {
-                return "/images/" + req.body.projectid + "/" + file.filename;
+            return;
+        }
+
+        // Save form data to database
+        const photoPath =
+            "/images/" + req.params.projectid + "/" + req.file.filename;
+        // ... save the form data and photo path to database
+
+        // save image to image folder
+        const { projectid, imagename } = req.params;
+        const path =
+            __dirname + "/../public/images/" + projectid + "/" + imagename;
+        const compressedPath = path.replace(
+            imagename,
+            "compressed_" + imagename
+        );
+
+        try {
+            const compressedImage = await compressImage(
+                req.file.buffer,
+                compressedPath
+            );
+            fs.writeFile(compressedPath, compressedImage, (err) => {
+                if (err) {
+                    console.log(err);
+                    res.status(500).send("Failed to save image!");
+                } else {
+                    res.status(200).send(
+                        "Form submitted and image saved successfully!"
+                    );
+                }
             });
-            // ... save the form data and photo paths to database
-            res.status(200).send("Form submitted successfully!");
+        } catch (error) {
+            console.log(error);
+            res.status(500).send("Failed to compress image!");
         }
     });
 });
@@ -813,7 +846,6 @@ router.patch(
                 );
                 res.json(project);
             }
-            
         } catch (e) {
             res.status(404).json({ error: `Failed to get leads: ${e}` });
         }
@@ -1007,10 +1039,7 @@ router.patch(
             const token = req.headers.authorization.split(" ")[1];
             const status = req.body.status;
             const id = req.body.id;
-            const updatedRequest = await projectData.updateRequest(
-                id,
-                status
-            );
+            const updatedRequest = await projectData.updateRequest(id, status);
             res.json(updatedRequest);
         } catch (e) {
             res.status(404).json({ error: e });

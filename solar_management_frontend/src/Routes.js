@@ -1,8 +1,9 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import ALLOngoingProjects from "./components/onGoingProjects";
-import ALLPastProjects from "./components/pastProjects";
-import ProjectDashboard from "./components/projectDetails/projectDashboard";
+import ALLOngoingProjects from "./components/salesDashboard/onGoingProjects";
+import ALLPastProjects from "./components/salesDashboard/pastProjects";
+// import ProjectDashboard from "./components/projectDetails/projectDashboard";
+import ProjectDashboard from "./components/salesDashboard/projectDetails/projectDashboard";
 import AllLeads from "./components/leads";
 import AllCustomer from "./components/customers";
 import Dashboard from "./components/salesDashboard/dashboard";
@@ -96,7 +97,7 @@ function ProjectRouter() {
             <Route path="/site-inspector" element={<SIDashboard />} />
             <Route
                 path="/site-inspector/projectdetails"
-                element={< SIForm/>}
+                element={<SIForm />}
             ></Route>
             <Route
                 path="/site-inspector/pastprojects"
@@ -104,7 +105,7 @@ function ProjectRouter() {
             ></Route>
             <Route
                 path="/site-inspector/ongoingprojects"
-                //element={<SIALLOngoingProjects />} 
+                //element={<SIALLOngoingProjects />}
             ></Route>
             <Route path="/team-lead" element={<TLDashboard />} />
             <Route

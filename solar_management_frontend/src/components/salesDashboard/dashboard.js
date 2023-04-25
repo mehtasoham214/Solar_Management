@@ -10,7 +10,7 @@ import { ThemeProvider } from "@mui/material/styles";
 //Project Imports
 import Counter from "./counter";
 import OngoingProject from "./onGoingProject";
-import PastProject from "./pastProjects";
+import PastProject from "./pastProject";
 import PermanentDrawerLeft from "./navBar";
 
 //Material UI Imports

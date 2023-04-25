@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 //Components
-import PermanentDrawerLeft from "../salesDashboard/navBar";
-import theme from "../theme";
-import Title from "../salesDashboard/Title";
+import PermanentDrawerLeft from "../navBar";
+import theme from "../../theme";
+import Title from "../Title";
 
 //Material UI
 import { ThemeProvider } from "@mui/material/styles";

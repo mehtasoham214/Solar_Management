@@ -1,5 +1,9 @@
-//import menu designs & content
+//import React
 import * as React from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+
+//Import MUI Theme
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
@@ -8,8 +12,8 @@ import HardwareIcon from "@mui/icons-material/Hardware";
 import HomeIcon from "@mui/icons-material/Home";
 import theme from "../theme";
 import { ThemeProvider } from "@mui/material/styles";
-import { Link } from "react-router-dom";
-import axios from "axios";
+
+//Import Icons
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import FactCheckIcon from "@mui/icons-material/FactCheck";
 

@@ -12,7 +12,7 @@ import Paper from "@mui/material/Paper";
 import { Button, Container, Grid, ButtonGroup } from "@mui/material";
 
 //Theme Imports
-import theme from "../theme";
+import theme from "../../theme";
 import { ThemeProvider } from "@mui/material/styles";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({

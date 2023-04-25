@@ -8,8 +8,9 @@ import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import OMCustomizedTables from "./projectdetails";
-import Invoicetable from "../../projectDetails/invoice";
-import ProjectImage from "../../projectDetails/projectImages";
+// import Invoicetable from "../../projectDetails/invoice";
+import Invoicetable from "../../salesDashboard/projectDetails/invoice";
+import ProjectImage from "../../salesDashboard/projectDetails/projectImages";
 
 import OMPermanentDrawerLeft from "../navBar";
 import NotesTable from "../../notes";

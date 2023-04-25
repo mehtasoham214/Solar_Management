@@ -2,19 +2,19 @@ import * as React from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import Link from "@mui/material/Link";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-// import Title from "./Title";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+} from "@mui/material";
 import theme from "../theme";
 import Title from "../salesDashboard/Title";
 import { ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 
-// Generate Order Data
-
+//Get ongoing Projects
 export default function OngoingProject({ showMoreLink = true }) {
     const navigate = useNavigate();
 
@@ -25,6 +25,7 @@ export default function OngoingProject({ showMoreLink = true }) {
 
     const [ongoing, getongoing] = useState();
 
+    //Getting ongoing projects data from backend
     async function Getongoingproject() {
         const token = localStorage.getItem("token");
         const response = await axios.get(
@@ -54,6 +55,7 @@ export default function OngoingProject({ showMoreLink = true }) {
         <ThemeProvider theme={theme}>
             <React.Fragment>
                 <Title> On-Going Projects</Title>
+                {/* Displaying tables */}
                 <Table size="small">
                     <TableHead>
                         <TableRow>

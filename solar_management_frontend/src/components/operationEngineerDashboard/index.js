@@ -3,21 +3,21 @@ import * as React from "react";
 //Theme Imports
 import theme from "../theme";
 import { ThemeProvider } from "@mui/material/styles";
-
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
 import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
+
+//Importing Components
 import OngoingProject from "./ongoingProjects";
 import PastProject from "./pastProjects";
-
 import OEPermanentDrawerLeft from "./navBar";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
 
 function OEDashboard() {
-  return (
-    <ThemeProvider theme={theme}>
-    <Box sx={{ display: "flex", mt: 2 }}>
+    return (
+        <ThemeProvider theme={theme}>
+            <Box sx={{ display: "flex", mt: 2 }}>
                 <OEPermanentDrawerLeft />
 
                 <Box
@@ -31,9 +31,8 @@ function OEDashboard() {
                 >
                     <Toolbar />
                     <Container maxWidth="lg">
-                        {/* <Typography>Some content here</Typography> */}
                         <Grid container spacing={3}>
-                          <Grid item xs={12}>
+                            <Grid item xs={12}>
                                 <Paper
                                     sx={{
                                         p: 2,
@@ -43,8 +42,8 @@ function OEDashboard() {
                                 >
                                     <OngoingProject />
                                 </Paper>
-                          </Grid>
-                          <Grid item xs={12}>
+                            </Grid>
+                            <Grid item xs={12}>
                                 <Paper
                                     sx={{
                                         p: 2,
@@ -54,14 +53,13 @@ function OEDashboard() {
                                 >
                                     <PastProject />
                                 </Paper>
-                          </Grid>
+                            </Grid>
                         </Grid>
                     </Container>
-
-        </Box>
-        </Box>
-    </ThemeProvider>
-  );
+                </Box>
+            </Box>
+        </ThemeProvider>
+    );
 }
 
 export default OEDashboard;

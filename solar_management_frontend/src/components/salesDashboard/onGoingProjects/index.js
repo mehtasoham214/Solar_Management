@@ -1,7 +1,7 @@
 import * as React from "react";
 import axios from "axios";
-import PermanentDrawerLeft from "../salesDashboard/navBar";
-import theme from "../theme";
+import PermanentDrawerLeft from "../navBar";
+import theme from "../../theme";
 import { ThemeProvider } from "@mui/material/styles";
 import { Box, Container } from "@mui/system";
 import Grid from "@mui/material/Grid";
@@ -12,7 +12,7 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Title from "../salesDashboard/Title";
+import Title from "../Title";
 import { useNavigate } from "react-router-dom";
 import {
     Dialog,
