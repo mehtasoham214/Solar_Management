@@ -1,9 +1,9 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
+//import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -14,6 +14,7 @@ import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import theme from "../../theme";
 import FormControl from "@mui/material/FormControl";
+import axios from 'axios';
 
 export default function AddEmployee() {
     const handleSubmit = async (e) => {
@@ -30,33 +31,34 @@ export default function AddEmployee() {
                 alert("Please enter all details");
                 return;
             }
-            const response = await fetch(
+            const token = localStorage.getItem("token");
+            const response = await axios.post(
                 `${process.env.REACT_APP_API_URL}addNewStaff`,
                 {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
+                    username: username,
+                    staffname: staffname,
+                    email: email,
+                    position: position,
+                    contact: contact
                     },
-                    body: JSON.stringify({
-                        position,
-                        username,
-                        email,
-                        staffname,
-                        contact,
-                    }),
-                }
+                    { headers: { Authorization: `Bearer ${token}` } }
             );
-            const data = await response.json();
-            if (data.createdUserData === "User Created Successfully") {
+            const data = await response.data;
+            if (data === "User Created Successfully") {
                 alert("User Created Successfully");
-                if (position === "Site Inspector") {
+            // Send login details to user
+            const subject = `Congratualtions on your new role as ${position}`;
+            const body = `Dear ${staffname},\n\nHere is your username:${username} \n\n Best Regards,\n ${userName} \nOperations Manager`;
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
+            if (position === "Site Inspector") {
                     window.location.href = "/ops-manager/siteInspector";
                 } else if (position === "Sales Team") {
                     window.location.href = "/ops-manager/sales";
                 } else if (position === "Team Lead") {
                     window.location.href = "/ops-manager/teamlead";
                 } else if (position === "Operations Engineer") {
-                    window.location.href = "/ops-manager/opsEngineer";
+                    window.location.href = "/ops-manager/operationengineer";
                 } else {
                     window.location.href = "/ops-manager";
                 }
@@ -65,6 +67,24 @@ export default function AddEmployee() {
             console.error(error);
         }
     };
+
+    const [userName, getuserName] = useState();
+    async function GetUserInfo() {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+            `${process.env.REACT_APP_API_URL}userInfo`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        const data = await response.data;
+        getuserName(data.name);
+    }
+    useEffect(() => {
+        GetUserInfo();
+    }, []);
 
     const [position, setPosition] = useState("");
     const [username, setUserName] = useState("");
@@ -161,8 +181,8 @@ export default function AddEmployee() {
                                         <MenuItem value={"Operations Engineer"}>
                                             Operations Engineer
                                         </MenuItem>
-                                        <MenuItem value={"Team Lead"}>
-                                            Team Lead
+                                        <MenuItem value={"Team Lead"}>
+                                            Team Lead
                                         </MenuItem>
                                     </Select>
                                 </FormControl>
