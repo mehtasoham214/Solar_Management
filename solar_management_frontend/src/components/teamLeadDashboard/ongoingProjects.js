@@ -19,6 +19,26 @@ import { useNavigate } from "react-router-dom";
 export default function OngoingProject({ showMoreLink = true }) {
     const navigate = useNavigate();
 
+    // Handling Done Button Click
+    const handleButton = async (id) => {
+        const type = "Done";
+            try {
+                const token = localStorage.getItem("token");
+                const response = await axios.patch(
+                    `${process.env.REACT_APP_API_URL}projectstatus`,
+                    { type, id },
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+                if (response.status === 200) {
+                    let tempType = 'Marked As ' + type;
+                    alert(`Project ${tempType} Successfully`);
+                    window.location.reload();
+                }
+            } catch (error) {
+                console.error(error);
+            }
+    };
+
     const handleSeeMoreClick = (event) => {
         event.preventDefault();
         navigate("/team-lead/ongoingprojects"); // replace with the desired path
@@ -30,7 +50,7 @@ export default function OngoingProject({ showMoreLink = true }) {
         return (
             <div>
                 {buttonArray.map((buttonText, index) => (
-                    <button style={{ marginLeft: "10px" }} key={index}>
+                    <button style={{ marginLeft: "10px" }} key={index} onClick={()=>handleButton(id)}>
                         {buttonText}
                     </button>
                 ))}
@@ -93,7 +113,11 @@ export default function OngoingProject({ showMoreLink = true }) {
                                     {row.projectAddress}
                                 </TableCell>
                                 <TableCell>{row.customerName}</TableCell>
-                                <TableCell>{ButtonArray(row._id)}</TableCell>
+                                <TableCell>
+                                    <button style={{ marginLeft: "10px" }} onClick={()=>{handleButton(row._id)}}>
+                                        Done
+                                    </button>
+                    </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

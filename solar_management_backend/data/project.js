@@ -177,17 +177,17 @@ const getInProgressFiveProjects = async (username) => {
     else if(staffUser.position == "Operations Engineer"){
         inProgressProjects = await projectCollection
             .find({
-                projectStatus: { $in: ["In-Progress", "Pending"] },
+                projectProgress:"With Operations Engineer",
                 operationEngineer: username,
             })
             .limit(5)
             .toArray();
     }
-    // CHECK IF USER IS A OPS ENGINEER
+    // CHECK IF USER IS A SITE ENGINEER
     else if(staffUser.position == "Site Inspector"){
         inProgressProjects = await projectCollection
             .find({
-                projectStatus: { $in: ["In-Progress", "Pending"] },
+                projectProgress:"With Site Inspector",
                 siteInspector: username,
             })
             .limit(5)
@@ -197,7 +197,7 @@ const getInProgressFiveProjects = async (username) => {
     else if(staffUser.position == "Team Lead"){
         inProgressProjects = await projectCollection
             .find({
-                projectStatus: { $in: ["In-Progress", "Pending"] },
+                projectProgress:"With Boots on Ground",
                 teamLead: username,
             })
             .limit(5)
@@ -252,7 +252,7 @@ const getOngoingProjects = async (username) => {
         else if(staffUser.position == "Team Lead"){
             inProgressProjects = await projectCollection
                 .find({
-                    projectStatus: { $in: ["In-Progress", "Pending"] },
+                    projectProgress:"With Boots on Ground",
                     teamLead: username,
                 })
                 .toArray();
@@ -306,7 +306,7 @@ const getFinishedFiveProjects = async (username) => {
     else if(staffUser.position == "Team Lead"){
         finishedProjects = await projectCollection
             .find({
-                projectStatus: { $in: ["In-Progress", "Pending"] },
+                projectStatus: { $in: ["Cancelled", "Finished"] },
                 teamLead: username,
             })
             .limit(5)
@@ -361,7 +361,7 @@ const getFinishedProjects = async (username) => {
     else if(staffUser.position == "Team Lead"){
         finishedProjects = await projectCollection
             .find({
-                projectStatus: { $in: ["In-Progress", "Pending"] },
+                projectStatus: { $in: ["Cancelled", "Finished"] },
                 teamLead: username,
             })
             .toArray();
@@ -447,6 +447,21 @@ const buttonClick = async (id, type, username) => {
             }
         );
     }
+
+    if (type == "Done") {
+        status = "Ground Work Completed";
+        let endDate = new Date().toLocaleDateString();
+        let projectProgress = "Boots on Ground Work Completed";
+        updatedInfo = await projectCollection.updateOne(
+            { _id: id },
+            {
+                $set: {
+                    projectStatus: status,
+                    projectProgress: projectProgress,
+                },
+            }
+        );
+    }
     let note = "Project Status Changed to " + status;
     let noteInfo = {
         _id: new ObjectId(),
@@ -514,7 +529,7 @@ const siteInspectorUpdate = async (
         feasibility:feasibility,
         structuralFeasibility:structuralFeasibility
     };
-    let progressStatus = "At Operations Engineer";
+    let progressStatus = "With Operations Engineer";
     const pictures = {
         photos: photos,
     };

@@ -794,7 +794,15 @@ router.patch(
                     username
                 );
                 res.json(project);
+            } else if (type == "Done") {
+                const project = await projectData.buttonClick(
+                    projectId,
+                    type,
+                    username
+                );
+                res.json(project);
             }
+            
         } catch (e) {
             res.status(404).json({ error: `Failed to get leads: ${e}` });
         }
