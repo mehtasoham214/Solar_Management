@@ -26,7 +26,8 @@ export default function AddEmployee() {
                 username === "" ||
                 email === "" ||
                 staffname === "" ||
-                contact === ""
+                contact === "" ||
+                password === ""
             ) {
                 alert("Please enter all details");
                 return;
@@ -39,7 +40,8 @@ export default function AddEmployee() {
                     staffname: staffname,
                     email: email,
                     position: position,
-                    contact: contact
+                    contact: contact,
+                    password:password
                     },
                     { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -48,7 +50,7 @@ export default function AddEmployee() {
                 alert("User Created Successfully");
             // Send login details to user
             const subject = `Congratualtions on your new role as ${position}`;
-            const body = `Dear ${staffname},\n\nHere is your username:${username} \n\n Best Regards,\n ${userName} \nOperations Manager`;
+            const body = `Dear ${staffname},\n\nHere is your username: ${username} \n\nHere is your password: ${password} \n\n Best Regards,\n ${userName} \nOperations Manager`;
             const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
             window.location.href = mailtoLink;
             if (position === "Site Inspector") {
@@ -91,6 +93,7 @@ export default function AddEmployee() {
     const [email, setEmail] = useState("");
     const [staffname, setStaffName] = useState("");
     const [contact, setContactNumber] = useState("");
+    const [password, setPassword] = useState("");
 
     return (
         <ThemeProvider theme={theme}>
@@ -140,6 +143,20 @@ export default function AddEmployee() {
                                     placeholder="e.g. JohnDoe123"
                                     onChange={(e) =>
                                         setUserName(e.target.value)
+                                    }
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    id="password"
+                                    label="Password"
+                                    name="password"
+                                    autoComplete="password"
+                                    placeholder="Enter a safe password"
+                                    onChange={(e) =>
+                                        setPassword(e.target.value)
                                     }
                                 />
                             </Grid>

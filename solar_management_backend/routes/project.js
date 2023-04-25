@@ -182,13 +182,17 @@ router.post(
             const email = req.body.email;
             const position = req.body.position;
             const contact = req.body.contact;
+            const password = req.body.password;
             const token = req.headers.authorization.split(" ")[1]; // get JWT token from Authorization header
+            // Hashed Password
+            const hashedPassword = await bcrypt.hash(password, 10);
             const userInformation = await userData.createNewStaff(
                 name,
                 staffusername,
                 email,
                 position,
-                contact
+                contact,
+                hashedPassword
             );
             res.status(200).json(userInformation);
         } catch (e) {
