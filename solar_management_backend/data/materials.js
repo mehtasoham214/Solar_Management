@@ -6,6 +6,7 @@ const { ObjectId } = require("mongodb");
 const validator = require("../validator");
 const user = require("./user");
 
+// get material information
 const getMaterials = async (username) => {
     let staffUser = await user.getUser(username);
     const materialCollection = await material();
@@ -22,6 +23,7 @@ const getMaterials = async (username) => {
     return materialsList;
 };
 
+// Unused
 const allocateMaterials = async (username,projectId) => {
     let staffUser = await user.getUser(username);
     let projectData = undefined;
@@ -41,4 +43,5 @@ const allocateMaterials = async (username,projectId) => {
 
 module.exports = {
     getMaterials,
+    allocateMaterials
 };

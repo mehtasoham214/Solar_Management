@@ -1,15 +1,3 @@
-// Add code for create project POST -- Done
-// Add code for fetch top 5 projects GET -- Done
-// Add code to fetch all projects ( and covert in to 2 arrays) GET --Done
-// Add code to fetch single selected project GET -- Done
-// Add code to update project information PATCH -- Done
-// Add field validation -- Done
-
-// Types of update:
-// 1. Button to start, end, cancel -- Done
-// 2. add information from site inspector (project parameters) -- Done
-// 3. add information from opereations engineer (equipment, name of site inspector)
-
 const mongoCollections = require("../db/collection");
 const project = mongoCollections.project;
 const customer = mongoCollections.customer;
@@ -250,7 +238,7 @@ const getOngoingProjects = async (username) => {
     }
         // CHECK IF USER IS A Team Lead
         else if(staffUser.position == "Team Lead"){
-            inProgressProjects = await projectCollection
+            onGoingProjects = await projectCollection
                 .find({
                     projectProgress:"With Boots on Ground",
                     teamLead: username,
@@ -577,6 +565,7 @@ const getSiteInspectorUpdate = async (id) => {
     return projectinfo.areaInfo;
 };
 
+// Get Project related Images
 const getImages = async (id) => {
     validator.validateId(id);
     if (typeof id == "string") {
@@ -589,7 +578,7 @@ const getImages = async (id) => {
     }
     return projectinfo.images;
 };
-//For Operations Engineer
+//For Operations Manager to add staff
 const addStaff = async (id, si, oe, tl, username) => {
     let progressStatus = "With Site Inspector";
     const projectCollection = await project();
@@ -837,6 +826,7 @@ const addEquipment = async (
     }
 };
 
+// Get Number of Ongoing Projects
 const getOngoingCount = async (username) => {
     const projectCollection = await project();
     let staffUser = await user.getUser(username);
@@ -862,6 +852,7 @@ const getOngoingCount = async (username) => {
     }
 };
 
+// Get Number of Finished Projects
 const getFinishedCount = async (username) => {
     const projectCollection = await project();
     let staffUser = await user.getUser(username);
@@ -887,6 +878,7 @@ const getFinishedCount = async (username) => {
     }
 };
 
+// Calculate total sales cost
 const getCost = async (username) => {
     const projectCollection = await project();
     let staffUser = await user.getUser(username);
@@ -1096,6 +1088,7 @@ const getEquipment = async (id) => {
     }
 };
 
+// Add a request as Team Lead
 const addRequest = async (id, projectRequest, projectAddress, postedby) => {
     const requestCollection = await requests();
     if (typeof id == "string") {
@@ -1119,16 +1112,17 @@ const addRequest = async (id, projectRequest, projectAddress, postedby) => {
     };
     const notesCollection = await notes();
     const newNoteInformation = await notesCollection.updateOne(
-        { projectid: id },
+        { projectAddress: id },
         { $push: { noteData: noteInfo } }
     );
-    if (newInsertInformation.insertedCount == 0) {
+    if (newNoteInformation.insertedCount == 0) {
         throw `Could not add request`;
     } else {
         return "Request added";
     }
 };
 
+// Approve or Deny a request
 const updateRequest = async (id, status) => {
     const requestCollection = await requests();
     const notesCollection = await notes();
@@ -1141,7 +1135,8 @@ const updateRequest = async (id, status) => {
         projectAddress: requestDetails.project,
     });
     if ((status = "Approve")) {
-        let newnote = requestDetails.projectRequest + " -" + status;
+        status = "Approved"
+        let newnote = requestDetails.projectRequest + " - " + status;
         let noteInfo = {
             _id: new ObjectId(),
             note: newnote,
@@ -1152,15 +1147,17 @@ const updateRequest = async (id, status) => {
             { projectid: projectDetails._id },
             { $push: { noteData: noteInfo } }
         );
-        const deletedInfo = await requestCollection.deleteOne({ _id: id });
-        if (deletedInfo.deletedCount == 0 || newInsertNote.insertedCount == 0) {
-            throw `Could not delete request`;
+        const updatedRequest = await requestCollection.updateOne({ _id: id },
+            {$set:{status: status}});
+        if (updatedRequest.modifiedCount == 0 || newInsertInformation.modifiedCount == 0) {
+            throw `Could not update request`;
         } else {
             return `Request ${status}`;
         }
     }
     if ((status = "Deny")) {
-        let newnote = requestDetails.projectRequest + " -" + status;
+        status = "Denied"
+        let newnote = requestDetails.projectRequest + " - " + status;
         let noteInfo = {
             _id: new ObjectId(),
             note: newnote,
@@ -1171,9 +1168,10 @@ const updateRequest = async (id, status) => {
             { projectid: projectDetails._id },
             { $push: { noteData: noteInfo } }
         );
-        const deletedInfo = await requestCollection.deleteOne({ _id: id });
-        if (deletedInfo.deletedCount == 0 || newInsertNote.insertedCount == 0) {
-            throw `Could not delete request`;
+        const updatedRequest = await requestCollection.updateOne({ _id: id },
+            {$set:{status: status}});
+        if (updatedRequest.modifiedCount == 0 || newInsertInformation.modifiedCount == 0) {
+            throw `Could not update request`;
         } else {
             return `Request ${status}`;
         }
@@ -1304,6 +1302,7 @@ const patchProject = async (
     return newNote;
 };
 
+// Get Equipment data to generate invoice as PDF
 const generateInvoice = async (id) => {
     if (typeof id == "string") {
         id = new ObjectId(id);
@@ -1372,31 +1371,36 @@ const getFinishedRequests = async (username) => {
 
 module.exports = {
     createProject,
+    // Get Projects Details
     getAllProjects,
     getInProgressFiveProjects,
     getFinishedFiveProjects,
-    getProjectByid,
-    buttonClick,
-    siteInspectorUpdate,
-    getSiteInspectorUpdate,
-    getImages,
-    addStaff,
-    addEquipment,
-    getEquipment,
     getFinishedProjects,
     getOngoingProjects,
     getOngoingCount,
     getFinishedCount,
+    getProjectByid,
     getCost,
+    getImages,
+    // Handle Buttons
+    buttonClick,
+    // Site Inspector
+    siteInspectorUpdate,
+    getSiteInspectorUpdate,
+    // Operations Engineer
+    addEquipment,
+    getEquipment,
     updateEquipment,
-    addRequest,
-    updateRequest,
-    addNote,
+    // Operations Managet
+    addStaff,
     // NOTES
+    addNote,
     getNotes,
     patchProject,
     generateInvoice,
     // Requests
+    addRequest,
+    updateRequest,
     getPendingRequests,
     getFinishedRequests,
 };

@@ -137,6 +137,7 @@ const getCustomerByid = async (id) => {
     return finalInfo;
 };
 
+// get leads details
 const getLeads = async (username) => {
     const leadCollection = await leads();
     let staffUser = await user.getUser(username);
@@ -156,6 +157,7 @@ const getLeads = async (username) => {
     return leadslist;
 };
 
+// get customer details
 const getCustomers = async (username) => {
     let staffUser = await user.getUser(username);
     const projectCollection = await project();

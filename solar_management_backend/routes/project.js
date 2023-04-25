@@ -554,6 +554,7 @@ router.get(
     }
 );
 
+// get site inspector info
 router.get(
     "/getsiteinspectors",
     passport.authenticate("jwt", { session: false }),
@@ -569,6 +570,7 @@ router.get(
     }
 );
 
+// Get operations enginner info
 router.get(
     "/getoperationsengineer",
     passport.authenticate("jwt", { session: false }),
@@ -585,6 +587,7 @@ router.get(
     }
 );
 
+// Get team lead info
 router.get(
     "/getteamlead",
     passport.authenticate("jwt", { session: false }),
@@ -600,6 +603,7 @@ router.get(
     }
 );
 
+//Get sales team info
 router.get(
     "/getsalesteam",
     passport.authenticate("jwt", { session: false }),
@@ -615,6 +619,7 @@ router.get(
     }
 );
 
+// Update Equipment Data
 router.patch(
     "/projects/equipment/update",
     passport.authenticate("jwt", { session: false }),
@@ -655,6 +660,8 @@ router.patch(
         }
     }
 );
+
+// Get Images
 router.get("/image/:projectid/:imagename", (req, res) => {
     const { projectid, imagename } = req.params;
     const path = __dirname + "/../public/images/" + projectid + "/" + imagename;
@@ -669,6 +676,7 @@ router.get("/image/:projectid/:imagename", (req, res) => {
     });
 });
 
+// Add Images
 router.post("/submit/:projectid/:imagename", (req, res) => {
     upload(req, res, (err) => {
         if (err) {
@@ -717,6 +725,7 @@ router.get(
     }
 );
 
+// Get total sales value
 router.get(
     "/gettotalCost",
     passport.authenticate("jwt", { session: false }),
@@ -732,6 +741,7 @@ router.get(
     }
 );
 
+// Get Customer Info
 router.get(
     "/customers",
     passport.authenticate("jwt", { session: false }),
@@ -747,6 +757,7 @@ router.get(
     }
 );
 
+// Get staff info
 router.get(
     "/userinfo",
     passport.authenticate("jwt", { session: false }),
@@ -809,6 +820,7 @@ router.patch(
     }
 );
 
+// Get inventory material details
 router.get(
     "/materials",
     passport.authenticate("jwt", { session: false }),
@@ -913,6 +925,7 @@ router.get(
     }
 );
 
+// Get Allocated Equipment Details
 router.get("/getequipment/:projectid", async (req, res, next) => {
     try {
         const token = req.headers.authorization.split(" ")[1];
@@ -924,6 +937,7 @@ router.get("/getequipment/:projectid", async (req, res, next) => {
     }
 });
 
+// To add a request
 router.post(
     "/request/add",
     passport.authenticate("jwt", { session: false }),

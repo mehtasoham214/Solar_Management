@@ -4,6 +4,7 @@ const customer = mongoCollections.customer;
 const { ObjectId } = require("mongodb");
 const validator = require("../validator");
 
+// Create a new user as Operations Manager
 const createNewStaff = async (name, username, email, position, contact) => {
     const usercollection = await userCol();
     const userInfo = {
@@ -51,6 +52,7 @@ const createUser = async (
     }
 };
 
+// Get Staff Details
 const getUser = async (username) => {
     const usercollection = await userCol();
     validator.validateUser(username.trim());
@@ -64,6 +66,7 @@ const getUser = async (username) => {
     }
 };
 
+// Get all site inspector details
 const getAllSiteInspector = async () => {
     const siteInspector = await userCol();
     const siteInsperctorList = await siteInspector
@@ -77,6 +80,7 @@ const getAllSiteInspector = async () => {
     return siteInsperctorList;
 };
 
+// Get all team lead information
 const getAllTeamLeads = async () => {
     const teamLeadCollection = await userCol();
     let teamLeadsList = await teamLeadCollection
@@ -90,6 +94,7 @@ const getAllTeamLeads = async () => {
     return teamLeadsList;
 };
 
+// get all operations engineer details
 const getAllOperationsEngineer = async () => {
     const operationsEngineerCollection = await userCol();
     let operationsEngineerList = await operationsEngineerCollection
@@ -103,6 +108,7 @@ const getAllOperationsEngineer = async () => {
     return operationsEngineerList;
 };
 
+// get all sales team information
 const getAllSalesTeam = async () => {
     const salesTeamCollection = await userCol();
     let salesTeamList = await salesTeamCollection

@@ -53,6 +53,9 @@ export default function TLAllCurrentRequests() {
                                                 <TableHead>
                                                     <TableRow>
                                                         <TableCell>
+                                                            Project Address
+                                                        </TableCell>
+                                                        <TableCell>
                                                             Request
                                                         </TableCell>
                                                         <TableCell>
@@ -66,6 +69,11 @@ export default function TLAllCurrentRequests() {
                                                 <TableBody>
                                                     {ongoing.map((row) => (
                                                         <TableRow key={row.id}>
+                                                            <TableCell>
+                                                                {
+                                                                    row.project
+                                                                }
+                                                            </TableCell>
                                                             <TableCell>
                                                                 {
                                                                     row.projectRequest
