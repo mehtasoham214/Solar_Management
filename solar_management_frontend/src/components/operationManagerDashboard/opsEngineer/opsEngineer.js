@@ -12,9 +12,22 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Title from "../../salesDashboard/Title";
+import { Box, Button } from "@mui/material";
+import { Dialog } from "@mui/material";
+import AddEmployee from "../addEmployee/addEmployee";
 
 export default function OpsEngineerList() {
+    const [openDialog, setOpenDialog] = useState(false);
     const [operationEngineer, setOperationEngineer] = useState("");
+
+    const handleOpenDialog = () => {
+        setOpenDialog(true);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+    };
+
     async function GetOperationsEngineer() {
         const token = localStorage.getItem("token");
         try {
@@ -43,6 +56,7 @@ export default function OpsEngineerList() {
             <React.Fragment>
                 <Container maxWidth="lg" sx={{ mt: 2 }}>
                     {/* On going projects */}
+
                     <Grid item xs={12}>
                         <Paper
                             sx={{
@@ -51,7 +65,28 @@ export default function OpsEngineerList() {
                                 flexDirection: "column",
                             }}
                         >
-                            <Title>Operation Engineers</Title>
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                }}
+                            >
+                                <Title>Operation Engineers</Title>
+                                <Button
+                                    variant="outlined"
+                                    color="primary"
+                                    size="small"
+                                    onClick={handleOpenDialog}
+                                >
+                                    Add Operation Engineer
+                                </Button>
+                                <Dialog
+                                    open={openDialog}
+                                    onClose={handleCloseDialog}
+                                >
+                                    <AddEmployee />
+                                </Dialog>
+                            </Box>
                             <Table size="small">
                                 <TableHead>
                                     <TableRow>

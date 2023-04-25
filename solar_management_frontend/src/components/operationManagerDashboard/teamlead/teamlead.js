@@ -12,10 +12,22 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Title from "../../salesDashboard/Title";
-
+import { Box, Button } from "@mui/material";
+import { Dialog } from "@mui/material";
+import AddEmployee from "../addEmployee/addEmployee";
 
 export default function TeamLeadList() {
+    const [openDialog, setOpenDialog] = useState(false);
     const [teamLead, setteamLead] = useState("");
+
+    const handleOpenDialog = () => {
+        setOpenDialog(true);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+    };
+
     async function GetTeamLead() {
         const token = localStorage.getItem("token");
         try {
@@ -42,60 +54,65 @@ export default function TeamLeadList() {
     return (
         <ThemeProvider theme={theme}>
             <React.Fragment>
-                        <Container maxWidth="lg" sx={{ mt: 2 }}>
-                            {/* On going projects */}
-                            <Grid item xs={12}>
-                                <Paper
-                                    sx={{
-                                        p: 2,
-                                        display: "flex",
-                                        flexDirection: "column",
-                                    }}
+                <Container maxWidth="lg" sx={{ mt: 2 }}>
+                    {/* On going projects */}
+                    <Grid item xs={12}>
+                        <Paper
+                            sx={{
+                                p: 2,
+                                display: "flex",
+                                flexDirection: "column",
+                            }}
+                        >
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                }}
+                            >
+                                <Title>Team Leads</Title>
+                                <Button
+                                    variant="outlined"
+                                    color="primary"
+                                    size="small"
+                                    onClick={handleOpenDialog}
                                 >
-                                            <Title>Team Leads</Title>
-                                            <Table size="small">
-                                                <TableHead>
-                                                    <TableRow>
-                                                        <TableCell>
-                                                            Name
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            Username
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            Position
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            Contact
-                                                        </TableCell>
-                                                    </TableRow>
-                                                </TableHead>
-                                                <TableBody>
-                                                    {teamLead.map((row) => (
-                                                        <TableRow key={row.id}>
-                                                            <TableCell>
-                                                                {
-                                                                    row.name
-                                                                }
-                                                            </TableCell>
-                                                            <TableCell>
-                                                                {
-                                                                    row.username
-                                                                }
-                                                            </TableCell>
-                                                            <TableCell>
-                                                                {row.position}
-                                                            </TableCell>
-                                                            <TableCell>
-                                                                {row.contact}
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    ))}
-                                                </TableBody>
-                                            </Table>
-                                </Paper>
-                            </Grid>
-                        </Container>
+                                    Add Team Lead
+                                </Button>
+                                <Dialog
+                                    open={openDialog}
+                                    onClose={handleCloseDialog}
+                                >
+                                    <AddEmployee />
+                                </Dialog>
+                            </Box>
+                            <Table size="small">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Name</TableCell>
+                                        <TableCell>Username</TableCell>
+                                        <TableCell>Position</TableCell>
+                                        <TableCell>Contact</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {teamLead.map((row) => (
+                                        <TableRow key={row.id}>
+                                            <TableCell>{row.name}</TableCell>
+                                            <TableCell>
+                                                {row.username}
+                                            </TableCell>
+                                            <TableCell>
+                                                {row.position}
+                                            </TableCell>
+                                            <TableCell>{row.contact}</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </Paper>
+                    </Grid>
+                </Container>
             </React.Fragment>
         </ThemeProvider>
     );

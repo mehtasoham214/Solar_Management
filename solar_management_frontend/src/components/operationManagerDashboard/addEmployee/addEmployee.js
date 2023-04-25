@@ -12,7 +12,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
-import theme from "../theme";
+import theme from "../../theme";
 import FormControl from "@mui/material/FormControl";
 
 export default function AddEmployee() {
@@ -129,6 +129,7 @@ export default function AddEmployee() {
                                     fullWidth
                                     name="email"
                                     type="Email"
+                                    label="Email Address"
                                     id="email"
                                     autoComplete="email"
                                     onChange={(e) => setEmail(e.target.value)}

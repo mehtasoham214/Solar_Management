@@ -12,9 +12,22 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Title from "../../salesDashboard/Title";
+import { Dialog } from "@mui/material";
+import AddEmployee from "../addEmployee/addEmployee";
+import { Box, Button } from "@mui/material";
 
 export default function SalesList() {
+    const [openDialog, setOpenDialog] = useState(false);
     const [salesTeam, setSalesTeam] = useState();
+
+    const handleOpenDialog = () => {
+        setOpenDialog(true);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+    };
+
     async function GetSalesTeam() {
         const token = localStorage.getItem("token");
         try {
@@ -51,7 +64,28 @@ export default function SalesList() {
                                 flexDirection: "column",
                             }}
                         >
-                            <Title>Sales</Title>
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                }}
+                            >
+                                <Title>Sales</Title>
+                                <Button
+                                    variant="outlined"
+                                    color="primary"
+                                    size="small"
+                                    onClick={handleOpenDialog}
+                                >
+                                    Add Sales
+                                </Button>
+                                <Dialog
+                                    open={openDialog}
+                                    onClose={handleCloseDialog}
+                                >
+                                    <AddEmployee />
+                                </Dialog>
+                            </Box>
                             <Table size="small">
                                 <TableHead>
                                     <TableRow>

@@ -17,14 +17,14 @@ import {
 } from "@mui/material";
 
 export default function SiteInspectorForm() {
-    const [backyardInfo,setBackyardInfo ] = useState();
+    const [backyardInfo, setBackyardInfo] = useState();
     const [roofInfo, setRoofInfo] = useState();
     const [grid, setGrid] = useState();
     const [irradiance, setIrradiance] = useState();
     const [meterCompatibility, setMeterCompatibility] = useState();
     const [coordinates, setCoordinates] = useState();
     const [environment, setEnvironmnet] = useState();
-    const [building, setBuilding] =useState();
+    const [building, setBuilding] = useState();
     const [electrical, setElectrical] = useState();
     const [zone, setZone] = useState();
     const [landUse, setLandUse] = useState();
@@ -36,8 +36,8 @@ export default function SiteInspectorForm() {
     const [structuralFeasibility, setStructuralFeasibility] = useState();
     //const [photos, setPhotos] = useState([]);
     console.log(backyardInfo);
-    const handleSubmit = async() => {
-        const formData ={
+    const handleSubmit = async () => {
+        const formData = {
             backyardInfo: backyardInfo,
             roofInfo: roofInfo,
             grid: grid,
@@ -55,7 +55,7 @@ export default function SiteInspectorForm() {
             hoa: hoa,
             feasibility: feasibility,
             structuralFeasibility: structuralFeasibility,
-        }
+        };
         try {
             const token = localStorage.getItem("token");
             const id = localStorage.getItem("projectId");
@@ -71,7 +71,7 @@ export default function SiteInspectorForm() {
         } catch (error) {
             console.error(error);
         }
-    }
+    };
     return (
         <Container sx={{ border: 3, borderRadius: 2, borderColor: "gray" }}>
             <Grid item md={8}>
@@ -84,7 +84,7 @@ export default function SiteInspectorForm() {
                     id="outlined-basic"
                     label="BackYard Info"
                     variant="outlined"
-                    onChange={(event)=> setBackyardInfo(event.target.value)}
+                    onChange={(event) => setBackyardInfo(event.target.value)}
                 />
             </Grid>
             <Grid item xs={12} md={8}>
@@ -93,7 +93,7 @@ export default function SiteInspectorForm() {
                     id="outlined-basic"
                     label="Roof Info"
                     variant="outlined"
-                    onChange={(event)=> setRoofInfo(event.target.value)}
+                    onChange={(event) => setRoofInfo(event.target.value)}
                 />
             </Grid>
 
@@ -112,19 +112,25 @@ export default function SiteInspectorForm() {
                                 value="On-Grid"
                                 control={<Radio />}
                                 label="On-Grid"
-                                onChange={(event)=> setGrid(event.target.value)}
+                                onChange={(event) =>
+                                    setGrid(event.target.value)
+                                }
                             />
                             <FormControlLabel
                                 value="Off-Grid"
                                 control={<Radio />}
                                 label="Off-Grid"
-                                onChange={(event)=> setGrid(event.target.value)}
+                                onChange={(event) =>
+                                    setGrid(event.target.value)
+                                }
                             />
                             <FormControlLabel
                                 value="Hybrid"
                                 control={<Radio />}
                                 label="Hybrid"
-                                onChange={(event)=> setGrid(event.target.value)}
+                                onChange={(event) =>
+                                    setGrid(event.target.value)
+                                }
                             />
                         </RadioGroup>
                     </FormControl>
@@ -138,7 +144,7 @@ export default function SiteInspectorForm() {
                         id="outlined-basic"
                         label="Irradiance"
                         variant="outlined"
-                        onChange={(event)=> setIrradiance(event.target.value)}
+                        onChange={(event) => setIrradiance(event.target.value)}
                     />
                 </Grid>
                 <Stack direction="row" spacing={2}>
@@ -160,13 +166,21 @@ export default function SiteInspectorForm() {
                                     value="Yes"
                                     control={<Radio />}
                                     label="Yes"
-                                    onChange={(event)=> setMeterCompatibility(event.target.value)}
+                                    onChange={(event) =>
+                                        setMeterCompatibility(
+                                            event.target.value
+                                        )
+                                    }
                                 />
                                 <FormControlLabel
                                     value="No"
                                     control={<Radio />}
                                     label="No"
-                                    onChange={(event)=> setMeterCompatibility(event.target.value)}
+                                    onChange={(event) =>
+                                        setMeterCompatibility(
+                                            event.target.value
+                                        )
+                                    }
                                 />
                             </RadioGroup>
                         </FormControl>
@@ -179,7 +193,7 @@ export default function SiteInspectorForm() {
                     id="outlined-basic"
                     label="Co-ordinates"
                     variant="outlined"
-                    onChange={(event)=> setCoordinates(event.target.value)}
+                    onChange={(event) => setCoordinates(event.target.value)}
                 />
             </div>
 
@@ -212,19 +226,31 @@ export default function SiteInspectorForm() {
                                                 value="Yes"
                                                 control={<Radio />}
                                                 label="Yes"
-                                                onChange={(event)=> setEnvironmnet(event.target.value)}
+                                                onChange={(event) =>
+                                                    setEnvironmnet(
+                                                        event.target.value
+                                                    )
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="No"
                                                 control={<Radio />}
                                                 label="No"
-                                                onChange={(event)=> setEnvironmnet(event.target.value)}
+                                                onChange={(event) =>
+                                                    setEnvironmnet(
+                                                        event.target.value
+                                                    )
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="Not required"
                                                 control={<Radio />}
                                                 label="Not required"
-                                                onChange={(event)=> setEnvironmnet(event.target.value)}
+                                                onChange={(event) =>
+                                                    setEnvironmnet(
+                                                        event.target.value
+                                                    )
+                                                }
                                             />
                                         </RadioGroup>
                                     </FormControl>
@@ -246,19 +272,31 @@ export default function SiteInspectorForm() {
                                                 value="Yes"
                                                 control={<Radio />}
                                                 label="Yes"
-                                                onChange={(event)=> setBuilding(event.target.value)}
+                                                onChange={(event) =>
+                                                    setBuilding(
+                                                        event.target.value
+                                                    )
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="No"
                                                 control={<Radio />}
                                                 label="No"
-                                                onChange={(event)=> setBuilding(event.target.value)}
+                                                onChange={(event) =>
+                                                    setBuilding(
+                                                        event.target.value
+                                                    )
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="Not required"
                                                 control={<Radio />}
                                                 label="Not required"
-                                                onChange={(event)=> setBuilding(event.target.value)}
+                                                onChange={(event) =>
+                                                    setBuilding(
+                                                        event.target.value
+                                                    )
+                                                }
                                             />
                                         </RadioGroup>
                                     </FormControl>
@@ -280,19 +318,31 @@ export default function SiteInspectorForm() {
                                                 value="Yes"
                                                 control={<Radio />}
                                                 label="Yes"
-                                                onChange={(event)=> setElectrical(event.target.value)}
+                                                onChange={(event) =>
+                                                    setElectrical(
+                                                        event.target.value
+                                                    )
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="No"
                                                 control={<Radio />}
                                                 label="No"
-                                                onChange={(event)=> setElectrical(event.target.value)}
+                                                onChange={(event) =>
+                                                    setElectrical(
+                                                        event.target.value
+                                                    )
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="Not required"
                                                 control={<Radio />}
                                                 label="Not required"
-                                                onChange={(event)=> setElectrical(event.target.value)}
+                                                onChange={(event) =>
+                                                    setElectrical(
+                                                        event.target.value
+                                                    )
+                                                }
                                             />
                                         </RadioGroup>
                                     </FormControl>
@@ -313,19 +363,25 @@ export default function SiteInspectorForm() {
                                                 value="Yes"
                                                 control={<Radio />}
                                                 label="Yes"
-                                                onChange={(event)=> setZone(event.target.value)}
+                                                onChange={(event) =>
+                                                    setZone(event.target.value)
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="No"
                                                 control={<Radio />}
                                                 label="No"
-                                                onChange={(event)=> setZone(event.target.value)}
+                                                onChange={(event) =>
+                                                    setZone(event.target.value)
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="Not required"
                                                 control={<Radio />}
                                                 label="Not required"
-                                                onChange={(event)=> setZone(event.target.value)}
+                                                onChange={(event) =>
+                                                    setZone(event.target.value)
+                                                }
                                             />
                                         </RadioGroup>
                                     </FormControl>
@@ -346,19 +402,31 @@ export default function SiteInspectorForm() {
                                                 value="Yes"
                                                 control={<Radio />}
                                                 label="Yes"
-                                                onChange={(event)=> setLandUse(event.target.value)}
+                                                onChange={(event) =>
+                                                    setLandUse(
+                                                        event.target.value
+                                                    )
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="No"
                                                 control={<Radio />}
                                                 label="No"
-                                                onChange={(event)=> setLandUse(event.target.value)}
+                                                onChange={(event) =>
+                                                    setLandUse(
+                                                        event.target.value
+                                                    )
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="Not required"
                                                 control={<Radio />}
                                                 label="Not required"
-                                                onChange={(event)=> setLandUse(event.target.value)}
+                                                onChange={(event) =>
+                                                    setLandUse(
+                                                        event.target.value
+                                                    )
+                                                }
                                             />
                                         </RadioGroup>
                                     </FormControl>
@@ -382,19 +450,31 @@ export default function SiteInspectorForm() {
                                                 value="Yes"
                                                 control={<Radio />}
                                                 label="Yes"
-                                                onChange={(event)=> setInterconnection(event.target.value)}
+                                                onChange={(event) =>
+                                                    setInterconnection(
+                                                        event.target.value
+                                                    )
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="No"
                                                 control={<Radio />}
                                                 label="No"
-                                                onChange={(event)=> setInterconnection(event.target.value)}
+                                                onChange={(event) =>
+                                                    setInterconnection(
+                                                        event.target.value
+                                                    )
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="Not required"
                                                 control={<Radio />}
                                                 label="Not required"
-                                                onChange={(event)=> setInterconnection(event.target.value)}
+                                                onChange={(event) =>
+                                                    setInterconnection(
+                                                        event.target.value
+                                                    )
+                                                }
                                             />
                                         </RadioGroup>
                                     </FormControl>
@@ -419,19 +499,31 @@ export default function SiteInspectorForm() {
                                                 value="Yes"
                                                 control={<Radio />}
                                                 label="Yes"
-                                                onChange={(event)=> setNetMetering(event.target.value)}
+                                                onChange={(event) =>
+                                                    setNetMetering(
+                                                        event.target.value
+                                                    )
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="No"
                                                 control={<Radio />}
                                                 label="No"
-                                                onChange={(event)=> setNetMetering(event.target.value)}
+                                                onChange={(event) =>
+                                                    setNetMetering(
+                                                        event.target.value
+                                                    )
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="Not required"
                                                 control={<Radio />}
                                                 label="Not required"
-                                                onChange={(event)=> setNetMetering(event.target.value)}
+                                                onChange={(event) =>
+                                                    setNetMetering(
+                                                        event.target.value
+                                                    )
+                                                }
                                             />
                                         </RadioGroup>
                                     </FormControl>
@@ -455,19 +547,31 @@ export default function SiteInspectorForm() {
                                                 value="Yes"
                                                 control={<Radio />}
                                                 label="Yes"
-                                                onChange={(event)=> setPropertyEasement(event.target.value)}
+                                                onChange={(event) =>
+                                                    setPropertyEasement(
+                                                        event.target.value
+                                                    )
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="No"
                                                 control={<Radio />}
                                                 label="No"
-                                                onChange={(event)=> setPropertyEasement(event.target.value)}
+                                                onChange={(event) =>
+                                                    setPropertyEasement(
+                                                        event.target.value
+                                                    )
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="Not required"
                                                 control={<Radio />}
                                                 label="Not required"
-                                                onChange={(event)=> setPropertyEasement(event.target.value)}
+                                                onChange={(event) =>
+                                                    setPropertyEasement(
+                                                        event.target.value
+                                                    )
+                                                }
                                             />
                                         </RadioGroup>
                                     </FormControl>
@@ -489,19 +593,25 @@ export default function SiteInspectorForm() {
                                                 value="Yes"
                                                 control={<Radio />}
                                                 label="Yes"
-                                                onChange={(event)=> setHoa(event.target.value)}
+                                                onChange={(event) =>
+                                                    setHoa(event.target.value)
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="No"
                                                 control={<Radio />}
                                                 label="No"
-                                                onChange={(event)=> setHoa(event.target.value)}
+                                                onChange={(event) =>
+                                                    setHoa(event.target.value)
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="Not required"
                                                 control={<Radio />}
                                                 label="Not required"
-                                                onChange={(event)=> setHoa(event.target.value)}
+                                                onChange={(event) =>
+                                                    setHoa(event.target.value)
+                                                }
                                             />
                                         </RadioGroup>
                                     </FormControl>
@@ -526,13 +636,17 @@ export default function SiteInspectorForm() {
                             value="Yes"
                             control={<Radio />}
                             label="Yes"
-                            onChange={(event)=> setFeasibility(event.target.value)}
+                            onChange={(event) =>
+                                setFeasibility(event.target.value)
+                            }
                         />
                         <FormControlLabel
                             value="No"
                             control={<Radio />}
                             label="No"
-                            onChange={(event)=> setFeasibility(event.target.value)}
+                            onChange={(event) =>
+                                setFeasibility(event.target.value)
+                            }
                         />
                     </RadioGroup>
                 </FormControl>
@@ -554,13 +668,17 @@ export default function SiteInspectorForm() {
                             value="Yes"
                             control={<Radio />}
                             label="Yes"
-                            onChange={(event)=> setStructuralFeasibility(event.target.value)}
+                            onChange={(event) =>
+                                setStructuralFeasibility(event.target.value)
+                            }
                         />
                         <FormControlLabel
                             value="No"
                             control={<Radio />}
                             label="No"
-                            onChange={(event)=> setStructuralFeasibility(event.target.value)}
+                            onChange={(event) =>
+                                setStructuralFeasibility(event.target.value)
+                            }
                         />
                     </RadioGroup>
                 </FormControl>
@@ -573,28 +691,28 @@ export default function SiteInspectorForm() {
                 </Button>
             </Grid>
             <Grid item xs={12}></Grid>
-                        <Grid
-                            item
-                            md={3}
-                            display="flex"
-                            alignItems={{
-                                xs: "center",
-                                md: "flex-end",
-                                lg: "flex-end",
-                            }}
-                            justifyContent="flex-end"
-                            sx={{ marginBottom: 2 }}
-                        >
-                            <Button
-                                onClick={handleSubmit}
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                sx={{ mt: 3, mb: 2 }}
-                            >
-                                Submit
-                            </Button>
-                        </Grid>
+            <Grid
+                item
+                md={3}
+                display="flex"
+                alignItems={{
+                    xs: "center",
+                    md: "flex-end",
+                    lg: "flex-end",
+                }}
+                justifyContent="flex-end"
+                sx={{ marginBottom: 2 }}
+            >
+                <Button
+                    onClick={handleSubmit}
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                >
+                    Submit
+                </Button>
+            </Grid>
         </Container>
     );
 }
