@@ -1134,7 +1134,7 @@ const updateRequest = async (id, status) => {
     const projectDetails = await projectCollection.findOne({
         projectAddress: requestDetails.project,
     });
-    if ((status = "Approve")) {
+    if ((status === "Approve")) {
         status = "Approved"
         let newnote = requestDetails.projectRequest + " - " + status;
         let noteInfo = {
@@ -1155,7 +1155,7 @@ const updateRequest = async (id, status) => {
             return `Request ${status}`;
         }
     }
-    if ((status = "Deny")) {
+    if ((status === "Deny")) {
         status = "Denied"
         let newnote = requestDetails.projectRequest + " - " + status;
         let noteInfo = {
@@ -1351,14 +1351,14 @@ const getFinishedRequests = async (username) => {
     if (staffUser.position == "Operations Manager") {
         finishedProjects = await requestCollection
             .find({
-                status: "Finished",
+                status: {$in:["Approved","Denied"]},
             })
             .toArray();
     } 
     else if(staffUser.position == "Team Lead"){
         finishedProjects = await requestCollection
             .find({
-                status: "Finished",
+                status: {$in:["Approved","Denied"]},
                 postedby: username
             })
             .toArray();

@@ -106,15 +106,12 @@ export default function AllPastRequests() {
 
                                                             <TableCell
                                                                 style={{
-                                                                    color:theme.palette.error.main
+                                                                    color: row.status === "Approved" ? theme.palette.success.main : row.status === "Denied" ? theme.palette.error.main : ""
                                                                 }}
                                                             >
                                                                 {
                                                                     row.status
                                                                 }
-                                                            </TableCell>
-                                                            <TableCell>
-                                                                {rows}
                                                             </TableCell>
                                                         </TableRow>
                                                     ))}

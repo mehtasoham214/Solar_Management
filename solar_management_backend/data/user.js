@@ -5,13 +5,13 @@ const { ObjectId } = require("mongodb");
 const validator = require("../validator");
 
 // Create a new user as Operations Manager
-const createNewStaff = async (name, username, email, position, contact) => {
+const createNewStaff = async (name, username, email, position, contact, password) => {
     const usercollection = await userCol();
     const userInfo = {
         name: name,
         username: username,
         email: email,
-        password: undefined,
+        password: password,
         position: position,
         contact: contact,
         createdAt: new Date().toLocaleDateString(),
@@ -108,7 +108,7 @@ const getAllOperationsEngineer = async () => {
     return operationsEngineerList;
 };
 
-// get all sales team information
+// get all sales team
 const getAllSalesTeam = async () => {
     const salesTeamCollection = await userCol();
     let salesTeamList = await salesTeamCollection
