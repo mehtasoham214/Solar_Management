@@ -23,7 +23,6 @@ export default function AllLeads() {
                         }}
                     >
                         <Container maxWidth="lg" sx={{ mt: 2 }}>
-                            {/* On going projects */}
                             <Grid item xs={12}>
                                 <Paper
                                     sx={{
@@ -32,7 +31,7 @@ export default function AllLeads() {
                                         flexDirection: "column",
                                     }}
                                 >
-                                    <Leads/>
+                                    <Leads />
                                 </Paper>
                             </Grid>
                         </Container>
