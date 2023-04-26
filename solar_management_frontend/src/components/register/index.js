@@ -88,7 +88,6 @@ export default function Register() {
                         onSubmit={(e) => {
                             handleSubmit(e);
                         }}
-                        // sendEmail(username, email, password, staffname,position);}}
                         sx={{ mt: 3 }}
                     >
                         <Grid container spacing={2}>
