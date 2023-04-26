@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-//import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -14,7 +13,7 @@ import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import theme from "../../theme";
 import FormControl from "@mui/material/FormControl";
-import axios from 'axios';
+import axios from "axios";
 
 export default function AddEmployee() {
     const handleSubmit = async (e) => {
@@ -41,19 +40,22 @@ export default function AddEmployee() {
                     email: email,
                     position: position,
                     contact: contact,
-                    password:password
-                    },
-                    { headers: { Authorization: `Bearer ${token}` } }
+                    password: password,
+                },
+                { headers: { Authorization: `Bearer ${token}` } }
             );
             const data = await response.data;
             if (data === "User Created Successfully") {
                 alert("User Created Successfully");
-            // Send login details to user
-            const subject = `Congratualtions on your new role as ${position}`;
-            const body = `Dear ${staffname},\n\nHere is your username: ${username} \n\nHere is your password: ${password} \n\n Best Regards,\n ${userName} \nOperations Manager`;
-            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-            window.location.href = mailtoLink;
-            if (position === "Site Inspector") {
+
+                // Send login details to user
+                const subject = `Congratualtions on your new role as ${position}`;
+                const body = `Dear ${staffname},\n\nHere is your username: ${username} \n\nHere is your password: ${password} \n\n Best Regards,\n ${userName} \nOperations Manager`;
+                const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(
+                    subject
+                )}&body=${encodeURIComponent(body)}`;
+                window.location.href = mailtoLink;
+                if (position === "Site Inspector") {
                     window.location.href = "/ops-manager/siteInspector";
                 } else if (position === "Sales Team") {
                     window.location.href = "/ops-manager/sales";

@@ -1,19 +1,27 @@
+//React Imports
 import * as React from "react";
 import { useState } from "react";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { ThemeProvider } from "@mui/material/styles";
-import MenuItem from "@mui/material/MenuItem";
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
+import axios from "axios";
+
+//MUI Imports
+import {
+    Button,
+    CssBaseline,
+    TextField,
+    Link,
+    Grid,
+    Box,
+    Typography,
+    Container,
+    ThemeProvider,
+    MenuItem,
+    InputLabel,
+    Select,
+    FormControl,
+} from "@mui/material";
+
+//Theme Imports
 import theme from "../theme";
-import FormControl from "@mui/material/FormControl";
 
 export default function Register() {
     const handleSubmit = async (e) => {
@@ -31,33 +39,22 @@ export default function Register() {
                 alert("Please enter all details");
                 return;
             }
-            const response = await fetch(
+            const response = await axios.post(
                 `${process.env.REACT_APP_API_URL}register`,
                 {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        position,
-                        username,
-                        email,
-                        password,
-                        staffname,
-                        contact,
-                    }),
+                    position: position,
+                    username: username,
+                    password: password,
+                    staffname: staffname,
+                    contact: contact,
+                    email: email,
                 }
             );
-            const data = await response.json();
+            const data = await response.data;
             if (data.createdUserData === "User Created Successfully") {
                 alert("User Created Successfully");
                 window.location.href = "/";
             }
-            // Send login details to user
-            const subject = `Congratualtions on your new role as ${position}`;
-            const body = `Dear ${staffname},\n\nHere is your username:${username} \n Here is you password: ${password} \n\n Best Regards,\n Operations Manager`;
-            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-            window.location.href = mailtoLink;
         } catch (error) {
             console.error(error);
         }
@@ -88,8 +85,10 @@ export default function Register() {
                     <Box
                         component="form"
                         noValidate
-                        onSubmit={(e) => {handleSubmit(e);}}
-                            // sendEmail(username, email, password, staffname,position);}}
+                        onSubmit={(e) => {
+                            handleSubmit(e);
+                        }}
+                        // sendEmail(username, email, password, staffname,position);}}
                         sx={{ mt: 3 }}
                     >
                         <Grid container spacing={2}>
