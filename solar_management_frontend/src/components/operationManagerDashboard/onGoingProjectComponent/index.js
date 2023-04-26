@@ -1,20 +1,16 @@
+//React imports
 import * as React from "react";
-import axios from "axios";
-import OMPermanentDrawerLeft from "../navBar";
-import theme from "../../theme";
-import Title from "../../salesDashboard/Title";
-import { ThemeProvider } from "@mui/material/styles";
-import { Box, Container } from "@mui/system";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
 import { useState, useEffect } from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-
 import { useNavigate } from "react-router-dom";
+
+//Axios imports
+import axios from "axios";
+
+//Components imports
+import OMPermanentDrawerLeft from "../navBar";
+import Title from "../../salesDashboard/Title";
+
+//Material UI imports
 import {
     Dialog,
     DialogActions,
@@ -22,13 +18,28 @@ import {
     DialogTitle,
     InputAdornment,
     TextField,
+    Button,
+    Box,
+    Container,
+    Grid,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
 } from "@mui/material";
+
+//Icons imports
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import PhoneIcon from "@mui/icons-material/Phone";
 import AddHomeIcon from "@mui/icons-material/AddHome";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import Button from "@mui/material/Button";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+
+//Theme imports
+import theme from "../../theme";
+import { ThemeProvider } from "@mui/material/styles";
 
 export default function AllOMOngoingProjects() {
     const navigate = useNavigate();
@@ -170,6 +181,7 @@ export default function AllOMOngoingProjects() {
         <ThemeProvider theme={theme}>
             <React.Fragment>
                 <Box sx={{ display: "flex", mt: 2 }}>
+                    {/* Menu for operation manager */}
                     <OMPermanentDrawerLeft />
                     <Box
                         component="main"

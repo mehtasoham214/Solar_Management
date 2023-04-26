@@ -1,40 +1,48 @@
+// React Imports
 import React from "react";
 import { Route, Routes } from "react-router-dom";
+
+//Sales Dashboard Component Imports
 import ALLOngoingProjects from "./components/salesDashboard/onGoingProjects";
 import ALLPastProjects from "./components/salesDashboard/pastProjects";
-// import ProjectDashboard from "./components/projectDetails/projectDashboard";
 import ProjectDashboard from "./components/salesDashboard/projectDetails/projectDashboard";
-import AllLeads from "./components/leads";
-import AllCustomer from "./components/customers";
+import AllLeads from "./components/salesDashboard/leads";
+import AllCustomer from "./components/salesDashboard/customers";
 import Dashboard from "./components/salesDashboard/dashboard";
+
+//Operation Manager Dashboard Component Imports
 import OMDashboard from "./components/operationManagerDashboard";
-import OEDashboard from "./components/operationEngineerDashboard";
-import SIDashboard from "./components/siteInspectorDashboard";
-import TLDashboard from "./components/teamLeadDashboard";
-import Login from "./components/login";
-import Register from "./components/register";
 import AllOMOngoingProjects from "./components/operationManagerDashboard/onGoingProjectComponent";
 import AllOMPastProjects from "./components/operationManagerDashboard/pastProjectComponent";
 import OMProjectDashboard from "./components/operationManagerDashboard/projectDetails";
-import OEMaterials from "./components/operationEngineerDashboard/materials";
-import OEProjectDetails from "./components/operationEngineerDashboard/projectDetails/projectDetailsDashboard";
-import OEALLOngoingProjects from "./components/operationEngineerDashboard/onGoingProjectsComponent";
-import OEALLPastProjects from "./components/operationEngineerDashboard/pastProjectsComponents";
-import TLALLOngoingProjects from "./components/teamLeadDashboard/onGoingProjectsComponent";
-import TLALLPastProjects from "./components/teamLeadDashboard/pastProjectsComponents";
-import TLProjectDetails from "./components/teamLeadDashboard/projectDetails/projectDetailsDashboard";
-import TLRequests from "./components/teamLeadDashboard/requests";
-
 import Requests from "./components/operationManagerDashboard/requests";
 import OpsEnginner from "./components/operationManagerDashboard/opsEngineer";
 import Sales from "./components/operationManagerDashboard/sales";
 import SiteInspector from "./components/operationManagerDashboard/siteInspector";
 import TeamLead from "./components/operationManagerDashboard/teamlead";
 
-import SIForm from "./components/siteInspectorDashboard/SIFormComponent";
+//Operation Engineer Dashboard Component Imports
+import OEDashboard from "./components/operationEngineerDashboard";
+import OEMaterials from "./components/operationEngineerDashboard/materials";
+import OEProjectDetails from "./components/operationEngineerDashboard/projectDetails/projectDetailsDashboard";
+import OEALLOngoingProjects from "./components/operationEngineerDashboard/onGoingProjectsComponent";
+import OEALLPastProjects from "./components/operationEngineerDashboard/pastProjectsComponents";
 
+//Site Inspector Dashboard Component Imports
+import SIDashboard from "./components/siteInspectorDashboard";
+import SIForm from "./components/siteInspectorDashboard/SIFormComponent";
 //import SIALLPastProjects from "./components/siteInspectorDashboard/pastProjectComponent";
 //import SIALLOngoingProjects from "./components/siteInspectorDashboard/ongoingProjectComponent";
+
+//Team Lead Dashboard Component Imports
+import TLDashboard from "./components/teamLeadDashboard";
+import TLALLOngoingProjects from "./components/teamLeadDashboard/onGoingProjectsComponent";
+import TLALLPastProjects from "./components/teamLeadDashboard/pastProjectsComponents";
+import TLProjectDetails from "./components/teamLeadDashboard/projectDetails/projectDetailsDashboard";
+import TLRequests from "./components/teamLeadDashboard/requests";
+
+import Login from "./components/login";
+import Register from "./components/register";
 
 function ProjectRouter() {
     return (
@@ -126,4 +134,4 @@ function ProjectRouter() {
 }
 
 export default ProjectRouter;
-// Error in line 35,36, 103,107 in Routes.js
+//siteinspector ongoing past to be added

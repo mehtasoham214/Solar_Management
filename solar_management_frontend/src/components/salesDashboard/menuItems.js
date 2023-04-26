@@ -1,17 +1,25 @@
-//import menu designs & content
+//React imports
 import * as React from "react";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
+
+//Material UI imports
+import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+
+//Icons imports
 import PeopleIcon from "@mui/icons-material/People";
 import LogoutIcon from "@mui/icons-material/Logout";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import FactCheckIcon from "@mui/icons-material/FactCheck";
 import LeaderboardIcon from "@mui/icons-material/Leaderboard";
 import HomeIcon from "@mui/icons-material/Home";
+
+//Theme imports
 import theme from "../theme";
 import { ThemeProvider } from "@mui/material/styles";
+
+//Components imports
 import { Link } from "react-router-dom";
+
+//Axios imports
 import axios from "axios";
 
 const handleLogout = async (e) => {
@@ -33,6 +41,7 @@ const handleLogout = async (e) => {
 export const mainListItems = (
     <ThemeProvider theme={theme}>
         <React.Fragment>
+            {/* Menu items display */}
             <Link to="/sales" href="#" sx={{ mt: 3 }}>
                 <ListItemButton sx={{ color: "primary.main" }}>
                     <ListItemIcon>

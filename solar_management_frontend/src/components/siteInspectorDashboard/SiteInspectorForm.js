@@ -1,7 +1,14 @@
+//React imports
 import * as React from "react";
 import { useState } from "react";
+
+//Axios imports
 import axios from "axios";
+
+//Components imports
 import Title from "../salesDashboard/Title";
+
+//Material UI imports
 import {
     Button,
     FormControl,
@@ -34,8 +41,6 @@ export default function SiteInspectorForm() {
     const [hoa, setHoa] = useState();
     const [feasibility, setFeasibility] = useState();
     const [structuralFeasibility, setStructuralFeasibility] = useState();
-    //const [photos, setPhotos] = useState([]);
-    console.log(backyardInfo);
     const handleSubmit = async () => {
         const formData = {
             backyardInfo: backyardInfo,

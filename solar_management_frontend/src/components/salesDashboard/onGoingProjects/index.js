@@ -1,19 +1,21 @@
+//React imports
 import * as React from "react";
-import axios from "axios";
-import PermanentDrawerLeft from "../navBar";
-import theme from "../../theme";
-import { ThemeProvider } from "@mui/material/styles";
-import { Box, Container } from "@mui/system";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
 import { useState, useEffect } from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Title from "../Title";
 import { useNavigate } from "react-router-dom";
+
+//Components Imports
+import PermanentDrawerLeft from "../navBar";
+import Title from "../Title";
+
+//Material ui Imports
+import { Box, Container, Grid, Paper, Button } from "@mui/material";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+} from "@mui/material";
 import {
     Dialog,
     DialogActions,
@@ -22,11 +24,19 @@ import {
     InputAdornment,
     TextField,
 } from "@mui/material";
+
+//Theme Imports
+import theme from "../../theme";
+import { ThemeProvider } from "@mui/material/styles";
+
+//Axios Imports
+import axios from "axios";
+
+//Icons Imports
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import PhoneIcon from "@mui/icons-material/Phone";
 import AddHomeIcon from "@mui/icons-material/AddHome";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import Button from "@mui/material/Button";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 export default function ALLOngoingProjects() {
@@ -169,6 +179,7 @@ export default function ALLOngoingProjects() {
         <ThemeProvider theme={theme}>
             <React.Fragment>
                 <Box sx={{ display: "flex", mt: 2 }}>
+                    {/* Menu drawer for sales dashboard */}
                     <PermanentDrawerLeft />
                     <Box
                         component="main"

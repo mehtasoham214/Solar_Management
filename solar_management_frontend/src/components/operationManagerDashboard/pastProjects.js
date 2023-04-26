@@ -1,17 +1,27 @@
+//React imports
 import * as React from "react";
-import axios from "axios";
 import { useState, useEffect } from "react";
-import Link from "@mui/material/Link";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
+import { useNavigate } from "react-router-dom";
+
+//Axios imports
+import axios from "axios";
+
+//Components imports
 import Title from "../salesDashboard/Title";
+
+//Material UI imports
+import {
+    Link,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+} from "@mui/material";
+
+//Theme imports
 import theme from "../theme";
 import { ThemeProvider } from "@mui/material/styles";
-import { useNavigate } from "react-router-dom";
-//import { Button } from "@mui/material";
 
 // Generate Order Data
 
@@ -28,10 +38,6 @@ export default function OMPastProject({ showMoreLink = true }) {
 
         return (
             <div>
-                {/* <EditButton>buttonArray[0]</EditButton>
-              <button >buttonArray[0]</button>
-              <button >buttonArray[0]</button> */}
-
                 {buttonArray.map((buttonText, index) => (
                     <button style={{ marginLeft: "10px" }} key={index}>
                         {buttonText}
@@ -73,6 +79,7 @@ export default function OMPastProject({ showMoreLink = true }) {
     return (
         <ThemeProvider theme={theme}>
             <React.Fragment>
+                {/* Past project display */}
                 <Title>Past Projects</Title>
                 <Table size="small">
                     <TableHead>

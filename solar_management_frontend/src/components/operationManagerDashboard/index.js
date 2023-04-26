@@ -13,16 +13,9 @@ import OMOngoingProject from "./ongoingProjects";
 import OMPastProject from "./pastProjects";
 import PermanentDrawerLeft from "./navBar";
 
-//Date Picker Imports
-// import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-
 //Material UI Imports
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-//import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Toolbar from "@mui/material/Toolbar";
@@ -87,6 +80,7 @@ function OMDashboard() {
     return (
         <ThemeProvider theme={theme}>
             <Box sx={{ display: "flex", mt: 2 }}>
+                {/* Menu for operation manager */}
                 <PermanentDrawerLeft />
                 <Box
                     component="main"

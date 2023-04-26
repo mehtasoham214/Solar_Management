@@ -1,10 +1,17 @@
+//React imports
 import * as React from "react";
-import axios from "axios";
 import { useState, useEffect } from "react";
-import { mainListItems, secondaryListItems } from "./menuItems";
-import { Avatar, Drawer, Typography, List } from "@mui/material";
+
+//Axios imports
+import axios from "axios";
+
+//Theme imports
 import theme from "../theme";
 import { ThemeProvider } from "@mui/material/styles";
+
+//Material UI imports
+import { mainListItems, secondaryListItems } from "./menuItems";
+import { Avatar, Drawer, Typography, List } from "@mui/material";
 
 export default function PermanentDrawerLeft() {
     const [userInfo, setUserInfo] = useState([]);

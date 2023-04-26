@@ -1,8 +1,17 @@
+//React imports
 import * as React from "react";
 import { useState, useEffect } from "react";
+
+//Axios imports
 import axios from "axios";
+
+//Components imports
 import { mainListItems, secondaryListItems } from "./menuItems";
+
+//Material UI imports
 import { Avatar, Drawer, Typography, List } from "@mui/material";
+
+//Theme imports
 import theme from "../theme";
 import { ThemeProvider } from "@mui/material/styles";
 

@@ -1,15 +1,28 @@
+//React Imports
 import * as React from "react";
 import { useState, useEffect } from "react";
+
+//Axios Imports
 import axios from "axios";
+
+//Components Imports
+
+//Material UI Imports
 import { styled } from "@mui/material/styles";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import { Button, Container, Grid, ButtonGroup } from "@mui/material";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
+    Button,
+    Container,
+    Grid,
+    ButtonGroup,
+} from "@mui/material";
+import { tableCellClasses } from "@mui/material/TableCell";
 
 //Theme Imports
 import theme from "../../theme";
@@ -82,6 +95,7 @@ function CustomizedTables() {
 
     return (
         <ThemeProvider theme={theme}>
+            {/* Displaying Project information */}
             <Container sx={{ border: 3, borderRadius: 2, borderColor: "gray" }}>
                 <Grid container spacing={3} marginBottom={3}>
                     <Grid item md={4}>

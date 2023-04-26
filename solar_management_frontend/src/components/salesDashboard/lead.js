@@ -1,12 +1,23 @@
+//React imports
 import * as React from "react";
 import { useState, useEffect } from "react";
+
+//Axios imports
 import axios from "axios";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
+
+//Components imports
 import Title from "./Title";
+
+//Material UI imports
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+} from "@mui/material";
+
+//Theme imports
 import theme from "../theme";
 import { ThemeProvider } from "@mui/material/styles";
 
@@ -32,6 +43,7 @@ export default function Leads() {
     return (
         <ThemeProvider theme={theme}>
             <React.Fragment>
+                {/* Displaying Leads */}
                 <Title>Leads</Title>
                 <Table size="small">
                     <TableHead>

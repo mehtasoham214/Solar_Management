@@ -3,11 +3,12 @@ import { useState, useEffect } from "react";
 
 // import axios
 import axios from "axios";
+
 //Theme Imports
 import theme from "../theme";
 import { ThemeProvider } from "@mui/material/styles";
 
-//Project Imports
+//Component Imports
 import Counter from "./counter";
 import OngoingProject from "./onGoingProject";
 import PastProject from "./pastProject";
@@ -22,14 +23,13 @@ import {
     InputAdornment,
     TextField,
     Typography,
+    Box,
+    Button,
+    Container,
+    Grid,
+    Paper,
+    Toolbar,
 } from "@mui/material";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
-//import Divider from "@mui/material/Divider";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import Toolbar from "@mui/material/Toolbar";
 
 //Material UI Icons Imports
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -143,6 +143,7 @@ function SalesDashboardContent() {
     return (
         <ThemeProvider theme={theme}>
             <Box sx={{ display: "flex", mt: 2 }}>
+                {/* Menu display for sales dashboard */}
                 <PermanentDrawerLeft />
                 <Box
                     component="main"

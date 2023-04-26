@@ -1,17 +1,24 @@
+//React imports
 import React from "react";
+
+//Components imports
 import OpsEngineerList from "./opsEngineer";
+import OMPermanentDrawerLeft from "../navBar";
+
+//Theme imports
 import theme from "../../theme";
 import { ThemeProvider } from "@mui/material";
-import OMPermanentDrawerLeft from "../navBar";
+
+//Material UI imports
 import Box from "@mui/material/Box";
 
-function OpsEnginner (){
+function OpsEnginner() {
     return (
         <ThemeProvider theme={theme}>
             <React.Fragment>
-            <Box sx={{ display: "flex", mt: 2 }}>
-                <OMPermanentDrawerLeft />
-                <Box
+                <Box sx={{ display: "flex", mt: 2 }}>
+                    <OMPermanentDrawerLeft />
+                    <Box
                         component="main"
                         sx={{
                             flexGrow: 1,
@@ -21,8 +28,8 @@ function OpsEnginner (){
                         }}
                     >
                         <OpsEngineerList />
-            </Box>
-            </Box>
+                    </Box>
+                </Box>
             </React.Fragment>
         </ThemeProvider>
     );

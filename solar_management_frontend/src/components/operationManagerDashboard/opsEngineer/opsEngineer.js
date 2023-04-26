@@ -1,20 +1,32 @@
+//React imports
 import * as React from "react";
+import { useState, useEffect } from "react";
+
+//Axios imports
 import axios from "axios";
+
+//Theme imports
 import theme from "../../theme";
 import { ThemeProvider } from "@mui/material/styles";
-import { Container } from "@mui/system";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import { useState, useEffect } from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Title from "../../salesDashboard/Title";
-import { Box, Button } from "@mui/material";
-import { Dialog } from "@mui/material";
+
+//Material UI imports
+import {
+    Box,
+    Button,
+    Container,
+    Dialog,
+    Grid,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+} from "@mui/material";
+
+//Components imports
 import AddEmployee from "../addEmployee/addEmployee";
+import Title from "../../salesDashboard/Title";
 
 export default function OpsEngineerList() {
     const [openDialog, setOpenDialog] = useState(false);

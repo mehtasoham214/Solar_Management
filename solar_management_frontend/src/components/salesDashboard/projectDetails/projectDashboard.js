@@ -1,13 +1,14 @@
+//React Imports
 import * as React from "react";
 
 //Theme Imports
 import theme from "../../theme";
 import { ThemeProvider } from "@mui/material/styles";
 
-import Toolbar from "@mui/material/Toolbar";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
+//Material ui Imports
+import { Toolbar, Box, Container } from "@mui/material";
 
+//Components Imports
 import CustomizedTables from "./projectdetails";
 import PermanentDrawerLeft from "../navBar";
 import Invoicetable from "./invoice";
@@ -18,6 +19,7 @@ function ProjectDashboard() {
     return (
         <ThemeProvider theme={theme}>
             <Box sx={{ display: "flex", mt: 2 }}>
+                {/* Menu drawer for sales dashboard */}
                 <PermanentDrawerLeft />
 
                 <Box
@@ -30,6 +32,7 @@ function ProjectDashboard() {
                     }}
                 >
                     <Toolbar />
+                    {/* Imported components display */}
                     <Container maxWidth="lg">
                         <CustomizedTables />
                         <br></br>
