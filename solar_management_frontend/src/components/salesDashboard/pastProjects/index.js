@@ -1,23 +1,26 @@
+//React imports
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
+//Axios imports
 import axios from "axios";
 
-//Components
+//Components imports
 import PermanentDrawerLeft from "../navBar";
 import theme from "../../theme";
 import Title from "../Title";
 
-//Material UI
+//Material UI imports
 import { ThemeProvider } from "@mui/material/styles";
-import { Box, Container } from "@mui/system";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
+import { Box, Container, Grid, Paper } from "@mui/material";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+} from "@mui/material";
 
 export default function ALLPastProjects() {
     const navigate = useNavigate();
@@ -70,6 +73,7 @@ export default function ALLPastProjects() {
         <ThemeProvider theme={theme}>
             <React.Fragment>
                 <Box sx={{ display: "flex", mt: 2 }}>
+                    {/* Menu drawer for sales dashboard */}
                     <PermanentDrawerLeft />
                     <Box
                         component="main"
@@ -91,7 +95,7 @@ export default function ALLPastProjects() {
                                 >
                                     <br />
                                     <br />
-                                    {/* <GetPastProjects /> */}
+                                    {/* Past projects */}
                                     <ThemeProvider theme={theme}>
                                         <React.Fragment>
                                             <Title>Past Projects</Title>

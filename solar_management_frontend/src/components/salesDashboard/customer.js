@@ -1,15 +1,26 @@
+//React Imports
 import * as React from "react";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
+//Axios Imports
 import axios from "axios";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
+
+//Material UI Imports
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+} from "@mui/material";
+
+//Components Imports
 import Title from "./Title";
+
+//Theme Imports
 import theme from "../theme";
 import { ThemeProvider } from "@mui/material/styles";
-import { useNavigate } from "react-router-dom";
 
 export default function Customer() {
     const navigate = useNavigate();
@@ -46,6 +57,7 @@ export default function Customer() {
     return (
         <ThemeProvider theme={theme}>
             <React.Fragment>
+                {/* Displaying customer information */}
                 <Title>Customer Details</Title>
                 <Table size="small">
                     <TableHead>

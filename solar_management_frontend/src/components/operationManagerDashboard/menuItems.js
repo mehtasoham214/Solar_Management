@@ -1,8 +1,20 @@
-//import menu designs & content
+//React imports
 import * as React from "react";
+import { Link } from "react-router-dom";
+
+//Axios imports
+import axios from "axios";
+
+//Theme imports
+import theme from "../theme";
+import { ThemeProvider } from "@mui/material/styles";
+
+//Material UI imports
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+
+//Material UI Icons imports
 import LogoutIcon from "@mui/icons-material/Logout";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import FactCheckIcon from "@mui/icons-material/FactCheck";
@@ -12,10 +24,6 @@ import EngineeringIcon from "@mui/icons-material/Engineering";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import PriceChangeIcon from "@mui/icons-material/PriceChange";
 import HandymanIcon from "@mui/icons-material/Handyman";
-import theme from "../theme";
-import { ThemeProvider } from "@mui/material/styles";
-import { Link } from "react-router-dom";
-import axios from "axios";
 
 const handleLogout = async (e) => {
     e.preventDefault();
@@ -36,6 +44,7 @@ const handleLogout = async (e) => {
 export const mainListItems = (
     <ThemeProvider theme={theme}>
         <React.Fragment>
+            {/* Menu items */}
             <Link to="/ops-manager" href="#">
                 <ListItemButton sx={{ color: "primary.main" }}>
                     <ListItemIcon>

@@ -1,15 +1,23 @@
+//React imports
 import * as React from "react";
 import { jsPDF } from "jspdf";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import { Button, Container, Grid, ButtonGroup } from "@mui/material";
 import { useState, useEffect } from "react";
+
+//Axios imports
 import axios from "axios";
+
+//Components imports
+
+//Material UI imports
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    TableContainer,
+} from "@mui/material";
+import { Button, Container, Grid, ButtonGroup, Paper } from "@mui/material";
 
 function Invoicetable() {
     const TAX_RATE = 0.0625;
@@ -95,6 +103,7 @@ function Invoicetable() {
 
     return (
         <Container sx={{ border: 3, borderRadius: 2, borderColor: "gray" }}>
+            {/* Invoice table display */}
             <Grid container spacing={3} marginBottom={3}>
                 <Grid item md={4}>
                     <h1>Invoice</h1>
@@ -111,6 +120,7 @@ function Invoicetable() {
                     justifyContent="flex-end"
                     sx={{ marginBottom: 2 }}
                 >
+                    {/* Button to download invoice as pdf */}
                     <ButtonGroup variant="outlined">
                         <Button color="secondary" onClick={handleDownloadClick}>
                             Download
@@ -123,6 +133,7 @@ function Invoicetable() {
                             sx={{ minWidth: 700 }}
                             aria-label="spanning table"
                         >
+                            {/* Invoice data display starts here */}
                             <TableHead>
                                 <TableRow>
                                     <TableCell align="center" colSpan={3}>

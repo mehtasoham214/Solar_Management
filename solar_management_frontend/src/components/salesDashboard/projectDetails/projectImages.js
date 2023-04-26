@@ -1,9 +1,15 @@
+//React Imports
 import * as React from "react";
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
-import { Box, Grid } from "@mui/material";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
+
+//Material ui Imports
+import {
+    ImageList,
+    ImageListItem,
+    Box,
+    Grid,
+    Typography,
+    Container,
+} from "@mui/material";
 
 //Theme Imports
 import theme from "../../theme";
@@ -66,6 +72,7 @@ function ProjectImage() {
 
     return (
         <ThemeProvider theme={theme}>
+            {/* Displaying images */}
             <Container sx={{ border: 3, borderRadius: 2, borderColor: "gray" }}>
                 <Grid container spacing={2}>
                     <Grid item md={12}>

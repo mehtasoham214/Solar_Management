@@ -1,16 +1,13 @@
+//React imports
 import * as React from "react";
-import axios from "axios";
 import { useState, useEffect } from "react";
-import Link from "@mui/material/Link";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Title from "./Title";
-import theme from "../theme";
-import { ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
+
+//Axios imports
+import axios from "axios";
+
+//Material UI imports
+import Title from "./Title";
 import {
     Dialog,
     DialogActions,
@@ -18,14 +15,26 @@ import {
     DialogTitle,
     InputAdornment,
     TextField,
+    Link,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    Box,
+    Button,
 } from "@mui/material";
-import Box from "@mui/material/Box";
+
+//Icons imports
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import PhoneIcon from "@mui/icons-material/Phone";
 import AddHomeIcon from "@mui/icons-material/AddHome";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import Button from "@mui/material/Button";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+
+//Theme imports
+import theme from "../theme";
+import { ThemeProvider } from "@mui/material/styles";
 
 // Generate Order Data
 
@@ -180,6 +189,7 @@ export default function OngoingProject({ showMoreLink = true }) {
     return (
         <ThemeProvider theme={theme}>
             <React.Fragment>
+                {/* On going project display */}
                 <Title>On-Going Projects</Title>
                 <Table size="small">
                     <TableHead>

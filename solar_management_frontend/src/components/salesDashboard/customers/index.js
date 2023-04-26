@@ -1,17 +1,23 @@
+//React Imports
 import * as React from "react";
-import Customer from "../salesDashboard/customers";
-import PermanentDrawerLeft from "../salesDashboard/navBar";
-import theme from "../theme";
+
+//Components Imports
+import PermanentDrawerLeft from "../navBar";
+import Customer from "../customer";
+
+//Material ui Imports
+import { Box, Container, Grid, Paper } from "@mui/material";
+
+//Theme Imports
+import theme from "../../theme";
 import { ThemeProvider } from "@mui/material/styles";
-import { Box, Container } from "@mui/system";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
 
 export default function AllCustomer() {
     return (
         <ThemeProvider theme={theme}>
             <React.Fragment>
                 <Box sx={{ display: "flex", mt: 2 }}>
+                    {/* Menu drawer for sales dashboard */}
                     <PermanentDrawerLeft />
                     <Box
                         component="main"
@@ -23,7 +29,7 @@ export default function AllCustomer() {
                         }}
                     >
                         <Container maxWidth="lg" sx={{ mt: 2 }}>
-                            {/* On going projects */}
+                            {/* Customers */}
                             <Grid item xs={12}>
                                 <Paper
                                     sx={{
@@ -32,7 +38,7 @@ export default function AllCustomer() {
                                         flexDirection: "column",
                                     }}
                                 >
-                                    <Customer/>
+                                    <Customer />
                                 </Paper>
                             </Grid>
                         </Container>
